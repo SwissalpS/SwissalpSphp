@@ -1,0 +1,15 @@
+
+paginator  : 
+  class     : WFPaginator
+  properties: 
+    itemPhrasePlural  : SssSBlaPermsPlur
+    itemPhraseSingular: SssSBlaPermsSing
+    modeForm          : search
+    pageSize          : 25
+Permissions: 
+  class     : WFArrayController
+  properties: 
+    automaticallyPreparesContent: false
+    class                       : Permissions
+    classIdentifiers            : uid
+    selectOnInsert              : true

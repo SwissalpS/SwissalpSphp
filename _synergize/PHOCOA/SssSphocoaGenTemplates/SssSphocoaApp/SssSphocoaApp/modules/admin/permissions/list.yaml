@@ -1,0 +1,124 @@
+
+deleteLink           : 
+  children  : 
+    deleteLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permissions/confirmDelete/%1%
+      class     : SssSLink
+      properties: 
+        label: SssSBlaSharedDelete
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permissions'
+domain               : 
+  children  : 
+    domainPrototype: 
+      bindings: 
+        label : 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : domain
+          options      : 
+            ValuePattern: %3% %1% %2%
+        label2: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : hash
+        label3: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+        value : 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permissions/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permissions'
+editLink             : 
+  children  : 
+    editLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permissions/edit/%1%
+      class     : SssSLink
+      properties: 
+        label: SssSBlaSharedEdit
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permissions'
+hash                 : 
+  children  : 
+    hashPrototype: 
+      bindings: 
+        label: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : hash
+          options      : 
+            labelTransformer: transDecHex
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permissions/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permissions'
+paginatorNavigation  : 
+  class     : SssSPaginatorNavigation
+  properties: 
+    paginator: '#module#paginator'
+paginatorPageInfo    : 
+  class     : SssSPaginatorPageInfo
+  properties: 
+    paginator: '#module#paginator'
+searchPermissionsForm: 
+  children: 
+    clear         : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedClear
+    paginatorState: 
+      class     : WFPaginatorState
+      properties: 
+        paginator: '#module#paginator'
+    query         : 
+      class: WFTextField
+    search        : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedSearch
+  class   : WFForm
+uid                  : 
+  children  : 
+    uidPrototype: 
+      bindings: 
+        label: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Permissions
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permissions/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permissions'

@@ -1,0 +1,91 @@
+
+editPermissionsForm: 
+  children: 
+    deleteObj   : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Permissions
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedDelete
+    domain      : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Permissions
+          modelKeyPath : domain
+      class   : WFTextField
+    hash        : 
+      bindings  : 
+        value: 
+          controllerKey: selection
+          instanceID   : Permissions
+          modelKeyPath : hash
+      class     : WFTextField
+      properties: 
+        onEvent: change do j updateCheckboxes()
+    hashBoxGroup: 
+      children: 
+        isSuperUser: 
+          class     : SssSCheckbox
+          properties: 
+            checkedValue  : 32768
+            label         : SssSBlaPermsSuperUser
+            onEvent       : click do j reCalcHash()
+            uncheckedValue: 0
+        mayAdmin   : 
+          class     : SssSCheckbox
+          properties: 
+            checkedValue  : 16
+            label         : SssSBlaPermsMayAdministrate
+            onEvent       : click do j reCalcHash()
+            uncheckedValue: 0
+        mayRead    : 
+          class     : SssSCheckbox
+          properties: 
+            checkedValue  : 1
+            enabled       : true
+            label         : SssSBlaPermsMayRead
+            onEvent       : click do j reCalcHash()
+            uncheckedValue: 0
+        mayWrite   : 
+          class     : SssSCheckbox
+          properties: 
+            checkedValue  : 4
+            label         : SssSBlaPermsMayWrite
+            onEvent       : click do j reCalcHash()
+            uncheckedValue: 0
+      class   : WFCheckboxGroup
+    save        : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Permissions
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedSave
+    saveNew     : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Permissions
+          modelKeyPath : isNew
+          options      : 
+            valueTransformer: WFNegateBoolean
+      class     : SssSSubmit
+      properties: 
+        action: save
+        label : SssSBlaSharedCreate
+    uid         : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Permissions
+          modelKeyPath : uid
+      class   : WFHidden
+  class   : WFForm
+statusMessage      : 
+  class: SssSMessageBox

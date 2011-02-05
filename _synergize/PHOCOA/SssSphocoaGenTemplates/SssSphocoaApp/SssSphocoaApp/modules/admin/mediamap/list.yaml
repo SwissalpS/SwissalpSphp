@@ -1,0 +1,76 @@
+
+deleteLink         : 
+  children  : 
+    deleteLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Mediamap
+          modelKeyPath : mediauid
+          options      : 
+            ValuePattern: /admin/mediamap/confirmDelete/%1%
+      class     : WFLink
+      properties: 
+        label: Delete
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Mediamap'
+editLink           : 
+  children  : 
+    editLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Mediamap
+          modelKeyPath : mediauid
+          options      : 
+            ValuePattern: /admin/mediamap/edit/%1%
+      class     : WFLink
+      properties: 
+        label: Edit
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Mediamap'
+paginatorNavigation: 
+  class     : WFPaginatorNavigation
+  properties: 
+    paginator: '#module#paginator'
+paginatorPageInfo  : 
+  class     : WFPaginatorPageInfo
+  properties: 
+    paginator: '#module#paginator'
+searchMediamapForm : 
+  children: 
+    clear         : 
+      class     : WFSubmit
+      properties: 
+        label: Clear
+    paginatorState: 
+      class     : WFPaginatorState
+      properties: 
+        paginator: '#module#paginator'
+    query         : 
+      class: WFTextField
+    search        : 
+      class     : WFSubmit
+      properties: 
+        label: Search
+  class   : WFForm
+url                : 
+  children  : 
+    urlPrototype: 
+      bindings: 
+        label: 
+          controllerKey: '#current#'
+          instanceID   : Mediamap
+          modelKeyPath : url
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Mediamap
+          modelKeyPath : mediauid
+          options      : 
+            ValuePattern: /admin/mediamap/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Mediamap'

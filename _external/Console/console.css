@@ -1,0 +1,26 @@
+* 	{ 
+	font-family: Courier, monospace; 
+	font-size: 12px;
+ 	}
+ 	
+table {
+	border-collapse:collapse;
+	width:100%;
+	} 
+	
+table td {
+	padding:4px; 
+	border-bottom:1px solid #CCCCCC;
+	}
+table th {
+	border-bottom:1px solid #666666;
+	}
+table td.num {
+	background: #666666;
+	color:#EEEEEE;
+	width:20px;
+	text-align: center;
+	}
+table td.comment {
+	text-align: left;
+	}

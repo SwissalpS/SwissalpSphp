@@ -1,0 +1,18 @@
+This file is provided "as is".  Use it at your discretion and I hope it helps you out.
+
+The concept is pretty basic, it is a simple PHP class that takes entries and loads them into a separate window. If you create two instances, you obviously get two windows so you can separate your console lists if you like. 
+
+<?php
+	$console = new Console('My Console');
+	$console->setDebugMode($is_in_debug_mode); // nothing happens if this is set to false
+	$console->rec('Something');
+	$console->rec('Something else');
+	
+	$console->printConsole();
+	
+?>
+
+If you make modifications, I'd appreciate if you sent it my way.
+
+Paulo Fernandes
+paulofernandes@mac.com

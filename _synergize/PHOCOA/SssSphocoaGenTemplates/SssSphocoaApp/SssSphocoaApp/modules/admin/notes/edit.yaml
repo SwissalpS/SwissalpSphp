@@ -1,0 +1,274 @@
+
+editNotesForm  :
+  children:
+    bridgeuid    :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : bridgeuid
+      class   : WFHidden
+    children     :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : children
+      class   : WFTextField
+    country      :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : country
+      class   : WFHidden
+    date         :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : date
+      properties:
+        formatter: '#module#dateFormatter'
+      class   : WFTextField
+    deleteObj    :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedDelete
+    email        :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : email
+      class     : WFTextField
+      properties:
+        maxLength: 128
+        size     : 36
+    handle       :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : handle
+      class   : WFTextField
+    karma        :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : karma
+      class   : WFTextField
+      properties:
+        maxLength: 11
+        size     : 5
+    lang         :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : lang
+      class   : WFHidden
+    mediauid     :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : mediauid
+      class   : WFTextField
+    name         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : name
+      class     : WFTextField
+      properties:
+        maxLength: 64
+        size     : 36
+    note         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : note
+      class     : WFTextArea
+      properties:
+        cols: 125
+    publish      :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : publish
+      class   : WFCheckbox
+      properties:
+        checkedValue: 1
+        uncheckedValue: 0
+    region       :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : region
+      class     : WFTextField
+      properties:
+        maxLength: 32
+        size     : 36
+    save         :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedSave
+    saveNew      :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : isNew
+          options      :
+            valueTransformer: WFNegateBoolean
+      class     : SssSSubmit
+      properties:
+        action: save
+        label : SssSBlaSharedCreate
+    selectBridge :
+      bindings  :
+        contentLabels:
+          controllerKey: bridges
+          instanceID   : '#module#'
+          modelKeyPath : selectBridgesLabels
+        contentValues:
+          controllerKey: bridges
+          instanceID   : '#module#'
+          modelKeyPath : selectBridgesValues
+      class     : WFSelect
+      properties:
+        multiple    : false
+        onEvent     : change do j updateBridge()
+        visibleItems: 1
+    selectCountry:
+      bindings  :
+        contentLabels:
+          controllerKey: countries
+          instanceID   : '#module#'
+          modelKeyPath : selectCountriesLabels
+        contentValues:
+          controllerKey: countries
+          instanceID   : '#module#'
+          modelKeyPath : selectCountriesValues
+      class     : WFSelect
+      properties:
+        multiple    : false
+        onEvent     : change do j updateCountry()
+        visibleItems: 1
+    selectLang   :
+      bindings  :
+        contentLabels:
+          controllerKey: localization
+          instanceID   : '#module#'
+          modelKeyPath : selectLangLabels
+        contentValues:
+          controllerKey: localization
+          instanceID   : '#module#'
+          modelKeyPath : selectLangValues
+      class     : WFSelect
+      properties:
+        multiple    : false
+        onEvent     : change do j updateLang()
+        visibleItems: 1
+    uid          :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : uid
+      class   : WFHidden
+    uploadMedia  :
+      class: WFUpload
+    url0         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : url0
+      class     : WFTextField
+      properties:
+        maxLength: 128
+        size     : 36
+    url1         :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : url1
+      class   : WFTextField
+  class   : WFForm
+helpCountry    :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('country')
+    value  : '#'
+helpDialog     :
+  children:
+    helpModule:
+      class     : WFModuleView
+      properties:
+        invocationPath  : help/main
+        targetRootModule: false
+  class   : WFYAHOO_widget_PhocoaDialog
+helpEmail      :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('email')
+    value  : '#'
+helpLanguage   :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('language')
+    value  : '#'
+helpName       :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('name')
+    value  : '#'
+helpNote       :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('note')
+    value  : '#'
+helpRegion     :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('region')
+    value  : '#'
+helpUploadMedia:
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('upload')
+    target : _blank
+    value  : /help/note/upload
+helpUrl0       :
+  class     : WFLink
+  properties:
+    label  : ??
+    onEvent: click do j showHelp('url0')
+    value  : '#'
+statusMessage  :
+  class: SssSMessageBox

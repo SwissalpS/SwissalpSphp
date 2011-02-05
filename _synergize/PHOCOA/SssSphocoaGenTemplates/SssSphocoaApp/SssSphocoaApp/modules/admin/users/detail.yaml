@@ -1,0 +1,99 @@
+
+avatarmediauid: 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : avatarmediauid
+  class   : WFLabel
+country       : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : country
+  class   : WFLabel
+email         : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : email
+  class   : WFLabel
+handle        : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : handle
+  class   : WFLabel
+karma         : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : karma
+  class   : WFLabel
+languageorder : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : languageorder
+  class   : WFLabel
+oauth         : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : oauth
+  class   : WFLabel
+openid        : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : openid
+  class   : WFLabel
+passhash      : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : passhash
+  class   : WFLabel
+permissions   : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : permissions
+  class   : WFLabel
+realname      : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : realname
+  class   : WFLabel
+region        : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : region
+  class   : WFLabel
+uid           : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : uid
+  class   : WFLabel
+url           : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Users
+      modelKeyPath : url
+  class   : WFLabel

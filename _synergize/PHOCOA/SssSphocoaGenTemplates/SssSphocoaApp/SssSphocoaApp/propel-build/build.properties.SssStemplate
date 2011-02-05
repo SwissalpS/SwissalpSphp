@@ -1,0 +1,17 @@
+propel.database = ##PROPEL_DATABASE##
+propel.project = ##PHOCOA_PROJECT_NAME##
+propel.database.url = ##PROPEL_DATABASE##:user=##DB_USER##;password=##DB_PASS##;hostname=##DB_HOST##;dbname=##DB_NAME##
+propel.database.user = ##DB_USER##
+propel.database.password = ##DB_PASS##
+propel.database.reverse.url = ##PROPEL_DATABASE##://##DB_USER##:##DB_PASS##@##DB_HOST##/##DB_NAME##
+propel.targetPackage = ##DB_NAME##
+propel.output.dir = ##PHOCOA_APP_DIR##/propel-build
+propel.php.dir = ##PHOCOA_APP_DIR##/classes
+propel.phpconf.dir = ##PHOCOA_APP_DIR##/conf
+propel.sql.dir = ##PHOCOA_APP_DIR##/propel-build/db/sql
+propel.addTimeStamp =
+propel.useDateTimeClass = 1
+propel.dateTimeClass = WFDateTime
+propel.defaultTimeStampFormat =
+propel.autoloadCoreClasses = 1
+propel.autoloadGeneratedClasses = 1

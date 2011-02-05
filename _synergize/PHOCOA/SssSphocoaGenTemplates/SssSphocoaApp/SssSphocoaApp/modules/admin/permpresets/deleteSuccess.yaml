@@ -1,0 +1,5 @@
+
+statusMessage: 
+  class     : SssSMessageBox
+  properties: 
+    value: SssSBlaPPermDeleted

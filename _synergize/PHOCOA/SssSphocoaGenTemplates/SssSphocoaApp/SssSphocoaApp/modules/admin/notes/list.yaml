@@ -1,0 +1,282 @@
+
+zoomViewDialog     :
+  class     : WFYAHOO_widget_Panel
+  properties:
+    close              : true
+    constraintoviewport: true
+    fixedcenter        : true
+    height             : 640px
+    modal              : true
+    width              : 916px
+newNoteDialog      :
+  children  :
+    newNoteView:
+      class     : WFModuleView
+      properties:
+        invocationPath: notes/edit
+        targetRootModule: false
+  class     : WFYAHOO_widget_PhocoaDialog
+  properties:
+    constraintoviewport   : true
+    deferModuleViewLoading: true
+    fixedcenter           : true
+    height                : 480px
+    modal                 : true
+    width                 : 916px
+noScriptAddNewNote :
+  class     : SssSLink
+  properties:
+    label: SssSBlaNoteAddNew
+    title: SssSBlaNoteAddNew
+    value: /notes/edit
+addNewNoteImage    :
+  class     : WFImage
+  properties:
+    link   : /notes/edit
+    alt    : SssSBlaNoteAddNew
+    border : 0
+    height : 16
+    onEvent: click do j SssSopenNoteDialog();return false;
+    value  : http://media.skypromenade.com/shared/badges/small_plus_green.png
+    width  : 16
+addNewNoteLink     :
+  class     : SssSLink
+  properties:
+    label  : SssSBlaNoteAddNew
+    onEvent: click do j SssSopenNoteDialog();return false;
+    title  : SssSBlaNoteAddNew
+    value  : '#'
+deleteLink         :
+  children  :
+    deleteLinkPrototype:
+      bindings  :
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : uid
+          options      :
+            ValuePattern: /admin/notes/confirmDelete/%1%
+      class     : SssSLink
+      properties:
+        label: SssSBlaSharedDelete
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+editLink           :
+  children  :
+    editLinkPrototype:
+      bindings  :
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : uid
+          options      :
+            ValuePattern: /admin/notes/edit/%1%
+      class     : SssSLink
+      properties:
+        label: SssSBlaSharedEdit
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+name               :
+  children  :
+    namePrototype:
+      bindings:
+        label:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : name
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : uid
+          options      :
+            ValuePattern: /notes/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+lang               :
+  children  :
+    langPrototype:
+      bindings:
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : lang
+      class   : WFLabel
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+country               :
+  children  :
+    countryPrototype:
+      bindings:
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : country
+      class   : WFLabel
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+note               :
+  children  :
+    notePrototype:
+      bindings:
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : note
+      class   : WFLabel
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+bridge               :
+  children  :
+    bridgePrototype:
+      bindings:
+        label:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : bridgeuid
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : bridgeuid
+          options      :
+            ValuePattern: /admin/bridges/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+date               :
+  children  :
+    datePrototype:
+      bindings:
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : date
+      class   : WFLabel
+      properties:
+        formatter: '#module#dateFormatter'
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+karma               :
+  children  :
+    karmaPrototype:
+      bindings:
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : karma
+      class   : WFLabel
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+publish               :
+  children  :
+    publishPrototype:
+      bindings:
+        value:
+          controllerKey: '#current#'
+          instanceID   : Notes
+          modelKeyPath : publish
+      class   : WFLabel
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Notes'
+paginatorSortName:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : name
+    paginator: '#module#paginator'
+paginatorSortLang:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : lang
+    paginator: '#module#paginator'
+paginatorSortCountry:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : country
+    paginator: '#module#paginator'
+paginatorSortNote:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : note
+    paginator: '#module#paginator'
+paginatorSortBridge:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : bridgeuid
+    paginator: '#module#paginator'
+paginatorSortDate:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : date
+    paginator: '#module#paginator'
+paginatorSortKarma:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : karma
+    paginator: '#module#paginator'
+paginatorSortPublish:
+  class     : SssSPaginatorSortLink
+  properties:
+    value    : publish
+    paginator: '#module#paginator'
+paginatorNavigation:
+  class     : SssSPaginatorNavigation
+  properties:
+    paginator: '#module#paginator'
+paginatorPageInfo  :
+  class     : SssSPaginatorPageInfo
+  properties:
+    paginator: '#module#paginator'
+adminBlaEditCriteria:
+  class : WFLabel
+  bindgings:
+    hidden:
+      controllerKey: authInfo
+      instanceID   : '#module#'
+      modelKeyPath : showBlaEditLinks
+      options:
+        ValueTransformer: WFNegateBoolean
+    value:
+      controllerKey: oNotesCriteria
+      instanceID   : '#module#'
+      modelKeyPath : editCriteriaLabelsHTML
+searchNotesForm    :
+  children:
+    clear         :
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedClear
+    paginatorState:
+      class     : WFPaginatorState
+      properties:
+        paginator: '#module#paginator'
+    query         :
+      class: WFTextField
+    search        :
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedSearch
+    selectSearchCriteria:
+      bindings  :
+        contentLabels:
+          controllerKey: notesCriteria
+          instanceID   : '#module#'
+          modelKeyPath : selectCriteriaLabels
+        contentValues:
+          controllerKey: notesCriteria
+          instanceID   : '#module#'
+          modelKeyPath : selectCriteriaValues
+      class     : WFSelect
+      properties:
+        multiple    : false
+        visibleItems: 1
+  class   : WFForm

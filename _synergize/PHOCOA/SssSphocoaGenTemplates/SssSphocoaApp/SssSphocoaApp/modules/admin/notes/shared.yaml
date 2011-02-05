@@ -1,0 +1,19 @@
+
+dateFormatter:
+  class     : WFUNIXDateFormatter
+  properties:
+    formatString: d.m.Y H:i:s
+Notes    :
+  class     : WFArrayController
+  properties:
+    automaticallyPreparesContent: false
+    class                       : Notes
+    classIdentifiers            : uid
+    selectOnInsert              : true
+paginator:
+  class     : WFPaginator
+  properties:
+    itemPhrasePlural  : SssSBlaNotePlur
+    itemPhraseSingular: SssSBlaNoteSing
+    modeForm          : search
+    pageSize          : 25

@@ -1,0 +1,35 @@
+
+confirmDeleteNotesForm: 
+  children: 
+    cancel   : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedCancel
+    deleteObj: 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedDelete
+    uid      : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Notes
+          modelKeyPath : uid
+      class   : WFHidden
+  class   : WFForm
+confirmMessage        : 
+  class     : SssSMessageBox
+  properties: 
+    value: SssSBlaNotesDeleteSure
+linkToNoteDetail      : 
+  bindings  : 
+    value: 
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : uid
+      options      : 
+        ValuePattern: /notes/detail/%1%
+  class     : SssSLink
+  properties: 
+    label : SssSBlaLikeThisBadgeDirectLink
+    target: _blank

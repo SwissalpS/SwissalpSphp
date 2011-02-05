@@ -1,0 +1,28 @@
+
+confirmDeletePermpresetsForm: 
+  children: 
+    cancel   : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedCancel
+    deleteObj: 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedDelete
+    uid      : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : uid
+      class   : WFHidden
+  class   : WFForm
+confirmMessage              : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permpresets
+      modelKeyPath : name
+      options      : 
+        ValuePattern: Are you sure you want to delete Permpresets "%1%"?
+  class   : SssSMessageBox

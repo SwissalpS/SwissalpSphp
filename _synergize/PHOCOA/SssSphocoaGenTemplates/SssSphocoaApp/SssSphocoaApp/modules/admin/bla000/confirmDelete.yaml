@@ -1,0 +1,28 @@
+
+confirmDeleteBla000Form: 
+  children: 
+    cancel   : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedCancel
+    deleteObj: 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedDelete
+    uid      : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : uid
+      class   : WFHidden
+  class   : WFForm
+confirmMessage         : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : uid
+      options      : 
+        ValuePattern: SssSBlaReallyDelete "%1%"?
+  class   : SssSMessageBox

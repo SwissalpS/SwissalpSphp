@@ -1,0 +1,69 @@
+
+/*           SssBla                 localised strings      */
+.SssSBlaVisitor {
+	border: none;
+	display: inline;
+}
+
+.SssSBla {
+	border: none;
+	border: solid tan 1px;
+	border-bottom: solid tan 2px;
+	display: inline-block;
+	position: relative;
+}
+
+.SssSBla:hover {
+	background-color:tan;
+	cursor: pointer;
+}
+
+.SssSBlaHidden {
+	display: none;
+}
+
+.SssSBlaVisible {
+	display: block;
+	position: absolute;
+	padding:3px;
+	margin:0px;
+	z-index: 1;
+	left: 7px;
+	bottom: 5%;
+	background-color: #b0a083;
+	border: solid white 1px;
+}
+
+.SssSBlaEditLink {
+	font-size			: 8px;
+	color : green;
+}
+
+.SssSBlaEditLink:hover {
+	font-size			: 14px;
+	color : green;
+}
+
+#SssSadminPanel {
+	background: url(http://media.skypromenade.com/shared/bgndTrans_grey40.png);
+	border: ridge 2px;
+	display:inline;
+//	float:right;
+	padding:3px;
+	position:absolute;
+//	width:45px;
+//	height:45px;
+//	border:20px;
+//	top:0px;
+	right:0px;
+	z-index:3;
+	color:white;
+}
+
+#SssSadminPanel:hover {
+	border: inset;background:silver;
+	padding: 32px;
+}
+
+.SssSadminPanelHide { display:none; }
+.SssSadminPanelShow { display:inline; }
