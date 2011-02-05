@@ -1,0 +1,21 @@
+SwissalpSphp.git/README
+author: Luke aka SwissalpS@LukeZimmermann.com
+licence: Creative Commons where not specified otherwise.
+group: developers tools
+version(date): 20110205_220032
+
+This is a collection of php classes, functions and snippets that I have found
+usefull in the past.
+
+Those in _external are hosted and maintained by others. Some have slightly been
+modified to play well with some of my development systems
+
+In _synergize there are mainly functions and classes that I wrote while learning
+PHOCOA
+
+Packages that use this package:
+	SwissalpS/brainZphp
+	SwissalpS/phocoa
+
+Packages that this package may want to use:
+	SwissalpS/phocoa
