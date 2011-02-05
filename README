@@ -11,7 +11,33 @@ Those in _external are hosted and maintained by others. Some have slightly been
 modified to play well with some of my development systems
 
 In _synergize there are mainly functions and classes that I wrote while learning
-PHOCOA
+PHOCOA most are from PEAR
+
+Generally a file beginning with 'SssS', abreviation of 'SwissalpS', was either
+fully written by me, SwissalpS, or I have done reasonable changes to the original
+script. Without the 'SssS' prefix, the file probably comes from someone else.
+To be sure, look at the information in the files. Though they may lack some
+commenting, the credits are there.
+
+.inc Extensions are php files with < ? php ? > tags and are not meant to output
+	anything if included.
+
+.phps are scripts that can be run from 'command line'
+
+.php are either same as .inc or 'active' php scripts like index.php --> they
+	output (x)html and may contain html. (as a rule of thumb)
+
+.conf files are mostly php but may also be a configuration file of some other
+	format.
+
+.plist files are xml files defined and 'owned' (just the format) by Apple(tm)
+
+.scpt files are Apple Script, also by Apple(tm) they may have other language
+	scripts bundled inside
+
+.SssStemplate files can be any text language (UTF-8, no BOM, Unix LF)
+	they are used by the SssSphocoaGen system. Basically the generator replaces
+	all '##labelXYZ##' with values from plist or deduced from host.
 
 Packages that use this package:
 	SwissalpS/brainZphp
