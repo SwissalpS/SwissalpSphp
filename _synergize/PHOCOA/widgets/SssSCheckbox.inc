@@ -68,6 +68,9 @@ class SssSCheckbox extends WFCheckbox {
         $sLabelLeft = $sLabelRight = (('' !== $this->label())
         		? ' <label for="' . $this->id . '">' . $this->label . '</label>'
         		: '');
+
+        $sTabIndex = ($this->tabIndex ? ' tabIndex="' . $this->tabIndex . '" ' : '');
+
         if ('right' === $this->labelPosition)
             $sLabelLeft = NULL;
 
@@ -79,7 +82,7 @@ class SssSCheckbox extends WFCheckbox {
         		. '" ' . ($this->class ? ' class="' . $this->class . '" ' : '')
         		. 'id="' . $this->id() . '" '
         		. 'value="' . $this->checkedValue() . '" '
-        		. $sChecked . $sEnabled . ' />' . $sLabelRight
+        		. $sChecked . $sEnabled . $sTabIndex . ' />' . $sLabelRight
         		. $this->getListenerJSInScriptTag();
 
     } // render
