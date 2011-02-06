@@ -96,7 +96,7 @@ class WFIncluding {
 				'WFBundle'
 				=> '_synergize/PHOCOA/WFBundle.php',
 				'SssSSubmit'
-				=> '_synergize/PHOCOA/SssSSubmit.inc',
+				=> '_synergize/PHOCOA/widgets/SssSSubmit.inc',
 				'SssSPaginatorSortLink'
 				=> '_synergize/PHOCOA/widgets/SssSPaginatorSortLink.inc',
 				'SssSPaginatorPageInfo'
@@ -126,7 +126,7 @@ class WFIncluding {
 				'SssSBlaHelper'
 				=> '_synergize/PHOCOA/SssSBlaHelper.inc',
 				'SssSBla'
-				=> '_synergize/PHOCOA/widgets/SssSBla.inc',
+				=> '_synergize/PHOCOA/SssSBla.inc',
 				'SssSCountries'
 				=> '_synergize/PHOCOA/SssSCountries.inc',
 

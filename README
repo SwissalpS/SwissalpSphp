@@ -39,7 +39,7 @@ commenting, the credits are there.
 	they are used by the SssSphocoaGen system. Basically the generator replaces
 	all '##labelXYZ##' with values from plist or deduced from host.
 
-Packages that use this package:
+Packages that use parts of this package:
 	SwissalpS/brainZphp
 	SwissalpS/phocoa
 
