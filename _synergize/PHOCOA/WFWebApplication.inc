@@ -23,12 +23,18 @@
  * or SssSApplicationDelegate
  */
 function WFWebApplicationMain() {
+
     $oApp = WFWebApplication::sharedWebApplication();
-    if (WFWebApplication::isHTTPRequest())
+
+    if (WFWebApplication::isHTTPRequest()) {
 
     		$oApp->runWebApplication();
 
-    else $oApp->runCLIApplication();
+    } else {
+
+    	$oApp->runCLIApplication();
+
+    } // if http or cli request
 
     return $oApp;
 
@@ -242,10 +248,15 @@ class WFWebApplication extends WFObject
         if (!$oApp) {
             $oApp = new WFWebApplication();
 
-            if (self::isHTTPRequest())
+            if (self::isHTTPRequest()) {
+
             	$oApp->init();
-            else
+
+            } else {
+
             	$oApp->initCLI();
+
+            } // if http or cli request
 
         } // first call
 

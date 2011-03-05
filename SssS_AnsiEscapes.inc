@@ -170,7 +170,7 @@ class SssS_AnsiEscapes {
 		return '';
 	} // gimme
 
-	static function __toString() { return print_r(self, true); } // __toString
+	public function __toString() { return print_r(self, true); } // __toString
 
 } // SssS_AnsiEscapes
 /* * * *\ SssS_AnsiEscapes.inc (CC) Luke JZ aka SwissalpS /* * * */

@@ -7,10 +7,13 @@
  * *
  * * @version 20091030_114551 (CC) Luke JZ aka SwissalpS
  * * * */
-require_once('SssS_Commander.inc');
-require_once('SssS_AnsiEscapes.inc');
-require_once('SssS_ShellScriptRunner.inc');
-require_once('SssS_PHPinlineScriptRunner.inc');
+if (!defined('AUTO_INCLUDING')) {
+	require_once('SssS_Commander.inc');
+	require_once('SssS_AnsiEscapes.inc');
+	require_once('SssS_ShellScriptRunner.inc');
+	require_once('SssS_PHPinlineScriptRunner.inc');
+} // if not autoincluding but on php's include path
+
 //$echo $a = SssS_Sandbox::sharedSandbox()
 class SssS_Sandbox {
 	var $sInfo = '';
@@ -414,7 +417,9 @@ class SssS_ServerCommander extends SssS_Commander {
 		if (!$this->isAllowed($oUser)) return $this->_insufficientPermission();
 
 
-		return ' -- not yet coded -- ';
+		return print_r(array_keys($this->oDelegate->aUo), true)
+				. ' -- not yet coded -- ';
+
 	} // command_listUsers
 
 
