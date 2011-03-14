@@ -1,5 +1,10 @@
 <?php
 //if (class_exists('SssSBla')) return;
+/*
+ * @version 20110314_140553 added php_utf8 functions to improve detection on certain systems
+*/
+require_once(SwissalpS_FRAMEWORK_DIR . DIRECTORY_SEPARATOR . '_external' . DIRECTORY_SEPARATOR . 'php_utf8' . DIRECTORY_SEPARATOR . 'utf8.inc');
+
 class SssSBla implements SssSLocalizationDelegate {
 
 	const DEFAULT_ID = 'SssSBla'; // default instance id
@@ -161,13 +166,15 @@ class SssSBla implements SssSLocalizationDelegate {
 
 	// convert special chars to html escapes (not all!)
 	static function cleanSpecialChars(&$sText) {
+
 		$sNew = '';
 		$sText = str_replace(array('\"', "\'", '\\\\'), array('"', "'", '\\'), $sText);
 		$iLen = mb_strlen($sText); //, 'UTF-8');
 		for ($j = 0; $j < $iLen; $j++) {
 
 			$s = mb_substr($sText, $j, 1); //, 'UTF-8');
-			$i = ord($s);
+			$a = utf8ToUnicode($s);
+			$i = (isset($a[0])) ? $a[0] : ord($s);
 
 			switch ($i) {
 				// tab, nl, cr
