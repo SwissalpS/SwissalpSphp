@@ -77,6 +77,7 @@ class SssSPaginatorSortLink extends WFPaginatorSortLink {
 		$aSortOptions = $this->paginator->sortOptions();
 
 		$sLabelRaw = $aSortOptions[$sLinkKey];
+
 		$sLabelTranslated = SssSBla::translateIfNeeded($sLabelRaw, array('noDIV' => true));
 
 		if ($this->paginator->mode() == WFPaginator::MODE_URL) {
@@ -93,11 +94,11 @@ class SssSPaginatorSortLink extends WFPaginatorSortLink {
 
 			$sLinkURL = $this->paginator->jsForState($this->paginator->paginatorState(NULL, NULL, array($sLinkKey)));
 
-			$sOut1 = '<a href="#" onClick="' . $sLinkURL . '">'
+			$sOut1 = '<a href="javascript:' . $sLinkURL . ' return false;">'
 					. $sLabelTranslated
 					. '</a>';
 
-			$sOut2 = '<a href="#" onClick="' . $sLinkURL . '">'
+			$sOut2 = '<a href="javascript:' . $sLinkURL . ' return false;">'
 					. $sSortIndicator . '</a>';
 
 		} // if mode url or js

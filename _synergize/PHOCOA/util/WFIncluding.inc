@@ -84,11 +84,11 @@ class WFIncluding {
 				=> '_synergize/PHOCOA/WFRequestController.inc',
 				'WFRedirectRequestException'
 				=> '_synergize/PHOCOA/WFRequestController.inc',
-				'WFRequestController_RedirectException' => 'framework/WFRequestController.inc',
-				'WFRequestController_InternalRedirectException' => 'framework/WFRequestController.inc',
-				'WFRequestController_NotFoundException' => 'framework/WFRequestController.inc',
-				'WFRequestController_BadRequestException' => 'framework/WFRequestController.inc',
-				'WFRequestController_HTTPException' => 'framework/WFRequestController.inc',
+				'WFRequestController_RedirectException' => '_synergize/PHOCOA/WFRequestController.inc',
+				'WFRequestController_InternalRedirectException' => '_synergize/PHOCOA/WFRequestController.inc',
+				'WFRequestController_NotFoundException' => '_synergize/PHOCOA/WFRequestController.inc',
+				'WFRequestController_BadRequestException' => '_synergize/PHOCOA/WFRequestController.inc',
+				'WFRequestController_HTTPException' => '_synergize/PHOCOA/WFRequestController.inc',
 				'WFSmarty'
 				=> '_synergize/PHOCOA/WFSmarty.php',
 

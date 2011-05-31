@@ -283,7 +283,7 @@ class WFRequestController extends WFObject
 			} // if ajax special situation with iframe
 			// TODO: print headers headers_list does not seem to work properly is this context
 			print implode("\r\n", headers_list()) . "\r\n\r\n";
-			WFLog::logToFile('red.log', implode("\r\n", headers_list()));
+			//WFLog::logToFile('cliHeaders.log', implode("\r\n", headers_list()));
 			print $html;
 			//print phpinfo();
 
