@@ -4,7 +4,7 @@ Listen ##SERVER_IP##:##SERVER_PORT##
     DocumentRoot ##PHOCOA_APP_DIR##/wwwroot
 
     # map phocoa framework wwwroot - enabled PHOCOA Versioning
-    AliasMatch ^/www/framework(/[0-9\.]*)?/?(.*) ##PHOCOA_BASE_DIR##/wwwroot/www/framework/$2
+    AliasMatch ^/www/framework(/[0-9\.]*)?/?(.*) ##FRAMEWORK_DIR##/wwwroot/www/framework/$2
     # enable a normal wwwroot
     AliasMatch ^/www/?(.*) ##PHOCOA_APP_DIR##/wwwroot/www/$1
 
@@ -16,7 +16,7 @@ Listen ##SERVER_IP##:##SERVER_PORT##
     AliasMatch ^/skins/([^/]*)/([^/]*)/([^/]*)/(.*) ##PHOCOA_APP_DIR##/skins/$1/$2/www/$3/$4
 
     # show phpdoc documentation
-    AliasMatch ^/docs/?(.*) ##PHOCOA_BASE_DIR##/docs/phpdocs/$1
+    AliasMatch ^/docs/?(.*) ##FRAMEWORK_DIR##/docs/phpdocs/$1
 
     # allow / to run application - THIS ONE MUST BE LAST otherwise it will override the others!
     AliasMatch ^/?(.*) ##PHOCOA_APP_DIR##/wwwroot/index.php/$1
@@ -42,7 +42,7 @@ Listen ##SERVER_IP##:##SERVER_PORT##
 
     # turn on Expires for static content
     # framework statics
-    <Directory ##PHOCOA_BASE_DIR##/wwwroot/www/framework/*>
+    <Directory ##FRAMEWORK_DIR##/wwwroot/www/framework/*>
         Allow from All
         <IfModule mod_expires.c>
             ExpiresActive On

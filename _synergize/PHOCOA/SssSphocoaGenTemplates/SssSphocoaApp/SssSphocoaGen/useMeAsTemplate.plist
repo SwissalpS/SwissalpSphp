@@ -1,40 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>sPathDefaultBaseTemplate</key>
-	<string>/usr/share/php/SwissalpS/_synergize/PHOCOA/SssSphocoaGenTemplates/SssSphocoaApp</string>
-	<key>sPathPhocoaFrameWork</key>
-	<string>/usr/share/php/phocoa</string>
-	<key>sPathSssSFrameWork</key>
-	<string>/usr/share/php/SwissalpS</string>
-	<key>sPathSmartyFrameWork</key>
-	<string>/usr/share/php/Smarty</string>
-	<key>sPathPropelFrameWork</key>
-	<string>/usr/share/php/propel</string>
-	<key>sPathHordeFrameWork</key>
-	<string>/usr/share/php/Horde</string>
-	<key>sPathPearLog</key>
-	<string>/usr/share/php</string>
-	<key>sPathPhing</key>
-	<string>/usr/share/php</string>
-	<key>sDBtype</key>
-	<string>mysql</string>
-	<key>sDBhost</key>
-	<string>debian2</string>
-	<key>sDBuser</key>
-	<string>phocoa</string>
-	<key>sDBpass</key>
-	<string>phocoa</string>
-	<key>sDBname</key>
-	<string>phocoa</string>
-	<key>sHTTPip</key>
-	<string>127.0.0.1</string>
-	<key>sHTTPHost</key>
-	<string>localhost</string>
-	<key>iHTTPPort</key>
-	<integer>80</integer>
-	<key>sAppName</key>
-	<string>SssSphocoaAppCopy</string>
-</dict>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist>
+	<dict>
+		<key>DEFAULT_BASE_TEMPLATE_DIR</key><string>/usr/share/php/SwissalpS/_synergize/PHOCOA/SssSphocoaGenTemplates/SssSphocoaApp</string>
+		<key>FRAMEWORK_DIR</key><string>/usr/share/php/phocoa</string>
+		<key>SwissalpS_FRAMEWORK_DIR</key><string>/usr/share/php/SwissalpS</string>
+		<key>SMARTY_DIR</key><string>/usr/share/php/Smarty</string>
+		<key>PROPEL_FRAMEWORK_DIR</key><string>/usr/share/php/propel</string>
+		<key>HORDE_FRAMEWORK_DIR</key><string>/usr/share/php/Horde</string>
+		<key>PEAR_LOG_FRAMEWORK_DIR</key><string>/usr/share/php</string>
+		<key>PHING_PATH</key><string>/usr/share/php</string>
+		<key>PROPEL_DATABASE</key><string>mysql</string>
+		<key>DB_HOST</key><string>debian2</string>
+		<key>DB_USER</key><string>phocoa</string>
+		<key>DB_PASS</key><string>phocoa</string>
+		<key>DB_NAME</key><string>phocoa</string>
+		<key>SERVER_IP</key><string>127.0.0.1</string>
+		<key>SERVER_NAME</key><string>localhost</string>
+		<key>SERVER_PORT</key><integer>80</integer>
+		<key>PHOCOA_PROJECT_NAME</key><string>SssSphocoaAppCopy</string>
+		<key>SssSphocoaGeneratorVersion</key><integer>2</integer>
+	</dict>
 </plist>

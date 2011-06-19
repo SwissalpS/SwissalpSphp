@@ -31,7 +31,7 @@ if (!defined('DIR_SEP')) define('DIR_SEP', DIRECTORY_SEPARATOR);
 /*
  * Absolute path to the base directory of the PHOCOA framework on the server. If using a PEAR-installed PHOCOA, this should be /path/to/pear/phocoa, otherwise /path/to/phocoa.
  */
-define('FRAMEWORK_DIR', '##PHOCOA_BASE_DIR##');
+define('FRAMEWORK_DIR', '##FRAMEWORK_DIR##');
 
 /* added by SwissalpS 20100502_033958
  * Absolute path to the base directory of the SwissalpS framework on the server.
