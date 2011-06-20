@@ -1033,6 +1033,10 @@ class SssSphocoaGenerator {
 
 				$aReplacements[] = SssS_CLI_Tools::$rts($mVal, DIR_SEP);
 
+			} else {
+
+				$aReplacements[] = $mVal;
+
 			} // if string and longer than 1 char -> remove trailing slash
 
 		} // loop each entry
