@@ -900,7 +900,7 @@ class SssSphocoaGenerator {
 				$sPathDest, $sPathDestAppRoot,
 				$sPathSssSFrameWork, $sPathPearLog,
 				$sPathPropelFrameWork, $sPathHordeFrameWork,
-				$sPathPhing, gmdate('Ymd_his'),
+				$sPathPhing, gmdate('Ymd_His'),
 				$sHTTPip, $iHTTPPort, $sHTTPHost,
 				$sPathLog, $sDBname, $sDBtype,
 				$sDBuser, $sDBhost, $sDBpass,
@@ -961,7 +961,6 @@ class SssSphocoaGenerator {
 		if (!$mPlist) return null;
 
 		static $rts = null; static $ats = null; static $gi = null;
-		static $aSearches = null;
 		static $nl = null; if (!$nl) {
 			$nl = chr(10);
 			$rts = 'removeTrailingSlash';
@@ -1016,7 +1015,7 @@ class SssSphocoaGenerator {
 
 		// double check existance of major variables
 		$oP->getOrSet('DIR_SEP', DIR_SEP);
-		$oP->getOrSet('DATE_STAMP', gmdate('Ymd_his'));
+		$oP->getOrSet('DATE_STAMP', gmdate('Ymd_His'));
 		$oP->getOrSet('PHOCOA_PROJECT_NAME', $sAppName);
 		$oP->getOrSet('PHOCOA_APP_DIR', $sPathDestAppRoot);
 		$oP->getOrSet('PHOCOA_APP_CONTAINER_DIR', $sPathOrig);
@@ -1029,8 +1028,12 @@ class SssSphocoaGenerator {
 
 			$aSearches[] = '##' . $sKey . '##';
 
-			// remove trailing slash
-			$aReplacements[] = SssS_CLI_Tools::$rts($mVal, DIR_SEP);
+			// remove trailing slash only if not only slash!
+			if (is_string($mVal) && 1 < strlen($mVal)) {
+
+				$aReplacements[] = SssS_CLI_Tools::$rts($mVal, DIR_SEP);
+
+			} // if string and longer than 1 char -> remove trailing slash
 
 		} // loop each entry
 
@@ -1125,7 +1128,7 @@ class SssSphocoaGenerator {
 			SssS_CLI_Tools::$rts($a['sPathPropelFrameWork']),
 			SssS_CLI_Tools::$rts($a['sPathHordeFrameWork']),
 			SssS_CLI_Tools::$rts($a['sPathPhing']),
-			gmdate('Ymd_his'),
+			gmdate('Ymd_His'),
 			$oP->get('sHTTPip', '127.0.0.1'), $oP->get('iHTTPPort', 80),
 			$oP->get('sHTTPHost', 'localhost'),
 			$oP->get('sPathLog', $sPathOrig . DIR_SEP . 'log'),
