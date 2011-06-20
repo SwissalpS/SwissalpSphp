@@ -140,7 +140,7 @@ class SssS_SecureRelay { // extends SssS_Cypher2 {
 				&& is_readable($aTask['cargo']['inFilePath'])) {
 
 			// add checksums
-			$s = $this->sChecksumSalt . $aTask['cargo'];
+			$s = $this->sChecksumSalt . print_r($aTask['cargo'], true);
 			$aTask['checksums']['md5'] = md5($s);
 			$aTask['checksums']['sha1'] = sha1($s);
 
@@ -246,7 +246,7 @@ class SssS_SecureRelay { // extends SssS_Cypher2 {
 									'relayTSin' => gmdate('U'),
 									'relayTSout' => gmdate('U'));
 							$mRelayResult = $this->relayTask($a);
-							$this->aOut['tasksResults'][] = ($mRelayResult) ? $mRelayResult : 'failed to relay, packige dropped'; //'cued@Noun' or task result
+							$this->aOut['tasksResults'][] = ($mRelayResult) ? $mRelayResult : 'failed to relay, package dropped'; //'cued@Noun' or task result
 						} // if is for me or to relay
 					} else {
 						// reg error
