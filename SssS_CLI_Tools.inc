@@ -8,8 +8,12 @@
  * * SssS_ServerCommander classes using ANSI coloring etc.
  * *
  * * @used by _synergize/PHOCOA/SssSphocoaGenerator
+ * * @version 20110609_214718 (CC) added checks for constants STDIN, STOUT, STDERR
  * * @version 20100501_083218 (CC) Luke JZ aka SwissalpS
  * * * */
+if (!defined('STDIN')) { define('STDIN', fOpen('php://stdin', 'r')); }
+if (!defined('STDOUT')) { define('STDOUT', fOpen('php://stdout', 'w')); }
+if (!defined('STDERR')) { define('STDERR', fOpen('php://stderr', 'w')); }
 class SssS_CLI_Tools {
 
 	static public function getInputCLI($sPrompt, $sDefault) {
