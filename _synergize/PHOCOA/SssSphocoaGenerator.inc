@@ -1019,6 +1019,7 @@ class SssSphocoaGenerator {
 		$oP->getOrSet('PHOCOA_PROJECT_NAME', $sAppName);
 		$oP->getOrSet('PHOCOA_APP_DIR', $sPathDestAppRoot);
 		$oP->getOrSet('PHOCOA_APP_CONTAINER_DIR', $sPathOrig);
+		$oP->getOrSet('LOG_DIR', $sPathOrig . DIR_SEP . 'log');
 		$oP->getOrSet('PHP_BIN', SssS_ShellScriptRunner::getPHPinterpreterPath());
 
 		$a = $oP->a_plist;	$aSearches = array(); $aReplacements = array();
@@ -1029,7 +1030,7 @@ class SssSphocoaGenerator {
 			$aSearches[] = '##' . $sKey . '##';
 
 			// remove trailing slash only if not only slash!
-			if (is_string($mVal) && 1 < strlen($mVal)) {
+			if (is_string($mVal) && 1 < strLen($mVal)) {
 
 				$aReplacements[] = SssS_CLI_Tools::$rts($mVal, DIR_SEP);
 
@@ -1169,7 +1170,8 @@ class SssSphocoaGenerator {
 
 		if (!$oRunner->isFolder($sPathOrig)) return array();
 
-		$oRunner->doScript('find "' . $sPathOrig . '" -name "*.SssStemplate"');
+		// make sure find gets it that we are looking at a folder....
+		$oRunner->doScript('find -L "' . $sPathOrig . '" -name "*.SssStemplate"');
 
 		return explode("\n", $oRunner->sOut());
 
