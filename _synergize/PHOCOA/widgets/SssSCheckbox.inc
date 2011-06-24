@@ -54,6 +54,13 @@ class SssSCheckbox extends WFCheckbox {
     } // setLabel
 
 
+    function setTitle($sTitle) {
+
+        $this->title = SssSBla::translateIfNeeded($sTitle, array('noDIV' => true));
+
+    } // setTitle
+
+
 	// add some xhtml compatibility
     function render($blockContent = NULL) {
         if ($this->hidden) return NULL;
@@ -71,6 +78,8 @@ class SssSCheckbox extends WFCheckbox {
 
         $sTabIndex = ($this->tabIndex ? ' tabIndex="' . $this->tabIndex . '" ' : '');
 
+        $sTitle = ($this->title ? ' title="' . $this->title . '" ' : '');
+
         if ('right' === $this->labelPosition)
             $sLabelLeft = NULL;
 
@@ -82,7 +91,7 @@ class SssSCheckbox extends WFCheckbox {
         		. '" ' . ($this->class ? ' class="' . $this->class . '" ' : '')
         		. 'id="' . $this->id() . '" '
         		. 'value="' . $this->checkedValue() . '" '
-        		. $sChecked . $sEnabled . $sTabIndex . ' />' . $sLabelRight
+        		. $sChecked . $sEnabled . $sTabIndex . $sTitle . ' />' . $sLabelRight
         		. $this->getListenerJSInScriptTag();
 
     } // render
