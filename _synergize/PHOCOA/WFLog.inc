@@ -45,14 +45,21 @@ class WFLog extends WFObject
         if (!WFLog::logif($level)) return;   // bail as early as possible if we aren't gonna log this line
         $logFileDir = WFWebApplication::sharedWebApplication()->appDirPath(WFWebApplication::DIR_LOG);
         $logger = Log::singleton('file', $logFileDir . '/wf.log', $ident, array('mode' => 0666), WF_LOG_LEVEL);
-        $logger->log($message, $level);
+        $logger->log(self::buildLogMessage($message), $level);
     }
 
+    /**
+      * Log the passed message to the framework's log folder in the filename specified.
+      * @param string The filename to log the message to. The exact string will be used for the filename; no extension will be appended.
+      * @param mixed string Log message to log.
+      *              object WFFunction A WFFunction which will be lazy-evaluated to produce the message to log. This level of decoupling allows the log infrastructure
+      *                                to be much faster when a message won't be logged as the message creation won't occur at all.
+      */
     public static function logToFile($fileName, $message)
     {
         $logFileDir = WFWebApplication::sharedWebApplication()->appDirPath(WFWebApplication::DIR_LOG);
         $logger = Log::singleton('file', $logFileDir . '/' . $fileName, 'log', array('mode' => 0666));
-        $logger->log($message);
+        $logger->log(self::buildLogMessage($message));
     }
 
     public static function logif($level = PEAR_LOG_DEBUG)
@@ -64,9 +71,23 @@ class WFLog extends WFObject
 
     public function deprecated($message)
     {
+        // intersects with E_DEPRECATED? http://php.net/manual/en/errorfunc.constants.php
         WFLog::log($message, 'deprecated', PEAR_LOG_NOTICE);
     }
 
+    private static function buildLogMessage($msg)
+    {
+        if (is_string($msg)) return $msg;
+
+        if ($msg instanceof WFFunction)
+        {
+            return $msg->call();
+        }
+
+        return "Unknown message type";
+    }
+
 } // WFLog
+
 /* * * *\ WFLog.inc (CC) Luke JZ aka SwissalpS /* * * */
 ?>
