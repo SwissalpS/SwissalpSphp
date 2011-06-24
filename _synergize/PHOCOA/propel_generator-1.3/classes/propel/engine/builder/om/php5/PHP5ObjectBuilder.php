@@ -126,7 +126,17 @@ class PHP5ObjectBuilder extends ObjectBuilder {
 			if ($col->isTemporalType()) {
 				$fmt = $this->getTemporalFormatter($col);
 				try {
-					if (!($this->getPlatform() instanceof MysqlPlatform &&
+					// SwissalpS added this if block to prevent script from crashing 20110623_102051
+					if ($this->getPlatform() instanceof MysqlPlatform &&
+					'CURRENT_TIMESTAMP' === $val) {
+
+						/* SwissalpS is not quit sure what to do here, the commented lines 'work' in that the script does not crash */
+						//$defDt = new DateTime('NOW');
+						//$defaultValue = var_export($defDt->format($fmt), true);
+
+						$defaultValue = "'0000-00-00 00:00:00'";
+
+					} else if (!($this->getPlatform() instanceof MysqlPlatform &&
 					($val === '0000-00-00 00:00:00' || $val === '0000-00-00'))) {
 						// while technically this is not a default value of NULL,
 						// this seems to be closest in meaning.
@@ -2012,7 +2022,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		if (\$con === null) {
 			\$con = Propel::getConnection(".$this->getPeerClassname()."::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		\$con->beginTransaction();
 		try {
 			".$this->getPeerClassname()."::doDelete(\$this, \$con);
@@ -2642,27 +2652,27 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 
 		$varName = $this->getFKVarName($fk);
 		$pCollName = $this->getFKPhpNameAffix($fk, $plural = true);
-		
+
 		$fkPeerBuilder = $this->getNewPeerBuilder($this->getForeignTable($fk));
 		$fkObjectBuilder = $this->getNewObjectBuilder($this->getForeignTable($fk))->getStubObjectBuilder();
 		$className = $fkObjectBuilder->getClassname(); // get the Classname that has maybe a prefix
-		
+
 		$and = "";
 		$comma = "";
 		$conditional = "";
 		$argmap = array(); // foreign -> local mapping
 		$argsize = 0;
 		foreach ($fk->getLocalColumns() as $columnName) {
-			
+
 			$lfmap = $fk->getLocalForeignMapping();
-			
+
 			$localColumn = $table->getColumn($columnName);
 			$foreignColumn = $fk->getForeignTable()->getColumn($lfmap[$columnName]);
-			
+
 			$column = $table->getColumn($columnName);
 			$cptype = $column->getPhpType();
 			$clo = strtolower($column->getName());
-			
+
 			if ($cptype == "integer" || $cptype == "float" || $cptype == "double") {
 				$conditional .= $and . "\$this->". $clo ." != 0";
 			} elseif ($cptype == "string") {
@@ -2670,13 +2680,13 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 			} else {
 				$conditional .= $and . "\$this->" . $clo ." !== null";
 			}
-			
+
 			$argmap[] = array('foreign' => $foreignColumn, 'local' => $localColumn);
 			$and = " && ";
 			$comma = ", ";
 			$argsize = $argsize + 1;
 		}
-		
+
 
 		$script .= "
 
@@ -3404,7 +3414,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 ";
 			} // foreach foreign k
 		} // if (count(foreign keys))
-		
+
 		if ($table->hasAutoIncrementPrimaryKey() ) {
 		$script .= "
 			if (\$this->isNew() ) {
@@ -3625,7 +3635,7 @@ abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->
 		if (\$con === null) {
 			\$con = Propel::getConnection(".$this->getPeerClassname()."::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
-		
+
 		\$con->beginTransaction();
 		try {
 			\$affectedRows = \$this->doSave(\$con".($reloadOnUpdate || $reloadOnInsert ? ", \$skipReload" : "").");
