@@ -130,16 +130,21 @@ class WFIncluding {
 				'SssSCountries'
 				=> '_synergize/PHOCOA/SssSCountries.inc',
 
+				// arbitrary SwissalpS classes
+
+				'SssS_LogRotator'
+				=> '_synergize/SssS_LogRotator.inc',
+
 				'SssSMailer'
 				=> '_synergize/PHOCOA/SssSMailer.inc',
-
-				'SssSURLRewrite'
-				=> '_synergize/PHOCOA/SssSURLRewrite.php',
 
 				'SssSPlistItem'
 				=> '_synergize/PHOCOA/SssSPlistItem.inc',
 				'SssSPlistItemHelper'
 				=> '_synergize/PHOCOA/SssSPlistItem.inc',
+
+				'SssSURLRewrite'
+				=> '_synergize/PHOCOA/SssSURLRewrite.php',
 
 			 	// default phocoa
 				//'Smarty' => 'Smarty/Smarty.class.php',
