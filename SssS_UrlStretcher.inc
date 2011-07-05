@@ -1,39 +1,46 @@
-#!/usr/local/php5/bin/php
 <?php
 /* * * *
- * * SssS_UrlStretcher.inc
+ * * SssS_URLStretcher.inc
  * *
  * * @version 20110705_023747 (CC) Luke JZ aka SwissalpS
  * * * */
 if (!defined('CRLF')) define('CRLF', "\r\n");
 
-/*http://www.postcourier.com.pg/images/Wkndxpix/Grass-Roots-20110414.gif
+/*
+TODO: clean up usage example:
+http://www.postcourier.com.pg/images/Wkndxpix/Grass-Roots-20110414.gif
 $aHops = array();
-$sLongUrl = SssS_UrlStretcher::longUrlFor('http://cot.ag/9WRLb7', $aHops) . chr(10);
-//echo SssS_UrlStretcher::longUrlFor('http://adage.com/smallagency/post?article_id=143272');
-//echo SssS_UrlStretcher::longUrlFor('http://adage.com/article/143272');
-//echo SssS_UrlStretcher::longUrlFor('http://adage.com/article/small-agency-diary/hell-a-creative-director-supposed/143272/');
+$sLongUrl = SssS_URLStretcher::longUrlFor('http://cot.ag/9WRLb7', $aHops) . chr(10);
+//echo SssS_URLStretcher::longUrlFor('http://adage.com/smallagency/post?article_id=143272');
+//echo SssS_URLStretcher::longUrlFor('http://adage.com/article/143272');
+//echo SssS_URLStretcher::longUrlFor('http://adage.com/article/small-agency-diary/hell-a-creative-director-supposed/143272/');
 var_dump($aHops);
 echo $sLongUrl
+*/ /*
+$aHops = array();
+echo SssS_URLStretcher::longUrlFor('http://www.postcourier.com.pg/20110704/grassruts.htm', $aHops) . chr(10);
+var_dump($aHops);
 */
-class SssS_UrlStretcher {
+class SssS_URLStretcher {
 
 	const ItIMEoUT = 20;
 
 	const SuSERaGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11';
 
-	static function longUrlFor($sShortUrl, &$aHops = null) {
+	static function longUrlFor($sShortUrl, &$aHops = null, $sUserAgent = null, $iTimeOut = null) {
 
 		if (!is_array($aHops)) $aHops = array();
+		if (!$sUserAgent) $sUserAgent = self::SuSERaGENT;
+		if (!$iTimeOut) $iTimeOut = self::ItIMEoUT;
 
 		// this follows redirects, not what we want
 		//return file_get_contents($sShortUrl);
 
 		// uncomment to use curl method (comment to use next method)
-		return self::longUrlForByMethodCurl($sShortUrl, $aHops);
+		return self::longUrlForByMethodCurl($sShortUrl, $aHops, $sUserAgent, $iTimeOut);
 
 		// curl method is mostly better... but if it's not on your server, try this
-		return self::longUrlForByMethodFsock($sShortUrl, $aHops);
+		return self::longUrlForByMethodFsock($sShortUrl, $aHops, $sUserAgent, $iTimeOut);
 
 	} // longUrlFor
 
@@ -41,9 +48,7 @@ class SssS_UrlStretcher {
 	static function longUrlForByMethodCurl($sShortUrl, &$aHops = null, $sUserAgent = null, $iTimeOut = null) {
 
 		if (!is_array($aHops)) $aHops = array();
-
 		if (!$sUserAgent) $sUserAgent = self::SuSERaGENT;
-
 		if (!$iTimeOut) $iTimeOut = self::ItIMEoUT;
 
 		$rC = curl_init();
@@ -197,10 +202,7 @@ class SssS_UrlStretcher {
 
 	} // longUrlForByMethodFsock
 
-} // SssS_UrlStretcher
+} // SssS_URLStretcher
 
-$aHops = array();
-echo SssS_UrlStretcher::longUrlFor('http://www.postcourier.com.pg/20110704/grassruts.htm', $aHops) . chr(10);
-var_dump($aHops);
-/* * * *\ SssS_UrlStretcher (CC) Luke JZ aka SwissalpS /* * * */
+/* * * *\ SssS_URLStretcher (CC) Luke JZ aka SwissalpS /* * * */
 ?>
