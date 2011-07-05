@@ -145,7 +145,7 @@ class SssS_URLStretcher {
 
 		} // if got port
 
-		// not actually used...
+		// not actually used... TODO: use ssl:// when https-url
 		if (isset($aUrl['scheme'])) {
 
 			$sScheme = $aUrl['scheme'];
@@ -155,7 +155,8 @@ class SssS_URLStretcher {
 			$sScheme = 'http';
 
 		} // if got scheme
-		$iErr = $sErr = null; //$sScheme . '://' .
+
+		$iErr = $sErr = null;
 		$rS = fSockOpen ($sHost, $iPort, $iErr, $sErr, $iTimeOut);
 		if (!$rS) return 'could not connect to: ' . $sShortUrl . ' (' . $iErr . ') ' . $sErr;
 
@@ -178,6 +179,11 @@ class SssS_URLStretcher {
 		$aLines = explode("\r", $sResponse); // not '\r\n'
 		if (2 > count($aLines)) $aLines = explode("\n", $sResponse);
 
+		// extract response code
+		$aResponse = explode(' ', trim($aLines[0]));
+		if (!isset($aResponse[1])) return 'malformed header returned from: ' . $sShortUrl;
+		$iResponseCode = $aResponse[1];
+
 		forEach ($aLines as $sLine) {
 
 			$sLine = trim($sLine);
@@ -186,7 +192,7 @@ class SssS_URLStretcher {
 
 			if ('Location:' == subStr($sLine, 0, 9)) {
 
-				$aHops[] = $sShortUrl;
+				$aHops[] = array('url' => $sShortUrl, 'code' => $iResponseCode);
 
 				$sLongUrl = trim(subStr($sLine, 9));
 
@@ -196,6 +202,8 @@ class SssS_URLStretcher {
 			} // if found location line
 
 		} // loop each line
+
+		$aHops[] = array('url' => $sShortUrl, 'code' => $iResponseCode);
 
 		// if no redirect occured, we can return the given url
 		return $sShortUrl;
