@@ -33,8 +33,9 @@ class SssS_URLStretcher {
 		if (!$sUserAgent) $sUserAgent = self::SuSERaGENT;
 		if (!$iTimeOut) $iTimeOut = self::ItIMEoUT;
 
-		// this follows redirects, not what we want
+		// this follows redirects, not what we want. Besides it also gets the whole content, we only need the response to the HTTP/1.1 HEAD request.
 		//return file_get_contents($sShortUrl);
+		//var_dump($http_response_header); // is set by PHP and gives a chance to look at final header
 
 		// uncomment to use curl method (comment to use next method)
 		return self::longUrlForByMethodCurl($sShortUrl, $aHops, $sUserAgent, $iTimeOut);
