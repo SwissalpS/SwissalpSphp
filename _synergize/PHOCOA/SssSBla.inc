@@ -382,18 +382,22 @@ class SssSBla implements SssSLocalizationDelegate {
 		// prepend the requested language
 		$aLangs = array_merge(array($sLang), $this->languageOrder());
 
-		if ($oBla = Bla000Peer::retrieveByPK($sKey)) {
+		if (class_exists('Bla000Peer')) {
 
-			// return the translated value, falling back to next language in list
-			foreach ($aLangs as $sLang) {
+			if ($oBla = Bla000Peer::retrieveByPK($sKey)) {
 
-				$mVal = $oBla->valueForKey(strToLower($sLang));
+				// return the translated value, falling back to next language in list
+				foreach ($aLangs as $sLang) {
 
-				if (!empty($mVal)) return $mVal;
+					$mVal = $oBla->valueForKey(strToLower($sLang));
 
-			} // loop languages
+					if (!empty($mVal)) return $mVal;
 
-		} // if got entry in db
+				} // loop languages
+
+			} // if got entry in db
+
+		} // if Bla000Peer class exists
 
 		return $sKey;
 
