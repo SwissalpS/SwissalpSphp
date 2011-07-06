@@ -115,6 +115,7 @@ class WFIncluding {
 				=> '_synergize/PHOCOA/SssSLocalization.inc',
 				'SssSLink'
 				=> '_synergize/PHOCOA/widgets/SssSLink.inc',
+				'SssSTextField' => '_synergize/PHOCOA/widgets/SssSTextField.inc',
 				'SssSLabel'
 				=> '_synergize/PHOCOA/widgets/SssSLabel.inc',
 				'SssSgdImageBasic'
