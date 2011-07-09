@@ -1054,9 +1054,14 @@ class SssSphocoaGenerator {
 			if ('runner.phps' == $sName) $sName = $sAppName;
 			//if ('propel-conf.xml' == $sName) $sName = $sAppName . '-conf.xml';
 			$sPath = dirname($sPath) . DIR_SEP;
-			file_put_contents_safely($sPath . $sName,
-					str_replace($aSearches, $aReplacements,
-					file_get_contents_safely($sPath . $sNameTemplate)), 'wb');
+			$sIn = file_get_contents_safely($sPath . $sNameTemplate);
+			$sOut = str_replace($aSearches, $aReplacements, $sIn);
+			file_put_contents_safely($sPath . $sName, $sOut, 'wb');
+
+			//if ('#!' == subStr($sOut, 0, 2)) { } // if got shebang -> executable
+			// instead replicate original
+			chmod($sPath . $sName, filePerms($sPath . $sNameTemplate));
+
 		} // foreach path
 
 		return true;
