@@ -56,7 +56,7 @@ class SssSSubmit extends WFSubmit {
 
     function setPostSubmitLabel($str) {
 
-        $this->postSubmitLabel = SssSBla::translateIfNeeded($str, array('noDIV' => true));
+        $this->postSubmitLabel = SssSBla::cleanForTitle(SssSBla::translateIfNeeded($str, array('noDIV' => true)));
 
         $this->postSubmitLabelBlaID = SssSBla::removeBlaPrefixIfHas($str);
 
