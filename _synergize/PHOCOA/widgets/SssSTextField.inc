@@ -11,7 +11,7 @@ class SssSTextField extends WFTextField {
 
     public function setNullPlaceholder($sValue) {
 
-		$this->nullPlaceholder = SssSBla::translateIfNeeded($sValue, array('noDIV' => true));
+		$this->nullPlaceholder = SssSBla::cleanForTitle(SssSBla::translateIfNeeded($sValue, array('noDIV' => true)));
 
     } // setNullPlaceholder
 
