@@ -2,6 +2,7 @@
 // MODIFIED FOR mb_ less & mb_ ed machines
 /** SssS_Plist.inc
  *
+ * @version 20111116_101323 + read binary format and sets a flag
  * @version 20110128_134728 + split '?' . '>' in regex to keep editors from confusion
  * @version 20100503_123217 + added __toString() for easy info. + Now handles NULL -> removes key if want to set to null. + added __toPlistArray(), __toDataBase64() and serializeAndEncodeObject() in conjunction with adding more support for adding non Plist values. Still triggers E_USER_NOTICE and informs what has been done. Read in parseArrayToTag() to see exact order of options: $o->__toPlistArray(), $o->__toDataBase64(), $o->__toString() and finally serializeAndEncodeObject($o)
  * @version 20091031_103025 + debugged the getter setter functions
@@ -38,6 +39,11 @@ class SssS_Plist extends SssS_XHTML {
 	 * @var string string representation of plist
 	 */
 	var $s_plist;			// string containing xml that will be parsed
+	/**
+	 * @var boolean indicate if read from a binary plist
+	 */
+	// + 20111116_101323
+	var $b_binary;
 	/**
 	 * @var string possible values: ["plist" | "html" | "xhtml"] parsed from $s_plist if possible -> root tag name
 	 */
@@ -120,6 +126,9 @@ class SssS_Plist extends SssS_XHTML {
 		/* * add basic plist tag * */
 		$this->i_plist &= $this->i_html;
 		$this->i_plist = $this->addTag('plist', -1, array('version' => '1.0'));
+
+		// assume xml format not binary + 20111116_101323
+		$this->b_binary = false;
 
 		// read from given string or array
 		// + or path 20091024_194309
@@ -945,6 +954,20 @@ pathChecks ' . $s_path . '
 				// yes, read.
 				// set global path
 				$this->s_path = $s_path;
+				// check for binary + 20111116_101323
+				if ('bplist00' == subStr($mXML, 0, 8)) {
+					ob_start();
+					system('plutil -convert xml1 -o - ' . $s_path, $i_res);
+					$s_res = ob_get_clean();
+					if (0 == $i_res) {
+						$this->b_binary = true;
+						return $s_res;
+					} else {
+						return '<plist>
+	<string>ERROR: binary plist format detected, failed to convert to xml</string>
+</plist>';
+					} // if system call ran ok or not
+				} // if is binary format
 				return $mXML;
 			} // if could read
 				// no, can't read oops -> ...
