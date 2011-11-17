@@ -6,6 +6,7 @@
  * * be in the base class
  * *
  * * @uses SssS_ShellScriptRunner
+ * * @version 20111117_021840 + sharedRunner()
  * * @version 20100501_203928 (CC) Luke JZ aka SwissalpS
  * * * */
 
@@ -32,6 +33,16 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 		$this->SssS_ShellScriptRunner();
 	} // SssS_ShellScriptRunnerForDummies constructor/initializer
 
+
+	// added: 20111117_021840
+	static function sharedRunner() {
+
+		static $o = null;
+		if (!$o) $o = new SssS_ShellScriptRunnerForDummies();
+
+		return $o;
+
+	} // sharedRunner
 
 
 	/**

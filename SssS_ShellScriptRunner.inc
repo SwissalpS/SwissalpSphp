@@ -5,6 +5,7 @@
  * * basically runs shell scripts as system calls. Either directly or by
  * * placing the script in a file first and changing it's mode to executable
  * *
+ * * @version 20111117_021840 + added sharedRunner()
  * * @version 20100502_175315 + added backgroundable and 2>&1 for file running.
  * * @version 20100501_200518 + added some quick getters iRes(), sOut() etc.
  * * @version 20091104_195900 + try catch and mute option in doScript(..,..)
@@ -32,6 +33,18 @@ class SssS_ShellScriptRunner {
 		//$this->fReset();
 
 	} // SssS_ShellScriptRunner
+
+
+	// added: 20111117_021840
+	static function sharedRunner() {
+
+		static $o = null;
+		if (!$o) $o = new SssS_ShellScriptRunner();
+
+		return $o;
+
+	} // sharedRunner
+
 
 	public function fReset() {
 
