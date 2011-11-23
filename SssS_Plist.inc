@@ -957,7 +957,7 @@ pathChecks ' . $s_path . '
 				// check for binary + 20111116_101323
 				if ('bplist00' == subStr($mXML, 0, 8)) {
 					ob_start();
-					system('plutil -convert xml1 -o - ' . $s_path, $i_res);
+					system('plutil -convert xml1 -o - "' . $s_path . '"', $i_res);
 					$s_res = ob_get_clean();
 					if (0 == $i_res) {
 						$this->b_binary = true;
