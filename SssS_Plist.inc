@@ -475,9 +475,9 @@ class SssS_Plist extends SssS_XHTML {
 
 	public function isMT() { return (0 == count($this->a_plist)); } // isMT
 
-	public function load($sPath = null) {
+	public function load($sPath = null, $bCreate = false) {
 		$sPath = ($sPath && '' != trim($sPath)) ? $sPath : $this->s_path;
-		$mRes = $this->pathChecks($sPath);
+		$mRes = $this->pathChecks($sPath, $bCreate);
 		if (false === $mRes) return false;
 
 		$this->s_path = $sPath;
