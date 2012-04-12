@@ -70,14 +70,14 @@ class SssS_ChmodHelper {
 
 		$sScript = 'chmod ' . $sMode . ' "' . $sPath . '";';
 
-		self::doScript($sScript);
+		return self::doScript($sScript);
 
 	} // chmodFile
 
 
 	static function doScript($sScript) {
 
-		self::sharedRunner()->doScript($sScript);
+		return self::sharedRunner()->doScript($sScript);
 
 	} // doScript
 
