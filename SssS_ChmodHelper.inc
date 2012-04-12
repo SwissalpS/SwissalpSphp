@@ -68,7 +68,7 @@ class SssS_ChmodHelper {
 
 		} // if file does not exist
 
-		$sScript = 'chmod ' . $sMode . ' "' .  . '";';
+		$sScript = 'chmod ' . $sMode . ' "' . $sPath . '";';
 
 		self::doScript($sScript);
 
