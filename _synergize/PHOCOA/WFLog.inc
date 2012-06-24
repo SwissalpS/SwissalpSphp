@@ -33,8 +33,10 @@ class WFLog extends WFObject
     const WARN_LOG = 'warn';
 
     /**
-      * Log the passed exception to the framework's log folder.
-      * @param string Log message to log.
+      * Log the passed message to the framework's log folder.
+      * @param mixed string Log message to log.
+      *              object WFFunction A WFFunction which will be lazy-evaluated to produce the message to log. This level of decoupling allows the log infrastructure
+      *                                to be much faster when a message won't be logged as the message creation won't occur at all.
       * @param string The "ident" of the message to log.
       * @param level The PEAR log level (PEAR_LOG_EMERG, PEAR_LOG_ALERT, PEAR_LOG_CRIT, PEAR_LOG_ERR, PEAR_LOG_WARNING, PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG)
       *

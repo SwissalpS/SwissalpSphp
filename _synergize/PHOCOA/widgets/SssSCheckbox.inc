@@ -86,13 +86,23 @@ class SssSCheckbox extends WFCheckbox {
         else
             $sLabelRight = NULL;
 
-        return $sLabelLeft . '<input type="checkbox" '
-        		. 'name="' . $this->name() . ($this->groupMode() ? '[]' : '')
+
+		$sName = $this->name() . ($this->groupMode() ? '[]' : '');
+		$sOut = $sLabelLeft . '<input type="checkbox" '
+        		. 'name="' . $sName . 
         		. '" ' . ($this->class ? ' class="' . $this->class . '" ' : '')
         		. 'id="' . $this->id() . '" '
         		. 'value="' . $this->checkedValue() . '" '
         		. $sChecked . $sEnabled . $sTabIndex . $sTitle . ' />' . $sLabelRight
         		. $this->getListenerJSInScriptTag();
+
+		if (!$this->enabled() && $this->checked() {
+
+			$sOut .= '<input type="hidden" name="' . $sName . '" value="' . $this->checkedValue() . '" />';
+
+		} // if not enabled but checked
+
+		return $sOut;
 
     } // render
 

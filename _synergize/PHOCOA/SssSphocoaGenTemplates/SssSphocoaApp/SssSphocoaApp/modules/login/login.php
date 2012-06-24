@@ -97,6 +97,9 @@ class login extends WFModule {
         $page->outlet('rememberMe')->setHidden( !$ac->shouldEnableRememberMe() );
         $page->outlet('forgottenPasswordLink')->setHidden( !$ac->shouldEnableForgottenPasswordReset() );
         $page->outlet('forgottenPasswordLink')->setValue( WFRequestController::WFURL('login', 'doForgotPassword') . '/' . $page->outlet('username')->value());
+        $page->outlet('signUp')->setLabel( $ac->signUpLabel() );
+        $page->outlet('signUp')->setValue( $ac->signUpUrl() );
+        $page->outlet('signUp')->setHidden( $ac->signUpUrl() === NULL );
 
         if (!$page->hasSubmittedForm()) {
 
@@ -149,6 +152,9 @@ class login extends WFModule {
         return array('username');
     }
     function doForgotPassword_PageDidLoad($page, $params) {
+
+        // IE sometimes lower-cases URLs for some reason. Help it out.
+        if (!$page->hasOutlet('username')) throw new WFRequestController_RedirectException(WFRequestController::WFURL($page->module()->moduleName(), 'doForgotPassword'));
 
         $ac = WFAuthorizationManager::sharedAuthorizationManager();
         $page->outlet('username')->setValue($params['username']);
