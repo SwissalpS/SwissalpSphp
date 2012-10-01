@@ -15,10 +15,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `skyproco_phskyprom`
---
-
 -- --------------------------------------------------------
 
 --
@@ -35,20 +31,6 @@ CREATE TABLE IF NOT EXISTS `Bla000` (
   `rm` text COLLATE utf8_unicode_ci,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `blog`
---
-
-CREATE TABLE IF NOT EXISTS `blog` (
-  `blog_id` int(11) NOT NULL AUTO_INCREMENT,
-  `post_dts` datetime NOT NULL,
-  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `post` text COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`blog_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
