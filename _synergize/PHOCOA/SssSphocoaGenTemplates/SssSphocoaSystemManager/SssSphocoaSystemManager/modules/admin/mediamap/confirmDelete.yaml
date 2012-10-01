@@ -1,0 +1,29 @@
+
+confirmDeleteMediamapForm: 
+  children: 
+    cancel   : 
+      class     : WFSubmit
+      properties: 
+        label: Cancel
+    deleteObj: 
+      class     : WFSubmit
+      properties: 
+        label: Delete
+    mediauid : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : mediauid
+      class   : WFHidden
+  class   : WFForm
+confirmMessage           : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : url
+      options      : 
+        ValuePattern: Are you sure you want to delete Mediamap "%1%"?
+
+  class   : WFMessageBox

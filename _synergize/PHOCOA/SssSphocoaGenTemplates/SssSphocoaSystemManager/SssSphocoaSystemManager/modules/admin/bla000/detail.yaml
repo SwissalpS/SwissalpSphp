@@ -1,0 +1,50 @@
+
+comment: 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : comment
+  class   : WFLabel
+de     : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : de
+  class   : WFLabel
+en     : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : en
+  class   : WFLabel
+fr     : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : fr
+  class   : WFLabel
+it     : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : it
+  class   : WFLabel
+rm     : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : rm
+  class   : WFLabel
+uid    : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Bla000
+      modelKeyPath : uid
+  class   : WFLabel

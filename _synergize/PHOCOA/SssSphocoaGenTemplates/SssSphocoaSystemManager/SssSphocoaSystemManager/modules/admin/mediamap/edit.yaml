@@ -1,0 +1,92 @@
+
+editMediamapForm: 
+  children: 
+    cssclass : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : cssclass
+      class   : WFTextField
+    deleteObj: 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : isNew
+      class     : WFSubmit
+      properties: 
+        label: Delete
+    height   : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : height
+      class   : WFTextField
+    karma    : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : karma
+      class   : WFTextField
+    mediauid : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : mediauid
+      class   : WFHidden
+    mime     : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : mime
+      class   : WFTextField
+    save     : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : isNew
+      class     : WFSubmit
+      properties: 
+        label: Save
+    saveNew  : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : isNew
+          options      : 
+            valueTransformer: WFNegateBoolean
+      class     : WFSubmit
+      properties: 
+        action: save
+        label : Create Mediamap
+    type     : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : type
+      class   : WFTextField
+    url      : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : url
+      class   : WFTextField
+    width    : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Mediamap
+          modelKeyPath : width
+      class   : WFTextField
+  class   : WFForm
+statusMessage   : 
+  class: WFMessageBox

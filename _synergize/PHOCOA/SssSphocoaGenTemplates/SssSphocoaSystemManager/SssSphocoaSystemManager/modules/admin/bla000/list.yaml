@@ -1,0 +1,88 @@
+
+deleteLink         :
+  children  :
+    deleteLinkPrototype:
+      bindings  :
+        value:
+          controllerKey: '#current#'
+          instanceID   : Bla000
+          modelKeyPath : uid
+          options      :
+            ValuePattern: /admin/bla000/confirmDelete/%1%
+      class     : SssSLink
+      properties:
+        label: SssSBlaSharedDelete
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Bla000'
+editLink           :
+  children  :
+    editLinkPrototype:
+      bindings  :
+        value:
+          controllerKey: '#current#'
+          instanceID   : Bla000
+          modelKeyPath : uid
+          options      :
+            ValuePattern: /admin/bla000/edit/%1%
+      class     : SssSLink
+      properties:
+        label: SssSBlaSharedEdit
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Bla000'
+comment           :
+  children  :
+    commentPrototype:
+      bindings  :
+        value:
+          controllerKey: '#current#'
+          instanceID   : Bla000
+          modelKeyPath : comment
+      class     : WFLabel
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Bla000'
+paginatorNavigation:
+  class     : SssSPaginatorNavigation
+  properties:
+    paginator: '#module#paginator'
+paginatorPageInfo  :
+  class     : SssSPaginatorPageInfo
+  properties:
+    paginator: '#module#paginator'
+searchBla000Form   :
+  children:
+    clear         :
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedClear
+    paginatorState:
+      class     : WFPaginatorState
+      properties:
+        paginator: '#module#paginator'
+    query         :
+      class: WFTextField
+    search        :
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedSearch
+  class   : WFForm
+uid                :
+  children  :
+    uidPrototype:
+      bindings:
+        label:
+          controllerKey: '#current#'
+          instanceID   : Bla000
+          modelKeyPath : uid
+        value:
+          controllerKey: '#current#'
+          instanceID   : Bla000
+          modelKeyPath : uid
+          options      :
+            ValuePattern: /admin/bla000/detail/%1%
+      class   : SssSLink
+  class     : WFDynamic
+  properties:
+    arrayController: '#module#Bla000'

@@ -1,0 +1,115 @@
+
+bridgeuid:
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : bridgeuid
+  class   : WFLabel
+children :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : children
+  class   : WFLabel
+country  :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : country
+  class   : WFLabel
+date     :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : date
+  properties:
+    formatter: '#module#dateFormatter'
+  class   : WFLabel
+email    :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : email
+  class   : WFLabel
+handle   :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : handle
+  class   : WFLabel
+karma    :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : karma
+  class   : WFLabel
+lang     :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : lang
+  class   : WFLabel
+mediauid :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : mediauid
+  class   : WFLabel
+name     :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : name
+  class   : WFLabel
+note     :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : note
+  class   : WFLabel
+publish  :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : publish
+  class   : WFLabel
+region   :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : region
+  class   : WFLabel
+uid      :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : uid
+  class   : WFLabel
+url0     :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : url0
+  class   : WFLabel
+url1     :
+  bindings:
+    value:
+      controllerKey: selection
+      instanceID   : Notes
+      modelKeyPath : url1
+  class   : WFLabel

@@ -1,0 +1,127 @@
+
+editUsersForm:
+  children:
+    country          :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : country
+      class   : WFHidden
+    deleteObj        :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedDelete
+    email            :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : email
+      class   : WFTextField
+      properties:
+        size: 39
+        maxLength: 128
+    handle           :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : handle
+      class   : WFHidden
+    handlel           :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : handle
+      class   : WFLabel
+    languageorderl    :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : languageorder
+      class   : WFLabel
+    selectCountry:
+      bindings  :
+        contentLabels:
+          controllerKey: countries
+          instanceID   : '#module#'
+          modelKeyPath : selectCountriesLabels
+        contentValues:
+          controllerKey: countries
+          instanceID   : '#module#'
+          modelKeyPath : selectCountriesValues
+      class     : WFSelect
+      properties:
+        multiple    : false
+        onEvent     : change do j updateCountry()
+        visibleItems: 1
+    pass1            :
+      class: WFTextField
+      properties:
+        size: 39
+    pass2            :
+      class: WFTextField
+      properties:
+        size: 39
+    realname         :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : realname
+      class   : WFTextField
+      properties:
+        size: 39
+        maxLength: 64
+    region           :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : region
+      class   : WFTextField
+      properties:
+        size: 39
+        maxLength: 32
+    save             :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedSave
+    saveNew          :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : isNew
+          options      :
+            valueTransformer: WFNegateBoolean
+      class     : SssSSubmit
+      properties:
+        action: save
+        label : SssSBlaSharedCreate
+    url              :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : url
+      class   : WFTextField
+      properties:
+        size: 39
+        maxLength: 256
+  class   : WFForm
+statusMessage:
+  class: SssSMessageBox

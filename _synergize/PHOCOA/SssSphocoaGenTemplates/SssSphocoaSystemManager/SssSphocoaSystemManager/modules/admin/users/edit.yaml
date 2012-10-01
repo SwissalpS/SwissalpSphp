@@ -1,0 +1,159 @@
+
+editUsersForm: 
+  children: 
+    avatarmediauid   : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : avatarmediauid
+      class   : WFTextField
+    country          : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : country
+      class   : WFTextField
+    deleteObj        : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedDelete
+    email            : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : email
+      class   : WFTextField
+    handle           : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : handle
+      class   : WFTextField
+    karma            : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : karma
+      class   : WFTextField
+    languageorder    : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : languageorder
+      class   : WFTextField
+    multiSelectPPerms: 
+      bindings  : 
+        contentLabels : 
+          controllerKey: arrangedObjects
+          instanceID   : Permpresets
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: %1% %2%
+        contentLabels2: 
+          controllerKey: arrangedObjects
+          instanceID   : Permpresets
+          modelKeyPath : name
+        contentValues : 
+          controllerKey: arrangedObjects
+          instanceID   : Permpresets
+          modelKeyPath : uid
+      class     : WFSelect
+      properties: 
+        multiple    : true
+        onEvent     : change do j remakePPermList()
+        visibleItems: 12
+    oauth            : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : oauth
+      class   : WFTextField
+    openid           : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : openid
+      class   : WFTextField
+    pass1            : 
+      class: WFTextField
+    pass2            : 
+      class: WFTextField
+    passhash         : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : passhash
+      class   : WFHidden
+    permissions      : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : permissions
+      class   : WFTextField
+    realname         : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : realname
+      class   : WFTextField
+    region           : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : region
+      class   : WFTextField
+    save             : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedSave
+    saveNew          : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : isNew
+          options      : 
+            valueTransformer: WFNegateBoolean
+      class     : SssSSubmit
+      properties: 
+        action: save
+        label : SssSBlaSharedCreate
+    uid              : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : uid
+      class   : WFHidden
+    url              : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Users
+          modelKeyPath : url
+      class   : WFTextField
+  class   : WFForm
+statusMessage: 
+  class: SssSMessageBox

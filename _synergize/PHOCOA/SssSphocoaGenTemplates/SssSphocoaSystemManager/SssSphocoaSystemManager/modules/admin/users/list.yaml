@@ -1,0 +1,76 @@
+
+deleteLink         : 
+  children  : 
+    deleteLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Users
+          modelKeyPath : handle
+          options      : 
+            ValuePattern: /admin/users/confirmDelete/%1%
+      class     : SssSLink
+      properties: 
+        label: SssSBlaSharedDelete
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Users'
+editLink           : 
+  children  : 
+    editLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Users
+          modelKeyPath : handle
+          options      : 
+            ValuePattern: /admin/users/edit/%1%
+      class     : SssSLink
+      properties: 
+        label: SssSBlaSharedEdit
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Users'
+handle             : 
+  children  : 
+    handlePrototype: 
+      bindings: 
+        label: 
+          controllerKey: '#current#'
+          instanceID   : Users
+          modelKeyPath : handle
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Users
+          modelKeyPath : handle
+          options      : 
+            ValuePattern: /admin/users/detail/%1%
+      class   : WFLink
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Users'
+paginatorNavigation: 
+  class     : SssSPaginatorNavigation
+  properties: 
+    paginator: '#module#paginator'
+paginatorPageInfo  : 
+  class     : SssSPaginatorPageInfo
+  properties: 
+    paginator: '#module#paginator'
+searchUsersForm    : 
+  children: 
+    clear         : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedClear
+    paginatorState: 
+      class     : WFPaginatorState
+      properties: 
+        paginator: '#module#paginator'
+    query         : 
+      class: WFTextField
+    search        : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedSearch
+  class   : WFForm

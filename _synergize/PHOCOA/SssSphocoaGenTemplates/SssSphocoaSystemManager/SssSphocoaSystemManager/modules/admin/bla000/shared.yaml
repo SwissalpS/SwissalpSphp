@@ -1,0 +1,15 @@
+
+Bla000   : 
+  class     : WFArrayController
+  properties: 
+    automaticallyPreparesContent: false
+    class                       : Bla000
+    classIdentifiers            : uid
+    selectOnInsert              : true
+paginator: 
+  class     : WFPaginator
+  properties: 
+    itemPhrasePlural  : SssSBlaBlaPlur
+    itemPhraseSingular: SssSBlaBlaSing
+    modeForm          : search
+    pageSize          : 25

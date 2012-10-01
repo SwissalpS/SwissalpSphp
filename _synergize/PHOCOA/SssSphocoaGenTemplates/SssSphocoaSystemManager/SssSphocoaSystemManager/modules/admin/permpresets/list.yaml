@@ -1,0 +1,82 @@
+
+deleteLink           : 
+  children  : 
+    deleteLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Permpresets
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permpresets/confirmDelete/%1%
+      class     : SssSLink
+      properties: 
+        label: SssSBlaSharedDelete
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permpresets'
+editLink             : 
+  children  : 
+    editLinkPrototype: 
+      bindings  : 
+        value: 
+          controllerKey: '#current#'
+          instanceID   : Permpresets
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permpresets/edit/%1%
+      class     : SssSLink
+      properties: 
+        label: SssSBlaSharedEdit
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permpresets'
+name                 : 
+  children  : 
+    namePrototype: 
+      bindings: 
+        label : 
+          controllerKey: '#current#'
+          instanceID   : Permpresets
+          modelKeyPath : name
+          options      : 
+            ValuePattern: -%1%- -%2%-
+        label2: 
+          controllerKey: '#current#'
+          instanceID   : Permpresets
+          modelKeyPath : uid
+        value : 
+          controllerKey: '#current#'
+          instanceID   : Permpresets
+          modelKeyPath : uid
+          options      : 
+            ValuePattern: /admin/permpresets/detail/%1%
+      class   : SssSLink
+  class     : WFDynamic
+  properties: 
+    arrayController: '#module#Permpresets'
+paginatorNavigation  : 
+  class     : SssSPaginatorNavigation
+  properties: 
+    paginator: '#module#paginator'
+paginatorPageInfo    : 
+  class     : SssSPaginatorPageInfo
+  properties: 
+    paginator: '#module#paginator'
+searchPermpresetsForm: 
+  children: 
+    clear         : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedClear
+    paginatorState: 
+      class     : WFPaginatorState
+      properties: 
+        paginator: '#module#paginator'
+    query         : 
+      class: WFTextField
+    search        : 
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedSearch
+  class   : WFForm

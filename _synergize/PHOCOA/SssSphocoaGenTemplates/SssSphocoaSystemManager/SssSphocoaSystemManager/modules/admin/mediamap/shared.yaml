@@ -1,0 +1,15 @@
+
+Mediamap : 
+  class     : WFArrayController
+  properties: 
+    automaticallyPreparesContent: false
+    class                       : Mediamap
+    classIdentifiers            : mediauid
+    selectOnInsert              : true
+paginator: 
+  class     : WFPaginator
+  properties: 
+    itemPhrasePlural  : Mediamaps
+    itemPhraseSingular: Mediamap
+    modeForm          : search
+    pageSize          : 25

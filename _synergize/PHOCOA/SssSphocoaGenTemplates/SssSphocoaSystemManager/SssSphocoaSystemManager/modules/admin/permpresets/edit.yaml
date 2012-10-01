@@ -1,0 +1,92 @@
+
+editPermpresetsForm: 
+  children: 
+    deleteObj       : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedDelete
+    multiSelectPerms: 
+      bindings  : 
+        contentLabels : 
+          controllerKey: arrangedObjects
+          instanceID   : Permissions
+          modelKeyPath : hash
+          options      : 
+            ValuePattern: %3% %2% %1%
+        contentLabels2: 
+          controllerKey: arrangedObjects
+          instanceID   : Permissions
+          modelKeyPath : domain
+        contentLabels3: 
+          controllerKey: arrangedObjects
+          instanceID   : Permissions
+          modelKeyPath : uid
+        contentValues : 
+          controllerKey: arrangedObjects
+          instanceID   : Permissions
+          modelKeyPath : uid
+      class     : WFSelect
+      properties: 
+        multiple    : true
+        onEvent     : change do j remakePermList()
+        visibleItems: 12
+    name            : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : name
+      class   : WFTextField
+    permissions     : 
+      bindings  : 
+        value: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : permissions
+      class     : WFTextField
+      properties: 
+        enabled: true
+        onEvent: change do j updateMultiSel()
+    save            : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties: 
+        label: SssSBlaSharedSave
+    saveNew         : 
+      bindings  : 
+        hidden: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : isNew
+          options      : 
+            valueTransformer: WFNegateBoolean
+      class     : SssSSubmit
+      properties: 
+        action: save
+        label : SssSBlaSharedCreate
+    uid             : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : uid
+      class   : WFHidden
+    uidl            : 
+      bindings: 
+        value: 
+          controllerKey: selection
+          instanceID   : Permpresets
+          modelKeyPath : uid
+      class   : WFLabel
+  class   : WFForm
+statusMessage      : 
+  class: SssSMessageBox

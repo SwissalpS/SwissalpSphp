@@ -1,0 +1,22 @@
+
+name       : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permpresets
+      modelKeyPath : name
+  class   : WFLabel
+permissions: 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permpresets
+      modelKeyPath : permissions
+  class   : WFLabel
+uid        : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permpresets
+      modelKeyPath : uid
+  class   : WFLabel

@@ -1,0 +1,113 @@
+
+editBla000Form:
+  children:
+    comment    :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : comment
+      class     : WFTextArea
+      properties:
+        cols: 80
+        rows: 5
+    de         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : de
+      class     : WFTextArea
+      properties:
+        cols: 80
+        rows: 5
+    deleteObj  :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedDelete
+    en         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : en
+      class     : WFTextArea
+      properties:
+        cols: 80
+        rows: 5
+    fr         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : fr
+      class     : WFTextArea
+      properties:
+        cols: 80
+        rows: 5
+    it         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : it
+      class     : WFTextArea
+      properties:
+        cols: 80
+        rows: 5
+    rm         :
+      bindings  :
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : rm
+      class     : WFTextArea
+      properties:
+        cols: 80
+        rows: 5
+    save       :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : isNew
+      class     : SssSSubmit
+      properties:
+        label: SssSBlaSharedSave
+        postSubmitLabel: SssSBlaSharedSaveing
+    saveNew    :
+      bindings  :
+        hidden:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : isNew
+          options      :
+            valueTransformer: WFNegateBoolean
+      class     : SssSSubmit
+      properties:
+        action: save
+        label : SssSBlaSharedCreate
+        postSubmitLabel: SssSBlaSharedSaveing
+    scratchHTML:
+      class     : WFHTMLArea
+      properties:
+        height: 200px
+        width : 640px
+        CustomConfigurationsPath: /www/HTMLArea/SPfckconfig.js
+    uid        :
+      bindings:
+        value:
+          controllerKey: selection
+          instanceID   : Bla000
+          modelKeyPath : uid
+      class   : WFTextField
+  class   : WFForm
+  properties:
+    isAjax: false
+statusMessage :
+  class: SssSMessageBox

@@ -1,0 +1,5 @@
+
+statusMessage: 
+  class     : WFMessageBox
+  properties: 
+    value: Mediamap successfully deleted.

@@ -1,0 +1,25 @@
+---
+loginForm:
+  class: 'WFForm'
+  children:
+    password:
+      class: 'WFPassword'
+    username:
+      class: 'WFTextField'
+    rememberMe:
+      class: 'WFCheckbox'
+    continueURL:
+      class: 'WFHidden'
+    signUp:
+      class: 'SssSLink'
+      properties:
+        label: 'SssSBlaLoginSignUp'
+    login:
+      class: 'SssSSubmit'
+      properties:
+        action: 'doLogin'
+        label: 'SssSBlaLoginLogin'
+forgottenPasswordLink:
+  class: 'SssSLink'
+  properties:
+    label: 'SssSBlaLoginForgotYourPassword'

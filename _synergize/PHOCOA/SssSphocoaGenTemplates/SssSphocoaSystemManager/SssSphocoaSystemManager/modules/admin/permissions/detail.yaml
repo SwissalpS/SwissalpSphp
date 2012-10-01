@@ -1,0 +1,50 @@
+
+domain      : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permissions
+      modelKeyPath : domain
+  class   : WFLabel
+hash        : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permissions
+      modelKeyPath : hash
+  class   : WFHidden
+hashBoxGroup: 
+  children: 
+    isSuperUser: 
+      class     : SssSCheckbox
+      properties: 
+        checkedValue  : 32768
+        label         : SssSBlaPermsSuperUser
+        uncheckedValue: 0
+    mayAdmin   : 
+      class     : SssSCheckbox
+      properties: 
+        checkedValue  : 16
+        label         : SssSBlaPermsMayAdministrate
+        uncheckedValue: 0
+    mayRead    : 
+      class     : SssSCheckbox
+      properties: 
+        checkedValue  : 1
+        enabled       : true
+        label         : SssSBlaPermsMayRead
+        uncheckedValue: 0
+    mayWrite   : 
+      class     : SssSCheckbox
+      properties: 
+        checkedValue  : 4
+        label         : SssSBlaPermsMayWrite
+        uncheckedValue: 0
+  class   : WFCheckboxGroup
+uid         : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Permissions
+      modelKeyPath : uid
+  class   : WFLabel

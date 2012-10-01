@@ -1,0 +1,35 @@
+---
+blaSwitchOff:
+  class:SssSLink
+  bindings:
+    hidden:
+      controllerKey: authInfo
+      instanceID: '#module#'
+      modelKeyPath: showBlaEditLinks
+      options:
+        ValueTransformer: WFNegateBoolean
+    value:
+      controllerKey: currentURLserialized
+      instanceID: '#module#'
+      modelKeyPath:
+      options:
+        ValuePattern: /admin/panel/show/0/%1%
+  properties:
+    label: SssSBlaAdminPanelBlaTurnOff
+    title: SssSBlaAdminPanelBlaTurnOffTitle
+blaSwitchOn:
+  class:SssSLink
+  bindings:
+    hidden:
+      controllerKey: authInfo
+      instanceID: '#module#'
+      modelKeyPath: showBlaEditLinks
+    value:
+      controllerKey: currentURLserialized
+      instanceID: '#module#'
+      modelKeyPath:
+      options:
+        ValuePattern: /admin/panel/show/1/%1%
+  properties:
+    label: SssSBlaAdminPanelBlaTurnOn
+    title: SssSBlaAdminPanelBlaTurnOnTitle

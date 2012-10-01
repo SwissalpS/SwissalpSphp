@@ -1,0 +1,57 @@
+
+cssclass: 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : cssclass
+  class   : WFLabel
+height  : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : height
+  class   : WFLabel
+karma   : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : karma
+  class   : WFLabel
+mediauid: 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : mediauid
+  class   : WFLabel
+mime    : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : mime
+  class   : WFLabel
+type    : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : type
+  class   : WFLabel
+url     : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : url
+  class   : WFLabel
+width   : 
+  bindings: 
+    value: 
+      controllerKey: selection
+      instanceID   : Mediamap
+      modelKeyPath : width
+  class   : WFLabel
