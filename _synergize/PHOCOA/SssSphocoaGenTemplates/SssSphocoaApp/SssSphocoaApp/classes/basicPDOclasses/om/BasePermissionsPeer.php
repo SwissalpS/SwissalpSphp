@@ -5,7 +5,7 @@
  *
  *
  *
- * @package    skyprom_phocoa.om
+ * @package    basicPDOclasses.om
  */
 abstract class BasePermissionsPeer {
 
@@ -16,7 +16,7 @@ abstract class BasePermissionsPeer {
 	const TABLE_NAME = 'permissions';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'skyprom_phocoa.Permissions';
+	const CLASS_DEFAULT = 'basicPDOclasses.Permissions';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 3;

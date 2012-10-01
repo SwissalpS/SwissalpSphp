@@ -11,14 +11,14 @@
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  *
- * @package    skyprom_phocoa.map
+ * @package    basicPDOclasses.map
  */
 class PermpresetsMapBuilder implements MapBuilder {
 
 	/**
 	 * The (dot-path) name of this class
 	 */
-	const CLASS_NAME = 'skyprom_phocoa.map.PermpresetsMapBuilder';
+	const CLASS_NAME = 'basicPDOclasses.map.PermpresetsMapBuilder';
 
 	/**
 	 * The database map.

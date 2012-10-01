@@ -5,7 +5,7 @@
  *
  *
  *
- * @package    skyprom_phocoa.om
+ * @package    basicPDOclasses.om
  */
 abstract class BaseUsers extends BaseObject  implements Persistent {
 

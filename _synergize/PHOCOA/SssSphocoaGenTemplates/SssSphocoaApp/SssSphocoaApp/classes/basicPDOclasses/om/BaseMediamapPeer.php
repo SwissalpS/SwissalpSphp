@@ -5,7 +5,7 @@
  *
  *
  *
- * @package    skyprom_phocoa.om
+ * @package    basicPDOclasses.om
  */
 abstract class BaseMediamapPeer {
 
@@ -16,7 +16,7 @@ abstract class BaseMediamapPeer {
 	const TABLE_NAME = 'mediaMap';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'skyprom_phocoa.Mediamap';
+	const CLASS_DEFAULT = 'basicPDOclasses.Mediamap';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 14;

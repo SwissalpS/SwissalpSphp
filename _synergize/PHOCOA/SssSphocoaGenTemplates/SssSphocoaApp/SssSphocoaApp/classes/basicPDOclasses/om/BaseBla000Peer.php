@@ -5,7 +5,7 @@
  *
  *
  *
- * @package    skyprom_phocoa.om
+ * @package    basicPDOclasses.om
  */
 abstract class BaseBla000Peer {
 
@@ -16,7 +16,7 @@ abstract class BaseBla000Peer {
 	const TABLE_NAME = 'Bla000';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'skyprom_phocoa.Bla000';
+	const CLASS_DEFAULT = 'basicPDOclasses.Bla000';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 7;

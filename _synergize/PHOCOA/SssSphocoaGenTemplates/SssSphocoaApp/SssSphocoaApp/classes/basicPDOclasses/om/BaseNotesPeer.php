@@ -5,7 +5,7 @@
  *
  *
  *
- * @package    skyprom_phocoa.om
+ * @package    basicPDOclasses.om
  */
 abstract class BaseNotesPeer {
 
@@ -16,7 +16,7 @@ abstract class BaseNotesPeer {
 	const TABLE_NAME = 'Notes';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'skyprom_phocoa.Notes';
+	const CLASS_DEFAULT = 'basicPDOclasses.Notes';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 16;

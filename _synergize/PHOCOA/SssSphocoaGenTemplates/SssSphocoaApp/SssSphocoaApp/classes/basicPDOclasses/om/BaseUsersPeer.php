@@ -5,7 +5,7 @@
  *
  *
  *
- * @package    skyprom_phocoa.om
+ * @package    basicPDOclasses.om
  */
 abstract class BaseUsersPeer {
 
@@ -16,7 +16,7 @@ abstract class BaseUsersPeer {
 	const TABLE_NAME = 'Users';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'skyprom_phocoa.Users';
+	const CLASS_DEFAULT = 'basicPDOclasses.Users';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 14;

@@ -1,6 +1,6 @@
 <?php
 
-require 'skyprom_phocoa/om/BaseUsersPeer.php';
+require 'basicPDOclasses/om/BaseUsersPeer.php';
 
 
 /**
@@ -12,7 +12,7 @@ require 'skyprom_phocoa/om/BaseUsersPeer.php';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    skyprom_phocoa
+ * @package    basicPDOclasses
  */
 class UsersPeer extends BaseUsersPeer {
 
