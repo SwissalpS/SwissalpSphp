@@ -66,8 +66,11 @@ class SssSphocoaGenerator {
 				|| ('-withinteraction' == $s)) $bUseAllDefaults = false;
 				// ask for each item for all files from now on
 
-			else $aPaths[] = array($s, $bUseAllDefaults, $sPathDest, $sAppName);
+			else {
+				$aPaths[] = array($s, $bUseAllDefaults, $sPathDest, $sAppName);
 				// got a path to a plist (if correct syntax etc) theoretically could be a string xml:plist
+				$sAppName = $sPathDest = false;
+			} // if path or modifier
 
 		} // loop all args building aPaths array
 
