@@ -1,0 +1,40 @@
+#!##PHP_BIN##
+<?php
+/* * * *
+ * * ##PHOCOA_PROJECT_NAME##/bin/watchdogFrontend.phps
+ * * watch for postings by webinterface and react.
+ * *
+ * * this script should be started at boot
+ * * also it should be run by e.g. cron to make sure it is running (as root)
+ * *
+ * * @generated ##DATE_STAMP##
+ * * @version 20121001_211417 (CC) Luke JZ aka SwissalpS
+ * * * */
+//error_reporting(E_ALL); // 0); //
+/*##RUN_BLOCKER##if (php_sapi_name() !== 'cli')
+		exit('This is a shell php script. To be run from command line.');
+
+// change into ##PHOCOA_PROJECT_NAME## app-root directory
+chdir('##PHOCOA_APP_DIR##');
+
+// bootstrap...
+// faster
+//require('##PHOCOA_APP_DIR####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
+// more elegant as we already changed dir
+require_once('conf##DIR_SEP##SssSphocoaApp.conf');
+
+// ... and run!
+
+TODO: check if instance is already running
+
+TODO: actually check runtime/EventsFrontend/
+
+//WFApplicationMain();
+##RUN_BLOCKER##*/
+// goodbye
+exit(0);
+
+
+
+/* * * *\ watchdogFrontend.phps (CC) Luke JZ aka SwissalpS /* * * */
+?>
