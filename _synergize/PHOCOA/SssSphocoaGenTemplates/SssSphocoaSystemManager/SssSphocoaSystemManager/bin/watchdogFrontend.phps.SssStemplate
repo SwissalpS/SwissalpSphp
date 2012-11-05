@@ -7,6 +7,11 @@
  * * this script should be started at boot
  * * also it should be run by e.g. cron to make sure it is running (as root)
  * *
+ * * There are several scenarios that call this script:
+ * *   1) a cron job -> no arguments
+ * *   2) launchd folder watcher -> no arguments
+ * *   3) incrond -> arguments include file that changed and the event code
+ * *
  * * @generated ##DATE_STAMP##
  * * @version 20121001_211417 (CC) Luke JZ aka SwissalpS
  * * * */
@@ -25,16 +30,14 @@ require_once('conf##DIR_SEP##SssSphocoaApp.conf');
 
 // ... and run!
 
-TODO: check if instance is already running
+TODO: check if instance is already running -> in case this is a call from a cronjob
 
-TODO: actually check runtime/EventsFrontend/
+TODO: actually check runtime/eventsFrontend/
 
-//WFApplicationMain();
+SssSphocoaSystemManagerWatchdogFrontend::main();
 ##RUN_BLOCKER##*/
 // goodbye
 exit(0);
-
-
 
 /* * * *\ watchdogFrontend.phps (CC) Luke JZ aka SwissalpS /* * * */
 ?>

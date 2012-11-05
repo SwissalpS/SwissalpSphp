@@ -32,6 +32,14 @@ class SssS_PIDlock {
 			$sExtScript = '.php',
 			$sExtLock = '.lock') {
 
+		if (defined('LOCK_FILE')) {
+
+			$this->sLockPathFile = LOCK_FILE;
+
+			return;
+
+		} // if defined LOCK_FILE
+
 		if (!$sPath) $sPath = '/var/run/';
 		$sPath .= ('/' != substr($sPath, -1)) ? '/' : ''; // add trailing /
 
@@ -51,7 +59,6 @@ class SssS_PIDlock {
 		// some prefer this, so it's in here too
 		define('LOCK_FILE', $this->sLockPathFile);
 
-		unset($sPath, $sName, $sExt);
 	} // SssS_PIDlock
 
 	public function isLocked() {
