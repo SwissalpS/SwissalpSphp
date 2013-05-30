@@ -622,7 +622,7 @@ class Log
      * @access  public
      * @since   Log 1.7.0
      */
-    function MASK($priority)
+    static function MASK($priority)
     {
         return (1 << $priority);
     }
@@ -641,7 +641,7 @@ class Log
      *
      * @deprecated deprecated since Log 1.9.4; use Log::MAX() instead
      */
-    function UPTO($priority)
+    static function UPTO($priority)
     {
         return Log::MAX($priority);
     }
@@ -660,7 +660,7 @@ class Log
      * @access  public
      * @since   Log 1.9.4
      */
-    function MIN($priority)
+    static function MIN($priority)
     {
         return PEAR_LOG_ALL ^ ((1 << $priority) - 1);
     }
@@ -679,7 +679,7 @@ class Log
      * @access  public
      * @since   Log 1.9.4
      */
-    function MAX($priority)
+    static function MAX($priority)
     {
         return ((1 << ($priority + 1)) - 1);
     }
