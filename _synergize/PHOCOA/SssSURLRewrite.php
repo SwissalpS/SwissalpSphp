@@ -465,7 +465,7 @@ class SssSURLRewrite {
 	} // respond
 
 
-	function ii($sIndexPHP = null) {
+	static function ii($sIndexPHP = null) {
 
 		self::lg('including: ' . basename($sIndexPHP));
 
