@@ -1,14 +1,13 @@
 <?php
 /* * * *
  * * SssS_Cypher2.inc
+ * * extends SssS_Cypher to never use cleartext on the cl
  * *
+ * * to make sure the temporary files are deleted, call cleanupCypher2()
  * * @version 20100503_132059 + autoloading switch and system tmp dir
  * * @version 20091024_203818 + file_get/put_contents
  * * @version 20090815_213258 (CC) Luke JZ aka SwissalpS
  * * * */
-// extends SssS_Cypher to never use cleartext on the cl
-// it's a quick patch so watch the arguments you pass.
-// to make sure the temporary files are deleted, call cleanupCypher2()
 
 /* usage example: * /
 $sPass = 'ha ha';
@@ -26,11 +25,6 @@ $sDec = $oCypher->decryptWithClearTextPass($sEnc, $sCypherCode, $sPass);
 // output. $oCypher->aResults['scriptExitCode'] is 0 when all went well.
 var_dump($sEnc, $sDec, $oCypher->aResults);
 /* :usage example */
-
-/* cypher data without writing to disk (if you want, you can do that too)
- * use the file password instead of cleartext to avoid ps sniffers
- */
-
 if (!defined('AUTO_INCLUDING')) {
 	require_once('SssS_Cypher.inc');
 } // if not autoincluding but on php's include path
@@ -286,8 +280,8 @@ class SssS_Cypher2 extends SssS_Cypher {
 				, $sCipher, $sInBit, $sOutBit, $sPassBit);
 		$this->doScript($sScriptEncode);
 		//$this->cleanupCypher2();
-echo 'cl: ' . $sScriptEncode . '
-';
+//echo 'cl: ' . $sScriptEncode . '
+//';
 		return @file_get_contents_safely($sPathOut); //$this->aResults['fullOutput'];
 	} // encryptFromFileToFile
 
