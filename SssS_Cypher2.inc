@@ -4,6 +4,7 @@
  * * extends SssS_Cypher to never use cleartext on the cl
  * *
  * * to make sure the temporary files are deleted, call cleanupCypher2()
+ * * @version 20131103_012737 + allways make tmp dir + check rm -P
  * * @version 20100503_132059 + autoloading switch and system tmp dir
  * * @version 20091024_203818 + file_get/put_contents
  * * @version 20090815_213258 (CC) Luke JZ aka SwissalpS
@@ -91,8 +92,10 @@ class SssS_Cypher2 extends SssS_Cypher {
 
 			//if (isset($aArgs[''])) $this->aSettings[''] = $aArgs[''];
 
-			$this->sTP = $this->fMakeSafeUniqueFolderInPath($this->aSettings['tmpPath']);
 		} // if got args
+
+		$this->sTP = $this->fMakeSafeUniqueFolderInPath($this->aSettings['tmpPath']);
+
 	} // SssS_Cypher2
 
 	/* * * * *  *   /PUBLIC enCRYPTING FUNCTIONS\   *  * * * * */
@@ -364,11 +367,103 @@ class SssS_Cypher2 extends SssS_Cypher {
 	/* * * * *  *   /HELPER FUNCTIONS\   *  * * * * */
 
 	public function cleanupCypher2() {
+
+		static $bRmHasOptionP = null;
+
 		if (isset($this->sTP) && file_exists($this->sTP)) {
-			// delete everything overwriting data
-			$this->doScript('rm -fPr ' . escapeshellarg($this->sTP));
+
+			// find out if this systems rm command supports option P
+			if (null === $bRmHasOptionP) {
+
+				$sTmpFileEscaped = escapeshellarg($this->sTP . 'SssS_Cypher2testOptionP');
+				$this->doScript('touch ' . $sTmpFileEscaped . ';rm -P ' . $sTmpFileEscaped);
+				$bRmHasOptionP = (0 === $this->iRes());
+
+				if (!$bRmHasOptionP) {
+
+					// cleanup test file
+					$this->doScript('rm ' . $sTmpFileEscaped);
+
+					echo 'rm does not support option "P", will emulate this myself.' . chr(10);
+
+				} // if option P is not supported
+
+			} // if first run
+
+			// if option P is supported (OS X), we can use the shortcut
+			if ($bRmHasOptionP) {
+
+				// delete everything overwriting data
+				$this->doScript('rm -fPr ' . escapeshellarg($this->sTP));
+				$bRes = (0 === $this->iRes());
+
+			} else {
+
+				// recurseivly overwrite files with 0xFF, 0x00 and 0xFF
+				$bRes = $this->secureRecursiveDeleteFolder($this->sTP);
+				if (false === $bRes) return false;
+
+			} // if rm has option -P or not
+
+			if (true !== $bRes) {
+
+				throw new Exception('error cleaning up. Manually remove dir: ' . $this->sTP);
+
+			} // if error cleaning up
+
+			// make new temp path
+			$this->sTP = $this->fMakeSafeUniqueFolderInPath($this->aSettings['tmpPath']);
+
 		} // if temp path exists
+
+		return true;
+
 	} // cleanupCypher2
+
+
+	function secureRecursiveDeleteFolder($sPath) {
+
+		if (!file_exists($sPath)) return false;
+		if (!is_dir($sPath)) return false;
+
+		$rD = opendir($sPath);
+		if (false === $rD) return false;
+
+		$sPath = rtrim($sPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+		while (false !== ($sF = readdir($rD))) {
+
+			if ('.' == $sF) continue;
+			if ('..' == $sF) continue;
+
+			$sPathFile = $sPath . $sF;
+			if (is_dir($sPathFile)) {
+
+				$bRes = $this->secureRecursiveDeleteFolder($sPathFile);
+
+			} else {
+
+				// overwrite file with 0x00, 0xFF, 0x00
+
+				$iFileSize = filesize($sPathFile);
+				$sZeros = str_repeat(chr(0), $iFileSize);
+				$s255s = str_repeat(chr(0xFF), $iFileSize);
+
+				file_put_contents_safely($sPathFile, $sZeros, 'wb');
+				file_put_contents_safely($sPathFile, $s255s, 'wb');
+				file_put_contents_safely($sPathFile, $sZeros, 'wb');
+
+				$bRes = @unlink($sPathFile);
+
+			} // if is dir or file
+
+			if (false === $bRes) return false;
+
+		} // loop all files in folder
+
+		return @rmdir($sPath);
+
+	} // secureRecursiveDeleteFolder
 
 	/* * * * *  *   \HELPER FUNCTIONS/   *  * * * * */
 
