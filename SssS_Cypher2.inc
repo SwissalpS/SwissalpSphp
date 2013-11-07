@@ -4,6 +4,7 @@
  * * extends SssS_Cypher to never use cleartext on the cl
  * *
  * * to make sure the temporary files are deleted, call cleanupCypher2()
+ * * @version 20131103_013848 + base64decodeFile() + base64encodeFile()
  * * @version 20131103_012737 + allways make tmp dir + check rm -P
  * * @version 20100503_132059 + autoloading switch and system tmp dir
  * * @version 20091024_203818 + file_get/put_contents
@@ -365,6 +366,36 @@ class SssS_Cypher2 extends SssS_Cypher {
 	/* * * * *  *   \PRIVATE FUNCTIONS 4 SUBCLASSING/   *  * * * * */
 
 	/* * * * *  *   /HELPER FUNCTIONS\   *  * * * * */
+
+    public function base64decodeFile($sPathFileIn, $sPathFileOut) {
+
+        if (!(file_exists($sPathFileIn) && is_file($sPathFileIn))) return false;
+
+        $sIn = escapeshellarg($sPathFileIn);
+        $sOut = escapeshellarg($sPathFileOut);
+
+        $sScriptDecode = sprintf('openssl enc -base64 -d -in %s -out %s', $sIn, $sOut);
+        $this->doScript($sScriptDecode);
+
+        return (0 === $this->iRes());
+
+    } // base64decodeFile
+
+
+    public function base64encodeFile($sPathFileIn, $sPathFileOut) {
+
+        if (!(file_exists($sPathFileIn) && is_file($sPathFileIn))) return false;
+
+        $sIn = escapeshellarg($sPathFileIn);
+        $sOut = escapeshellarg($sPathFileOut);
+
+        $sScriptEncode = sprintf('openssl enc -base64 -in %s -out %s', $sIn, $sOut);
+        $this->doScript($sScriptEncode);
+
+        return (0 === $this->iRes());
+
+    } // base64encodeFile
+
 
 	public function cleanupCypher2() {
 
