@@ -2,21 +2,23 @@
 /* * * *
  * * SssS_Cypher.inc
  * *
+ * * @version 20131106_153049 changed spelling of cypher to cipher when adj.
  * * @version 20091024_204153 + file_get/put_contents_safely
  * * @version 20090730_030924 (CC) Luke JZ aka SwissalpS
  * * * */
+// a little english lesson: the cipher is the adjective while the verb is spelt cypher
 /* usage example: * /
 $sPass = 'ha ha';
 $sContent = 'something secret';
-$sCypherCode = 'c9055128424a70e4a5b9d0a'; // => 'des3';
+$sCipherCode = 'c9055128424a70e4a5b9d0a'; // => 'des3';
 
 $oCypher = new SssS_Cypher();
 
 // encode
-$sEnc = $oCypher->encryptWithClearTextPass($sContent, $sCypherCode, $sPass);
+$sEnc = $oCypher->encryptWithClearTextPass($sContent, $sCipherCode, $sPass);
 
 // decode
-$sDec = $oCypher->decryptWithClearTextPass($sEnc, $sCypherCode, $sPass);
+$sDec = $oCypher->decryptWithClearTextPass($sEnc, $sCipherCode, $sPass);
 
 // output. $oCypher->aResults['scriptExitCode'] is 0 when all went well.
 var_dump($sEnc, $sDec, $oCypher->aResults);
@@ -38,88 +40,88 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 
 	/* * * * *  *   /PUBLIC enCRYPTING FUNCTIONS\   *  * * * * */
 
-	public function encryptWithClearTextPass($sContent = '', $mCypherCode = '', $sPassword = '') {
+	public function encryptWithClearTextPass($sContent = '', $sCipherCode = '', $sPassword = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->encryptThis($sContent, $mCypherCode, $sPassBit);
+		return $this->encryptThis($sContent, $sCipherCode, $sPassBit);
 	} // encryptWithClearTextPass
 
-	public function encryptWithClearTextPassFromFile($mCypherCode = '', $sPassword = '', $sPathIn = '') {
+	public function encryptWithClearTextPassFromFile($sCipherCode = '', $sPassword = '', $sPathIn = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->encryptFromFile($mCypherCode, $sPassBit, $sPathIn);
+		return $this->encryptFromFile($sCipherCode, $sPassBit, $sPathIn);
 	} // encryptWithClearTextPassFromFile
 
-	public function encryptWithClearTextPassFromFileToFile($mCypherCode = '', $sPassword = '', $sPathIn = '', $sPathOut = '') {
+	public function encryptWithClearTextPassFromFileToFile($sCipherCode = '', $sPassword = '', $sPathIn = '', $sPathOut = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->encryptFromFileToFile($mCypherCode, $sPassBit, $sPathIn, $sPathOut);
+		return $this->encryptFromFileToFile($sCipherCode, $sPassBit, $sPathIn, $sPathOut);
 	} // encryptWithClearTextPassFromFileToFile
 
-	public function encryptWithClearTextPassToFile($sContent = '', $mCypherCode = '', $sPassword = '', $sPathOut = '') {
+	public function encryptWithClearTextPassToFile($sContent = '', $sCipherCode = '', $sPassword = '', $sPathOut = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->encryptThisToFile($sContent, $mCypherCode, $sPassBit, $sPathOut);
+		return $this->encryptThisToFile($sContent, $sCipherCode, $sPassBit, $sPathOut);
 	} // encryptWithClearTextPassToFile
 
-	public function encryptWithFilePass($sContent = '', $mCypherCode = '', $sPassPath = '') {
+	public function encryptWithFilePass($sContent = '', $sCipherCode = '', $sPassPath = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->encryptThis($sContent, $mCypherCode, $sPassBit);
+		return $this->encryptThis($sContent, $sCipherCode, $sPassBit);
 	} // encryptWithFilePass
 
-	public function encryptWithFilePassFromFile($mCypherCode = '', $sPassPath = '', $sPathIn = '') {
+	public function encryptWithFilePassFromFile($sCipherCode = '', $sPassPath = '', $sPathIn = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->encryptFromFile($mCypherCode, $sPassBit, $sPathIn);
+		return $this->encryptFromFile($sCipherCode, $sPassBit, $sPathIn);
 	} // encryptWithFilePassFromFile
 
-	public function encryptWithFilePassFromFileToFile($mCypherCode = '', $sPassPath = '', $sPathIn = '', $sPathOut = '') {
+	public function encryptWithFilePassFromFileToFile($sCipherCode = '', $sPassPath = '', $sPathIn = '', $sPathOut = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->encryptFromFileToFile($mCypherCode, $sPassBit, $sPathIn, $sPathOut);
+		return $this->encryptFromFileToFile($sCipherCode, $sPassBit, $sPathIn, $sPathOut);
 	} // encryptWithFilePassFromFileToFile
 
-	public function encryptWithFilePassToFile($sContent = '', $mCypherCode = '', $sPassPath = '', $sPathOut = '') {
+	public function encryptWithFilePassToFile($sContent = '', $sCipherCode = '', $sPassPath = '', $sPathOut = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->encryptThisToFile($sContent, $mCypherCode, $sPassBit, $sPathOut);
+		return $this->encryptThisToFile($sContent, $sCipherCode, $sPassBit, $sPathOut);
 	} // encryptWithFilePassToFile
 
 	/* * * * *  *   \PUBLIC enCRYPTING FUNCTIONS/   *  * * * * */
 
 	/* * * * *  *   /PUBLIC deCRYPTING FUNCTIONS\   *  * * * * */
 
-	public function decryptWithClearTextPass($sContent = '', $mCypherCode = '', $sPassword = '') {
+	public function decryptWithClearTextPass($sEncrypted = '', $sCipherCode = '', $sPassword = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->decryptThis($sContent, $mCypherCode, $sPassBit);
+		return $this->decryptThis($sEncrypted, $sCipherCode, $sPassBit);
 	} // decryptWithClearTextPass
 
-	public function decryptWithClearTextPassFromFile($mCypherCode = '', $sPassword = '', $sPathIn = '') {
+	public function decryptWithClearTextPassFromFile($sCipherCode = '', $sPassword = '', $sPathIn = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->decryptFromFile($mCypherCode, $sPassBit, $sPathIn);
+		return $this->decryptFromFile($sCipherCode, $sPassBit, $sPathIn);
 	} // decryptWithClearTextPassFromFile
 
-	public function decryptWithClearTextPassFromFileToFile($mCypherCode = '', $sPassword = '', $sPathIn = '', $sPathOut = '') {
+	public function decryptWithClearTextPassFromFileToFile($sCipherCode = '', $sPassword = '', $sPathIn = '', $sPathOut = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->decryptFromFileToFile($mCypherCode, $sPassBit, $sPathIn, $sPathOut);
+		return $this->decryptFromFileToFile($sCipherCode, $sPassBit, $sPathIn, $sPathOut);
 	} // decryptWithClearTextPassFromFileToFile
 
-	public function decryptWithClearTextPassToFile($sContent = '', $mCypherCode = '', $sPassword = '', $sPathOut = '') {
+	public function decryptWithClearTextPassToFile($sEncrypted = '', $sCipherCode = '', $sPassword = '', $sPathOut = '') {
 		$sPassBit = $this->fClearTextPassBit($sPassword);
-		return $this->decryptThisToFile($sContent, $mCypherCode, $sPassBit, $sPathOut);
+		return $this->decryptThisToFile($sEncrypted, $sCipherCode, $sPassBit, $sPathOut);
 	} // decryptWithClearTextPassToFile
 
-	public function decryptWithFilePass($sContent = '', $mCypherCode = '', $sPassPath = '') {
+	public function decryptWithFilePass($sEncrypted = '', $sCipherCode = '', $sPassPath = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->decryptThis($sContent, $mCypherCode, $sPassBit);
+		return $this->decryptThis($sEncrypted, $sCipherCode, $sPassBit);
 	} // decryptWithFilePass
 
-	public function decryptWithFilePassFromFile($mCypherCode = '', $sPassPath = '', $sPathIn = '') {
+	public function decryptWithFilePassFromFile($sCipherCode = '', $sPassPath = '', $sPathIn = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->decryptFromFile($mCypherCode, $sPassBit, $sPathIn);
+		return $this->decryptFromFile($sCipherCode, $sPassBit, $sPathIn);
 	} // decryptWithFilePassFromFile
 
-	public function decryptWithFilePassFromFileToFile($mCypherCode = '', $sPassPath = '', $sPathIn = '', $sPathOut = '') {
+	public function decryptWithFilePassFromFileToFile($sCipherCode = '', $sPassPath = '', $sPathIn = '', $sPathOut = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->decryptFromFileToFile($mCypherCode, $sPassBit, $sPathIn, $sPathOut);
+		return $this->decryptFromFileToFile($sCipherCode, $sPassBit, $sPathIn, $sPathOut);
 	} // decryptWithFilePassFromFileToFile
 
-	public function decryptWithFilePassToFile($sContent = '', $mCypherCode = '', $sPassPath = '', $sPathOut = '') {
+	public function decryptWithFilePassToFile($sEncrypted = '', $sCipherCode = '', $sPassPath = '', $sPathOut = '') {
 		$sPassBit = $this->fFilePassBit($sPassPath);
-		return $this->decryptThisToFile($sContent, $mCypherCode, $sPassBit, $sPathOut);
+		return $this->decryptThisToFile($sEncrypted, $sCipherCode, $sPassBit, $sPathOut);
 	} // decryptWithFilePassToFile
 
 	/* * * * *  *   \PUBLIC deCRYPTING FUNCTIONS/   *  * * * * */
@@ -136,7 +138,7 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 
 	/* * * * *  *   /PRIVATE enCRYPTING FUNCTIONS\   *  * * * * */
 
-	private function encryptFromFile($mCypherCode = '', $sPassBit = '', $sPathIn = '') {
+	private function encryptFromFile($sCipherCode = '', $sPassBit = '', $sPathIn = '') {
 		if (!is_file($sPathIn)) {
 			$this->fReset();
 			$this->aResults['fullOutput'] = 'invalid in path';
@@ -144,14 +146,14 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 			return $this->aResults['fullOutput'];
 		} // if invalid in path
 		$sInBit = escapeshellarg($sPathIn);
-		$sCipher = $this->cypherForKey($mCypherCode);
+		$sCipher = $this->cipherForKey($sCipherCode);
 		$sScriptEncode = sprintf('openssl enc -%s -a -salt -in %s %s'
 				, $sCipher, $sInBit, $sPassBit);
 		$this->doScript($sScriptEncode);
 		return $this->aResults['fullOutput'];
 	} // encryptFromFile
 
-	private function encryptFromFileToFile($mCypherCode = '', $sPassBit = '', $sPathIn = '', $sPathOut = '') {
+	private function encryptFromFileToFile($sCipherCode = '', $sPassBit = '', $sPathIn = '', $sPathOut = '') {
 		if (!is_file($sPathIn)) {
 			$this->fReset();
 			$this->aResults['fullOutput'] = 'invalid in path';
@@ -159,7 +161,7 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 			return $this->aResults['fullOutput'];
 		} // if invalid in path
 		$sInBit = escapeshellarg($sPathIn);
-		$sCipher = $this->cypherForKey($mCypherCode);
+		$sCipher = $this->cipherForKey($sCipherCode);
 		$sOutBit = ($sPathOut && ('' != $sPathOut))
 				? ' -out ' . escapeshellarg($sPathOut) : '';
 		$sScriptEncode = sprintf('openssl enc -%s -a -salt -in %s%s %s'
@@ -168,8 +170,8 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 		return $this->aResults['fullOutput'];
 	} // encryptFromFileToFile
 
-	private function encryptThisToFile($sContent = '', $mCypherCode = '', $sPassBit = '', $sPathOut = '') {
-		$sCipher = $this->cypherForKey($mCypherCode);
+	private function encryptThisToFile($sContent = '', $sCipherCode = '', $sPassBit = '', $sPathOut = '') {
+		$sCipher = $this->cipherForKey($sCipherCode);
 		$sContentQuoted = escapeshellarg($sContent);
 		$sOutBit = ($sPathOut && ('' != $sPathOut))
 				? ' -out ' . escapeshellarg($sPathOut) : '';
@@ -179,8 +181,8 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 		return $this->aResults['fullOutput'];
 	} // encryptThisToFile
 
-	private function encryptThis($sContent = '', $mCypherCode = '', $sPassBit = '') {
-		$sCipher = $this->cypherForKey($mCypherCode);
+	private function encryptThis($sContent = '', $sCipherCode = '', $sPassBit = '') {
+		$sCipher = $this->cipherForKey($sCipherCode);
 		$sContentQuoted = escapeshellarg($sContent);
 		$sScriptEncode = sprintf('echo %s | openssl enc -%s -a -salt %s'
 				, $sContentQuoted, $sCipher, $sPassBit);
@@ -192,7 +194,7 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 
 	/* * * * *  *   /PRIVATE deCRYPTING FUNCTIONS\   *  * * * * */
 
-	private function decryptFromFile($mCypherCode = '', $sPassBit = '', $sPathIn = '') {
+	private function decryptFromFile($sCipherCode = '', $sPassBit = '', $sPathIn = '') {
 		if (!is_file($sPathIn)) {
 			$this->fReset();
 			$this->aResults['fullOutput'] = 'invalid in path';
@@ -200,14 +202,14 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 			return $this->aResults['fullOutput'];
 		} // if invalid in path
 		$sInBit = escapeshellarg($sPathIn);
-		$sCipher = $this->cypherForKey($mCypherCode);
+		$sCipher = $this->cipherForKey($sCipherCode);
 		$sScriptDecode = sprintf('openssl enc -d -%s -a -in %s %s'
 				, $sCipher, $sInBit, $sPassBit);
 		$this->doScript($sScriptDecode);
 		return $this->aResults['fullOutput'];
 	} // decryptFromFile
 
-	private function decryptFromFileToFile($mCypherCode = '', $sPassBit = '', $sPathIn = '', $sPathOut = '') {
+	private function decryptFromFileToFile($sCipherCode = '', $sPassBit = '', $sPathIn = '', $sPathOut = '') {
 		if (!is_file($sPathIn)) {
 			$this->fReset();
 			$this->aResults['fullOutput'] = 'invalid in path';
@@ -217,29 +219,29 @@ class SssS_Cypher extends SssS_ShellScriptRunner {
 		$sInBit = escapeshellarg($sPathIn);
 		$sOutBit = ($sPathOut && ('' != $sPathOut))
 				? ' -out ' . escapeshellarg($sPathOut) : '';
-		$sCipher = $this->cypherForKey($mCypherCode);
+		$sCipher = $this->cipherForKey($sCipherCode);
 		$sScriptDecode = sprintf('openssl enc -d -%s -a -in %s%s %s'
 				, $sCipher, $sInBit, $sOutBit, $sPassBit);
 		$this->doScript($sScriptDecode);
 		return $this->aResults['fullOutput'];
 	} // decryptFromFileToFile
 
-	private function decryptThisToFile($sContent = '', $mCypherCode = '', $sPassBit = '', $sPathOut = '') {
+	private function decryptThisToFile($sEncrypted = '', $sCipherCode = '', $sPassBit = '', $sPathOut = '') {
 		$sOutBit = ($sPathOut && ('' != $sPathOut))
 				? ' -out ' . escapeshellarg($sPathOut) : '';
-		$sCipher = $this->cypherForKey($mCypherCode);
-		$sContentQuoted = escapeshellarg($sContent);
+		$sCipher = $this->cipherForKey($sCipherCode);
+		$sEncryptedQuoted = escapeshellarg($sEncrypted);
 		$sScriptDecode = sprintf('echo %s | openssl enc -d -%s -a%s %s'
-				,$sContentQuoted, $sCipher, $sOutBit, $sPassBit);
+				,$sEncryptedQuoted, $sCipher, $sOutBit, $sPassBit);
 		$this->doScript($sScriptDecode);
 		return $this->aResults['fullOutput'];
 	} // decryptThisToFile
 
-	private function decryptThis($sContent = '', $mCypherCode = '', $sPassBit = '') {
-		$sCipher = $this->cypherForKey($mCypherCode);
-		$sContentQuoted = escapeshellarg($sContent);
+	private function decryptThis($sEncrypted = '', $sCipherCode = '', $sPassBit = '') {
+		$sCipher = $this->cipherForKey($sCipherCode);
+		$sEncryptedQuoted = escapeshellarg($sEncrypted);
 		$sScriptDecode = sprintf('echo %s | openssl enc -d -%s -a %s'
-				,$sContentQuoted, $sCipher, $sPassBit);
+				,$sEncryptedQuoted, $sCipher, $sPassBit);
 		$this->doScript($sScriptDecode);
 		return $this->aResults['fullOutput'];
 	} // decryptThis
