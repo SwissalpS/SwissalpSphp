@@ -4,6 +4,11 @@
  * * extends SssS_Cypher to never use cleartext on the cl
  * *
  * * to make sure the temporary files are deleted, call cleanupCypher2()
+ * *
+ * * DEPRICATED CLASS, use SssS_Cypher3openSSLcli or SssS_Cypher3mcrypt instead
+ * * not all the settings options are respected and they will never be as I have
+ * * stopped working on this class. SssS_Cypher3 subclasses are the way to go.
+ * *
  * * @version 20131106_153049 changed spelling of cypher to cipher when adj.
  * * @version 20131103_013848 + base64decodeFile() + base64encodeFile()
  * * @version 20131103_012737 + allways make tmp dir + check rm -P
@@ -362,10 +367,14 @@ class SssS_Cypher2 extends SssS_Cypher {
 	protected function cypherForKey($sKey = '') { return $this->cipherForKey($sKey); } // cypherForKey
 
 	// subclass this for more obfuscation
-	private function initCiphers() {
+	protected function initCiphers() {
+
 		$aCiphers = array('aes-128-cbc', 'aes-128-ecb', 'aes-192-cbc', 'aes-192-ecb', 'aes-256-cbc', 'aes-256-ecb', 'base64', 'bf', 'bf-cbc', 'bf-cfb', 'bf-ecb', 'bf-ofb', 'cast', 'cast-cbc', 'cast5-cbc', 'cast5-cfb', 'cast5-ecb', 'cast5-ofb', 'des', 'des-cbc', 'des-cfb', 'des-ecb', 'des-ede', 'des-ede-cbc', 'des-ede-cfb', 'des-ede-ofb', 'des-ede3', 'des-ede3-cbc', 'des-ede3-cfb', 'des-ede3-ofb', 'des-ofb', 'des3', 'desx', 'idea', 'idea-cbc', 'idea-cfb', 'idea-ecb', 'idea-ofb', 'rc2', 'rc2-40-cbc', 'rc2-64-cbc', 'rc2-cbc', 'rc2-cfb', 'rc2-ecb', 'rc2-ofb', 'rc4', 'rc4-40');
+
 		$aKeys = array('c16656459864a70e4a5b9acd', 'c2045100124a70e4a5b9af4', 'c1371656364a70e4a5b9b00', 'c8203878634a70e4a5b9b0b', 'c12472937914a70e4a5b9b22', 'c6056705394a70e4a5b9b2d', 'c17844071144a70e4a5b9b38', 'c9648511854a70e4a5b9b43', 'c3996862294a70e4a5b9b4e', 'c8413803914a70e4a5b9b5a', 'c12520960834a70e4a5b9b65', 'c13237995704a70e4a5b9b70', 'c20738177034a70e4a5b9b7b', 'c16550030104a70e4a5b9b87', 'c499833734a70e4a5b9b92', 'c8454988194a70e4a5b9b9d', 'c4410822034a70e4a5b9ba8', 'c16104793824a70e4a5b9bb4', 'c12116392854a70e4a5b9bbf', 'c8110343934a70e4a5b9bcb', 'c9898186794a70e4a5b9bd6', 'c17935449364a70e4a5b9be1', 'c11861465694a70e4a5b9bed', 'c15616643904a70e4a5b9bf8', 'c12132073984a70e4a5b9c03', 'c13616428694a70e4a5b9c0e', 'c8078337254a70e4a5b9c1a', 'c17729865414a70e4a5b9c25', 'c13873505044a70e4a5b9c30', 'c18390697884a70e4a5b9c3b', 'c15121712554a70e4a5b9c46', 'c9055128424a70e4a5b9d0a', 'c20435798004a70e4a5b9d23', 'c16493368914a70e4a5b9d31', 'c17259007054a70e4a5b9d3d', 'c11433899434a70e4a5b9d48', 'c1075237824a70e4a5b9d53', 'c13628241714a70e4a5b9d5e', 'c21082411284a70e4a5b9d6a', 'c5072100114a70e4a5b9d75', 'c567209144a70e4a5b9d80', 'c12128535634a70e4a5b9d8b', 'c18310095814a70e4a5b9d96', 'c21305386184a70e4a5b9da1', 'c7203729254a70e4a5b9dac', 'c18809929544a70e4a5b9db8', 'c8285537894a70e4a5b9dc3');
+
 		$this->hCiphers = array_combine($aKeys, $aCiphers);
+
 	} // initCiphers
 
 	/* * * * *  *   \PRIVATE FUNCTIONS 4 SUBCLASSING/   *  * * * * */

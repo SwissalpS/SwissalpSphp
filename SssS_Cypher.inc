@@ -26,6 +26,7 @@ var_dump($sEnc, $sDec, $oCypher->aResults);
 
 /* cypher data without writing to disk (if you want, you can do that too)
  * use the file password instead of cleartext to avoid ps sniffers
+ * or use SssS_Cypher2 or even better one of the SssS_Cypher3 subclasses.
  */
 
 if (!defined('AUTO_INCLUDING')) {
