@@ -252,9 +252,9 @@ class WFIncluding {
 				=> 'framework/widgets/WFFormatter.php',
 				'WFSensitiveDataFormatter'
 				=> 'framework/widgets/WFFormatter.php',
-				'WFPaginatorException'
-				=> 'framework/WFPagination.php',
 				'WFPaginator'
+				=> 'framework/WFPagination.php',
+				'WFPaginatorException'
 				=> 'framework/WFPagination.php',
 				'WFPagedArray'
 				=> 'framework/WFPagination.php',
