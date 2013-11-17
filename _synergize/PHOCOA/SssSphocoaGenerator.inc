@@ -31,13 +31,13 @@ class SssSphocoaGenerator {
 	public function SssSphocoaGenerator() {} // SssSphocoaGenerator
 
 	// dealloc
-	static public function bail() {	echo chr(10) . 'SssSphocoaGenerator exiting...' . chr(10); exit(0); } // bail
+	static public function bail() {	echo NL . 'SssSphocoaGenerator exiting...' . NL; exit(0); } // bail
 
 	// main cli 'inlet'
 	static public function runCLI() {
 		$a = $_SERVER['argv'];
 		$sInvocation = array_shift($a); // get $0 path
-		//echo chr(10) . $sInvocation . '<-sInvocation-';
+		//echo NL . $sInvocation . '<-sInvocation-';
 		$sPathInvocationBase = self::parseInvocationBase($sInvocation);
 
 		$bUseAllDefaults = $sPathDest = $sAppName = false;
@@ -94,7 +94,7 @@ class SssSphocoaGenerator {
 
 		// good bye
 		echo sprintf('%1$ssuccessful in %2$s out of %3$s files%1$s',
-						chr(10), $iYes, count($aPaths));
+						NL, $iYes, count($aPaths));
 
 		// debug fails if any
 		if (!empty($aFails)) echo 'failed paths: ' . print_r($aFails, true);
@@ -124,7 +124,7 @@ class SssSphocoaGenerator {
 
 		// good bye
 		echo sprintf('%1$ssuccessful in %2$s out of %3$s files%1$s',
-						chr(10), $iYes, $iCount);
+						NL, $iYes, $iCount);
 
 		// debug fails if any
 		if (!empty($aFails)) echo 'failed paths: ' . print_r($aFails, true);
@@ -1366,7 +1366,7 @@ class SssSphocoaGenerator {
 
 	static public function warnVersion() {
 
-		echo chr(10) . chr(10) . '! ! ! Warning, you are using an old version plist ! ! !' . chr(10) . ' update with ....' . chr(10) . chr(10);
+		echo NL . NL . '! ! ! Warning, you are using an old version plist ! ! !' . NL . ' update with ....' . NL . NL;
 
 	} // warnVersion
 
