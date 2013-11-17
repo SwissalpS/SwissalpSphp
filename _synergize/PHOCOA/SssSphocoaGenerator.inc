@@ -594,8 +594,7 @@ class SssSphocoaGenerator {
 			$bUseAllDefaults = false,
 			$sPathDest = false,
 			$sPathInvocationBase = null, // alternative root calculated from invocation path
-			$sAppName = false)
-	{
+			$sAppName = false) {
 
 		static $ats = null; static $gi = null;
 		static $rts = null; if (!$rts) {
@@ -991,8 +990,8 @@ class SssSphocoaGenerator {
 	static function inPlaceRefreshTemplatesInPlist(
 			$mPlist = null,
 			$aFiles = null,
-			$sPathInvocationBase = null)
-	{
+			$sPathInvocationBase = null) {
+
 		if (!$mPlist) return null;
 
 		static $ats = null; static $gi = null;
@@ -1005,19 +1004,22 @@ class SssSphocoaGenerator {
 		} // first run
 
 		$sArgType = gettype($mPlist);
-		if ('object' == $sArgType && is_subclass_of($mPlist, 'SssS_Plist'))
+		if ('object' == $sArgType && is_subclass_of($mPlist, 'SssS_Plist')) {
+
 			$oP = $mPlist;
 
-		else { // is not an SssS_Plist or subclass
+		} else { // is not an SssS_Plist or subclass
 			// mPlist is plist string or path
-			if (('string' == $sArgType) || ('array' == $sArgType))
-				$oP = new SssS_Plist($mPlist);
-			// if string (path or xml) or array as mPlist
+			if (('string' == $sArgType) || ('array' == $sArgType)) {
 
-			else {
+				$oP = new SssS_Plist($mPlist);
+				// if string (path or xml) or array as mPlist
+			} else {
+
 				$oP = self::defaultPlist(0);
 				if ($sPathInvocationBase)
 					$oP->set('DEFAULT_BASE_TEMPLATE_DIR', null);
+
 			} // if use defaults
 
 		} // if mPlist is is a SssS_Plist subclass or not
@@ -1108,8 +1110,8 @@ class SssSphocoaGenerator {
 	static function inPlaceRefreshTemplatesInPlist1(
 			$mPlist = null,
 			$aFiles = null,
-			$sPathInvocationBase = null)
-	{
+			$sPathInvocationBase = null) {
+
 		if (!$mPlist) return null;
 
 		static $ats = null; static $gi = null;
