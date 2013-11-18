@@ -13,12 +13,12 @@
 		<key>PROPEL_DATABASE</key><string>mysql</string>
 		<key>DB_HOST</key><string>debian2</string>
 		<key>DB_USER</key><string>phocoa</string>
-		<key>DB_PASS</key><string>phocoa</string>
+		<key>DB_PASS</key><string>cGhvY29h</string>
 		<key>DB_NAME</key><string>phocoa</string>
 		<key>SERVER_IP</key><string>127.0.0.1</string>
 		<key>SERVER_NAME</key><string>localhost</string>
 		<key>SERVER_PORT</key><integer>80</integer>
 		<key>PHOCOA_PROJECT_NAME</key><string>SssSphocoaAppCopy</string>
-		<key>SssSphocoaGeneratorVersion</key><integer>2</integer>
+		<key>SssSphocoaGeneratorVersion</key><integer>3</integer>
 	</dict>
 </plist>
