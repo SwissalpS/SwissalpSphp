@@ -1157,7 +1157,7 @@ pathChecks ' . $s_path . '
 	} // getStrForKeyPath
 
 	public function getString($mKeyPath = '', $mDefaultValue = '', $iStartID = -1) {
-		return getStr($mKeyPath, $mDefaultValue, $iStartID);
+		return $this->getStr($mKeyPath, $mDefaultValue, $iStartID);
 	} // getStringForKeyPath
 
 	public function getStringForKeyPath($mKeyPath = '', $iStartID = -1) {

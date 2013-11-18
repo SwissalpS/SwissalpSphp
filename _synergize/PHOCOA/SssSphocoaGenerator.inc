@@ -153,7 +153,7 @@ class SssSphocoaGenerator {
 	// cli 'inlet'
 	static public function runCLIupdatePlistVersion2To3() {
 
-		self::updatePlistVersion(2, 3);
+		self::runCLIupdatePlistVersion(2, 3);
 
 	} // runCLIupdatePlistVersion2To3
 
@@ -207,8 +207,6 @@ class SssSphocoaGenerator {
 
 		if (2 == $iFromVersion) {
 
-			$iFromVersion++;
-
 			$aFails = array(); $iYes = 0; $iCount = count($a);
 
 			foreach($a as $mPlist) {
@@ -234,6 +232,8 @@ class SssSphocoaGenerator {
 
 			// debug fails if any
 			if (!empty($aFails)) echo 'failed paths: ' . print_r($aFails, true);
+
+			$iFromVersion++;
 
 		} // if canvert from version 2
 
