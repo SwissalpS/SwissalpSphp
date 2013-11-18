@@ -88,7 +88,7 @@ class SssSLink extends WFLink {
 */
 		$sDone = '<a id="' . $this->id . '" href="' . $this->value . '"'
 				. $class . $target . $title . $this->getJSActions() . '>'
-				. $label . '</a>' . $this->getListenerJSInScriptTag();
+				. $label . '</a>' . "\n" . $this->getListenerJSInScriptTag();
 
 		if ($bShowBla && ($this->sLabelBlaID || $this->sTitleBlaID)) {
 

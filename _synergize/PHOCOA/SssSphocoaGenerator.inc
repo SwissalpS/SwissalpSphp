@@ -297,7 +297,7 @@ class SssSphocoaGenerator {
 			$ats = 'addTrailingSlash';
 			$gi = 'getInputCLI';
 			$iVersion = 3;
-			
+
 		} // first run
 
 		if ($sPathInvocationBase)

@@ -89,7 +89,7 @@ class SssSCheckbox extends WFCheckbox {
 
 		$sName = $this->name() . ($this->groupMode() ? '[]' : '');
 		$sOut = $sLabelLeft . '<input type="checkbox" '
-        		. 'name="' . $sName . 
+        		. 'name="' . $sName .
         		. '" ' . ($this->class ? ' class="' . $this->class . '" ' : '')
         		. 'id="' . $this->id() . '" '
         		. 'value="' . $this->checkedValue() . '" '
