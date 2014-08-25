@@ -13,6 +13,7 @@
  * * declaring the charset
  * *
  * * see example.php for usage
+ * * @version 20140825_120410 + $a_noShortcutCloseTags don't use /> for tags in this array
  * * @version 20091024_201456 + require functions file_get/put_contents_safely
  * * @version 20090803_220831 (CC)2008 Luke JZ aka SwissalpS mb_ detection
  * * @version 0.2 (CC)2008 Luke JZ aka SwissalpS (modified outputTag and added XHTMLaa to enable automatic insertion of id, name and class attributes. In the hope that this makes css and scripting easier for certain people like myself when planing dynamic content. Also added double check on tag and attribute names to ensure that they are lowercase)
@@ -119,6 +120,10 @@ class SssS_XHTML {
  	 * @var array array of strings of tags which take a new line after they open
  	 */
 	var $a_newLineAfterOpenTags;
+ 	/**
+ 	 * @var array array of strings of tags which must be closed with close tag
+ 	 */
+	var $a_noShortcutCloseTags;
 
 	/* * *
 	 * * void function SssS_XHTML(
@@ -205,6 +210,7 @@ class SssS_XHTML {
 		$this->a_skipTheseFromFlagIdNameClass = array('br');
 		$this->a_newLineAfterOpenTags = array('pre', 'p', 'div', 'link', 'head', 'html', 'meta', 'title', 'table', 'form', 'style', 'script', 'br', 'tr', 'hr', 'td');
 		$this->a_newLineAfterCloseTags = array('pre', 'p', 'div', 'link', 'head', 'html', 'meta', 'title', 'table', 'form', 'style', 'script', 'br');
+		$this->a_noShortcutCloseTags = array('pre', 'textarea', 'script', 'td', 'div');
 		//
 		$this->s_textNodeName = 'ssss_xml_textnode';
 
@@ -336,12 +342,15 @@ class SssS_XHTML {
 		$i_countTags = count($this->a_tags);
 		// TO DO: these two lines look weird: b_attachToIstextNode is used uninitialized to influence it's initial value
 		$b_isValidAttachTo = (('' !== trim($i_attachTo)) && (0 < $i_attachTo)
-				&& ($i_attachTo < $i_countTags) && $b_attachToIstextNode) ? true : false;
-		$b_attachToIsTextNode = ($b_isValidAttachTo && ($this->s_textNodeName == $this->a_tags[$i_attachTo]['tag'])) ? true : false;
+				&& ($i_attachTo < $i_countTags));// && $b_attachToIstextNode) ? true : false;
+
+		$b_attachToIsTextNode = ($b_isValidAttachTo && ($this->s_textNodeName == $this->a_tags[$i_attachTo]['tag']));
+
 		if ($b_attachToIsTextNode) {
 			// if (parent exists) $i_tag = first possible parent
-			if ($b_isValidAttachTo) $i_tag = $this->a_tags[$i_attachTo]['parent'];
-			else $b_isValidAttachTo = false;
+			$i_tag = $this->a_tags[$i_attachTo]['parent'];
+		} elseif ($b_isValidAttachTo) {
+			$i_tag = $i_attachTo;
 		}
 
 		if ($b_scriptIsSet || $b_urlIsSet) {
@@ -801,7 +810,7 @@ class SssS_XHTML {
 $b_leadIn = true;
 $b_leadIn = (in_array($a_thisTag['tag'], $this->a_newLineAfterOpenTags));
 			if ($b_MTtag) { // close eMpTy tag
-				$s_return .= ' />';
+				$s_return .= (in_array($a_thisTag['tag'], $this->a_noShortcutCloseTags) ? '></' . $a_thisTag['tag'] . '>' : ' />');
 			} else { // pause tag
 				$s_return .= '>';
 
