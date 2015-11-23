@@ -3,16 +3,16 @@
 // custom skin delegates
 class simple_SkinDelegate {
 
-    function loadDefaults($skin) {
+    function loadDefaults($oSkin) {
 
         // look at URL and determine skin.
-        $skin->setSkin('sidenav');
-        $skin->setTheme('brushed');
+        $oSkin->setSkin('sidenav');
+        $oSkin->setTheme('brushed');
 
         // set up other skin defaults
-        $skin->setMetaDescription('PHOCOA Skin Type based on YUI CSS principles.');
-        $skin->addMetaKeywords(array('yui, yui css, yahoo css'));
-        $skin->setTitle('YUI Skin for PHOCOA');
+        $oSkin->setMetaDescription('PHOCOA Skin Type based on YUI CSS principles.');
+        $oSkin->addMetaKeywords(array('yui, yui css, yahoo css'));
+        $oSkin->setTitle('YUI Skin for PHOCOA');
 
 		$oSkin->addHeadString('<link rel="stylesheet" type="text/css" href="' . $oSkin->getSkinDir() . '/SssSBla.css" />');
 
