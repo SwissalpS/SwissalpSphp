@@ -10,9 +10,13 @@
 SssSURLRewrite::doIt(array(
 	'logFile' => '/home/skyproco/phocoaApps/skyprom/log/404.log',
 	'sIndexPHP' => '/home/skyproco/public_html/index.php',
-	'sAppDir' => '/home/skyproco/phocoaApps/skyprom/skyprom'));
+	'sAppDir' => '/home/skyproco/phocoaApps/skyprom/skyprom',
+	'sPhocoaDir' => '/usr/local/share', // defaults to /usr/local/share/phocoa
+));
 */
 
+// we need to define a time-zone to avoid flooding with warnings
+date_default_timezone_set('UTC');
 
 if (!defined('DIR_SEP')) define('DIR_SEP', DIRECTORY_SEPARATOR);
 
@@ -107,7 +111,17 @@ class SssSURLRewrite {
 
 		//preDumpServer();
 
-		$bYouServe = self::respond(self::check($_SERVER['REQUEST_URI'], $aProps['sAppDir']), $aProps['sIndexPHP']);
+		// check if phocoa path is given
+		if ( ! isset($aProps['sPhocoaDir']))
+			$aProps['sPhocoaDir'] = '/usr/local/share/phocoa/';
+
+		$bYouServe = self::respond(
+							self::check($_SERVER['REQUEST_URI'],
+										$aProps['sAppDir'],
+										$aProps['sPhocoaDir']),
+							$aProps['sIndexPHP'],
+							$aProps['sPhocoaDir']
+						);
 
 		// if not run as root script, we don't want to kill the app using the filter
 		if (!isset($aProps['sIndexPHP'])) return $bYouServe;
@@ -206,11 +220,15 @@ class SssSURLRewrite {
 	} // mime_content_type
 
 
-	static function check($sRequestURI, $sAppDir) {
+	static function check($sRequestURI, $sAppDir, $sPhocoaFrameWorkDir = '/usr/local/share/phocoa') {
+
+		// remove any trailing slashes and add one to make sure we have a path at all
+		$sPhocoaFrameWorkDir = rtrim($sPhocoaFrameWorkDir, DIR_SEP) . DIR_SEP;
+		// same goes for app dir
+		$sAppDir = rtrim($sAppDir, DIR_SEP) . DIR_SEP;
 
 		static $aPatterns = null;
-		static $sPhocoaFrameWorkDir = null;
-		if (!$aPatterns) {
+		if ( ! $aPatterns) {
 			$aPatterns = array(
 				'favic' => '|^/favicon.ico|i',
 				'menu1' => '|^/menu/menu/mainMenu/menubaritem_submenuindicator.png|i',
@@ -223,7 +241,6 @@ class SssSURLRewrite {
 				'docs1' => '|^/docs/?(.*)|i'
 				//'asset' => '|^/assets/?(.*)|i',
 			);
-			$sPhocoaFrameWorkDir = '/usr/local/share';
 		} // first run
 
 		$sPath = null;
@@ -248,12 +265,12 @@ class SssSURLRewrite {
 				switch ($sPatID) {
 
 					case 'favic' : // ^/favicon.ico /SwissalpS/phocoaApps/SssSAppPIiCal/SssSAppPIiCal/wwwroot/
-						$sPath = sprintf('%1$s%2$swwwroot%2$sfavicon.ico', $sAppDir, DIR_SEP);
+						$sPath = sprintf('%1$swwwroot%2$sfavicon.ico', $sAppDir, DIR_SEP);
 						break;
 
 					case 'wwwf1' : //  ^/www/framework(/[0-9\.]*)?/?(.*) /private/var/mobile/SwissalpS/git/phocoa/phocoa/wwwroot/www/framework/$2
 						$sPath = sprintf(
-							'%1$s%2$sphocoa%2$swwwroot%2$swww%2$sframework%2$s%3$s',
+							'%1$sphocoa%2$swwwroot%2$swww%2$sframework%2$s%3$s',
 							$sPhocoaFrameWorkDir, DIR_SEP, $aMatches[2]);
 						break;
 	/*
@@ -264,24 +281,24 @@ class SssSURLRewrite {
 	*/
 					case 'wwwf4' : // ^/www/framework/(.*) /private/var/mobile/SwissalpS/git/phocoa/phocoa/wwwroot/www/framework/$1
 						$sPath = sprintf(
-							'%1$s%2$sphocoa%2$swwwroot%2$swww%2$sframework%2$s%3$s',
+							'%1$sphocoa%2$swwwroot%2$swww%2$sframework%2$s%3$s',
 							$sPhocoaFrameWorkDir, DIR_SEP, $aMatches[1]);
 						break;
 
 					case 'wwwf2' :
 						// ^/www/?(.*) /SwissalpS/phocoaApps/SssSAppPIiCal/SssSAppPIiCal/wwwroot/www/$1
-						$sPath = $sAppDir . DIR_SEP . 'wwwroot' . DIR_SEP
+						$sPath = $sAppDir . 'wwwroot' . DIR_SEP
 								. 'www' . DIR_SEP . $aMatches[1];
 						break;
 
 					case 'skin1' : // ^/skins/([^/]*)/www/(.*) /SwissalpS/phocoaApps/SssSAppPIiCal/SssSAppPIiCal/skins/$1/www/$2
-						$sPath = $sAppDir . DIR_SEP . 'skins' . DIR_SEP
+						$sPath = $sAppDir . 'skins' . DIR_SEP
 									. $aMatches[1] . DIR_SEP . 'www' . DIR_SEP
 									. $aMatches[2];
 						break;
 
 					case 'skin2' : // ^/skins/([^/]*)/([^/]*)/([^/]*)/(.*) /SwissalpS/phocoaApps/SssSAppPIiCal/SssSAppPIiCal/skins/$1/$2/www/$3/$4
-							$sPath = $sAppDir . DIR_SEP . 'skins' . DIR_SEP
+							$sPath = $sAppDir . 'skins' . DIR_SEP
 									. $aMatches[1] . DIR_SEP . $aMatches[2]
 									. DIR_SEP . 'www' . DIR_SEP . $aMatches[3]
 									. DIR_SEP . $aMatches[4];
@@ -289,7 +306,7 @@ class SssSURLRewrite {
 
 					case 'docs1' : // ^/docs/?(.*) /private/var/mobile/SwissalpS/git/phocoa/phocoa/docs/phpdocs/$1
 						$sPath = sprintf(
-								'%1$s%2$sphocoa%2$sdocs%2$sphpdocs%2$s%3$s',
+								'%1$sphocoa%2$sdocs%2$sphpdocs%2$s%3$s',
 								$sPhocoaFrameWorkDir, DIR_SEP, $aMatches[1]);
 						break;
 					/*
@@ -299,7 +316,7 @@ class SssSURLRewrite {
 
 					case 'menu1' : // /menu/menu/mainMenu/menubaritem_submenuindicator.png /private/var/mobile/SwissalpS/git/phocoa/phocoa/wwwroot/www/framework/yui/menu/assets/menubaritem_submenuindicator.png
 						$sPath = sprintf(
-							'%1$s%2$sphocoa%2$swwwroot%2$swww%2$sframework%2$syui%2$smenu%2$sassets%2$smenubaritem_submenuindicator.png',
+							'%1$sphocoa%2$swwwroot%2$swww%2$sframework%2$syui%2$smenu%2$sassets%2$smenubaritem_submenuindicator.png',
 							$sPhocoaFrameWorkDir, DIR_SEP);
 						break;
 
@@ -345,7 +362,7 @@ class SssSURLRewrite {
 	} // lg
 
 
-	static function respond($sPath, $sIndexPHP) {
+	static function respond($sPath, $sIndexPHP, $sPhocoaFrameWorkDir = '/usr/local/share/phocoa') {
 
 		$sOrigPath = $sPath;
 
@@ -353,7 +370,7 @@ class SssSURLRewrite {
 
 		if (false !== $mPos) $sPath = substr($sPath, 0, $mPos);
 
-		static $nl = null; if (!$nl) $nl = chr(10);
+		static $nl = null; if ( ! $nl) $nl = chr(10);
 
 		if (null !== $sPath) {
 			// serve up or redirect
@@ -396,6 +413,9 @@ class SssSURLRewrite {
 
 			} else {
 
+				/// try include index.php
+				//return self::ii($sIndexPHP);
+
 				$sHeader = 'HTTP/1.0 404 Not Found';
 
 				self::lg('is NEITHER file nor folder: ' . $sPath . $nl . 'returning: ' . $sHeader);
@@ -405,7 +425,7 @@ class SssSURLRewrite {
 
 				print $sHeaderFull;
 
-			} // if is a file
+			} // if path is dir or file or neither
 
 			return false; // -> already served, caller doesn't need to
 
@@ -413,11 +433,14 @@ class SssSURLRewrite {
 			// no match at all
 			$sRequestURI = $_SERVER['REQUEST_URI'];
 
-			if ('/' == $sRequestURI) return self::ii($sIndexPHP);
-
-			$sPath = '/usr/local/share/phocoa/wwwroot/www/framework/yui' . $sRequestURI;
+			if (DIR_SEP == $sRequestURI) return self::ii($sIndexPHP);
 
 			self::lg(' no match found trying yui framework');
+
+			// remove any trailing slashes and add one
+			$sPhocoaFrameWorkDir = rtrim($sPhocoaFrameWorkDir, DIR_SEP) . DIR_SEP;
+
+			$sPath = $sPhocoaFrameWorkDir . 'phocoa/wwwroot/www/framework/yui' . $sRequestURI;
 
 			if (is_dir($sPath)) {
 
@@ -463,6 +486,8 @@ class SssSURLRewrite {
 		} // if found match
 
 	} // respond
+
+
 
 
 	static function ii($sIndexPHP = null) {
