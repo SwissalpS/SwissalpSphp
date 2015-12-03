@@ -18,7 +18,7 @@ if (!defined('AUTO_INCLUDING')) {
 
 class SssS_ChmodHelper {
 
-	static function chmodDir($sPath, $sMode = 'a+rw') {
+	static function chmodDir($sPath, $sMode = 'a+rw', $bChmodContents = true) {
 
 		if (!is_dir($sPath)) {
 
@@ -33,6 +33,8 @@ class SssS_ChmodHelper {
 		$sScript = 'chmod ' . $sMode . ' "' . $sPath . '";';
 
 		self::doScript($sScript);
+
+		if ( ! $bChmodContents) return;
 
 		if ($rD = openDir($sPath)) {
 

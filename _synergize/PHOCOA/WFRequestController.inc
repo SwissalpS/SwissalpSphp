@@ -231,10 +231,10 @@ class WFRequestController extends WFObject
                 $relativeURI = substr($relativeURI, strlen(WWW_ROOT));
             } // if path begins with WWW_ROOT, remove that
             $modInvocationPath = ltrim($relativeURI, '/');
-            $paramsPos = strpos($modInvocationPath, '?');
-            if ($paramsPos !== false)
-            {
-                $modInvocationPath = substr($modInvocationPath, 0, $paramsPos);
+        	$paramsPos = strpos($modInvocationPath, '?');
+        	if ($paramsPos !== false)
+        	{
+            	$modInvocationPath = substr($modInvocationPath, 0, $paramsPos);
             } // if there are _GET arguments, drop them
 
             if ($modInvocationPath == '')
