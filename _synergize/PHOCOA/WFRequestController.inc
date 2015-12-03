@@ -226,12 +226,16 @@ class WFRequestController extends WFObject
         try {
         $relativeURI = parse_url($_SERVER['REQUEST_URI'],PHP_URL_PATH); // need to run this to convert absolute URI's to relative ones (sent by SOME http clients)
             if ($relativeURI === false) throw new WFRequestController_NotFoundException("Malformed URI: {$_SERVER['REQUEST_URI']}");
-        $modInvocationPath = ltrim(substr($relativeURI, strlen(WWW_ROOT)), '/');
-        $paramsPos = strpos($modInvocationPath, '?');
-        if ($paramsPos !== false)
-        {
-            $modInvocationPath = substr($modInvocationPath, 0, $paramsPos);
-        }
+            if (('' !== WWW_ROOT) && (0 === strpos($relativeURI, WWW_ROOT)))
+            {
+                $relativeURI = substr($relativeURI, strlen(WWW_ROOT));
+            } // if path begins with WWW_ROOT, remove that
+            $modInvocationPath = ltrim($relativeURI, '/');
+        	$paramsPos = strpos($modInvocationPath, '?');
+        	if ($paramsPos !== false)
+        	{
+            	$modInvocationPath = substr($modInvocationPath, 0, $paramsPos);
+            } // if there are _GET arguments, drop them
 
             if ($modInvocationPath == '')
             {

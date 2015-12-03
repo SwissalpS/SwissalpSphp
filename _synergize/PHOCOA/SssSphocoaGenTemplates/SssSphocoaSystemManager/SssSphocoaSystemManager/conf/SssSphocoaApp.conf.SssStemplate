@@ -132,6 +132,9 @@ if (null === //SssS_IncludeThesePathsToPHPIncludePath( // normal - checks duplic
 
 define('PROPEL_CONF', APP_ROOT . '##DIR_SEP##conf##DIR_SEP####PHOCOA_PROJECT_NAME##-conf.php');
 
+// we need to define a time-zone to avoid flooding with warnings
+date_default_timezone_set('UTC');
+
 /** SwissalpS 20100502_033958 modified this line to point to his modified bootstrap
  * ensuring that his classes get loaded and that his modified WFIncluding does the autoload
  * Call the bootstrap code so every script doesn't have to.
