@@ -61,6 +61,8 @@ class WFIncluding {
 				=> HORDE_FRAMEWORK_DIR . '/Yaml/Node.php',
 				'iphp'
 				=> SwissalpS_FRAMEWORK_DIR . '/_external/iPHP/iphp.php',
+				'JohnJ_ed25519'
+				=> SwissalpS_FRAMEWORK_DIR . '/_external/JohnJ_ed25519.inc',
 				'Log'
 				=> PEAR_LOG_FRAMEWORK_DIR . '/Log.php',
 				'Propel'
