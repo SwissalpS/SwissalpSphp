@@ -63,6 +63,8 @@ class WFIncluding {
 				=> SwissalpS_FRAMEWORK_DIR . '/_external/iPHP/iphp.php',
 				'Log'
 				=> PEAR_LOG_FRAMEWORK_DIR . '/Log.php',
+				'medoo'
+				=> SwissalpS_FRAMEWORK_DIR . '/_external/medoo.php',
 				'Propel'
 				=> PROPEL_FRAMEWORK_DIR . '/Propel.php',
 				'SaferScript'
