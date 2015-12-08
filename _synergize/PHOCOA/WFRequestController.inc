@@ -187,7 +187,7 @@ class WFRequestController extends WFObject
 
         // output error info
         header("HTTP/1.0 500 Uncaught Exception");
-        if ($this->isAjax())
+        if (self::isAjax())
         {
             print strip_tags($body_html);
         }
@@ -253,7 +253,7 @@ class WFRequestController extends WFObject
             }
 
             // create the root invocation; only skin if we're not in an XHR
-            $this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, ($this->isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()) );
+            $this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, (self::isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()) );
             // get HTML result of the module, and output it
             $html = $this->rootModuleInvocation->execute();
 
@@ -364,7 +364,7 @@ class WFRequestController extends WFObject
 			list($bInteractive, $modInvocationPath) = self::parseCliRequest();
 
 			// create the root invocation; only skin if we're not in an XHR
-			$this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, ($this->isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
+			$this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, (self::isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
 			// get HTML result of the module, and output it
 
 			$html = $this->rootModuleInvocation->execute();
@@ -413,7 +413,7 @@ class WFRequestController extends WFObject
 								$nl . 'invocation (the default shown is either the first argument passed or the default path):', $modInvocationPath);
 
 						// create the root invocation; only skin if we're not in an XHR
-						$this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, ($this->isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
+						$this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, (self::isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
 						// get HTML result of the module, and output it
 
 						$html = $this->rootModuleInvocation->execute();
@@ -885,7 +885,7 @@ class WFRequestController extends WFObject
      *
      *  @return boolean
      */
-    function isAjax()
+	static function isAjax()
     {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') return true;
         if (isset($_REQUEST['HTTP_X_REQUESTED_WITH']) and strtolower($_REQUEST['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') return true;  // for debugging
