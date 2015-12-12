@@ -464,9 +464,10 @@ class WFRequestController extends WFObject
 
 						$aChoicesGenerate = array(
 							'(add/activate Propel [use phocoa tasks for now])',
-							'Propel convert',
+							'Propel2 database:reverse -> schema.xml',
 							'fix schema.xml',
-							'create Propel class files (reverse db)',
+							'Propel2 database:build -> class files',
+							'Propel2 config:convert -> PROPEL_CONF',
 							'create scaffolds for Propel classes',
 							'---------------------------------------',
 							'create a module',
@@ -481,7 +482,9 @@ class WFRequestController extends WFObject
 						$sPathPropelBuild = APP_ROOT . DIR_SEP . 'propel-build';
 
 						// TODO: get this and other values from the .plist that created this project
-						$sPathPropelGenBin = SwissalpS_FRAMEWORK_DIR . DIR_SEP . '_synergize' . DIR_SEP . 'PHOCOA' . DIR_SEP . 'propel_generator-1.3' . DIR_SEP . 'bin' . DIR_SEP . 'propel-gen';
+						$sPathPropelGenBin = 'gitSwissalpS/Propel2/bin/propel'; //SwissalpS_FRAMEWORK_DIR . DIR_SEP . '_synergize' . DIR_SEP . 'PHOCOA' . DIR_SEP . 'propel_generator-1.3' . DIR_SEP . 'bin' . DIR_SEP . 'propel-gen';
+						$sPropelBinArgs = ' --config-dir "' . $sPathPropelBuild . '"'
+								   . ' --output-dir "' . $sPathPropelBuild . '"';
 
 						$sPathPhocoaScripts = FRAMEWORK_DIR . DIR_SEP . 'framework' . DIR_SEP . 'script';
 
@@ -503,25 +506,26 @@ class WFRequestController extends WFObject
 			        				$bContinueGenerateMenu = false;
 			        				break;
 
-			        			case 'Propel convert' :
+			        			case 'Propel2 database:reverse -> schema.xml' :
 			        				// TODO: look for .plist and make/remake config files in propel-build
 			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' ' . $sPathPropelBuild . ' convert-conf', $iRes);
+			        				passthru($sPathPropelGenBin . ' database:reverse' . $sPropelBinArgs, $iRes);
 			        				break;
 
 			        			case 'fix schema.xml' :
-			        				self::setEnvForPhocoaPhingPropel();
 			        				$iRes = null;
 			        				passthru($sPathBin . DIR_SEP . 'fix-schema.php', $iRes);
 			        				break;
 
-			        			case 'create Propel class files (reverse db)' :
-			        				self::setEnvForPhocoaPhingPropel();
+			        			case 'Propel2 database:build -> class files' :
 			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' ' . $sPathPropelBuild . ' reverse', $iRes);
-			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' ' . $sPathPropelBuild . ' main', $iRes);
+			        				passthru($sPathPropelGenBin . ' model:build' . $sPropelBinArgs, $iRes);
 			        				break;
+
+							case 'Propel2 config:convert -> PROPEL_CONF' :
+								$iRes = null;
+								passthru($sPathPropelGenBin . ' config:convert' . $sPropelBinArgs, $iRes);
+								break;
 
 			        			case 'create scaffolds for Propel classes' :
 			        				if (!is_file(PROPEL_CONF)) {
@@ -536,12 +540,12 @@ class WFRequestController extends WFObject
 
 			        				} // if no classes in propel configuration
 
-			        				$iLenPeer = strLen('Peer'); $iLenMapBuilder = strLen('MapBuilder');
+			        				$iLenPeer = strLen('Query'); $iLenMapBuilder = strLen('MapBuilder');
 			        				$sAvailableClasses = '';
 			        				foreach ($aPropelConfig['propel']['datasources'][basename(APP_ROOT)]['classes'] as $sClassName => $sClassPath) {
 
-			        					// ends with Peer?
-			        					if ('Peer' == substr($sClassName, -$iLenPeer)) continue;
+			        					// ends with Query?
+			        					if ('Query' == substr($sClassName, -$iLenPeer)) continue;
 			        					// ends with MapBuilder?
 			        					if ('MapBuilder' == substr($sClassName, -$iLenMapBuilder)) continue;
 
