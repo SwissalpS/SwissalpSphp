@@ -482,7 +482,7 @@ class WFRequestController extends WFObject
 						$sPathPropelBuild = APP_ROOT . DIR_SEP . 'propel-build';
 
 						// TODO: get this and other values from the .plist that created this project
-						$sPathPropelGenBin = 'gitSwissalpS/Propel2/bin/propel'; //SwissalpS_FRAMEWORK_DIR . DIR_SEP . '_synergize' . DIR_SEP . 'PHOCOA' . DIR_SEP . 'propel_generator-1.3' . DIR_SEP . 'bin' . DIR_SEP . 'propel-gen';
+						$sPathPropelGenBin = '/gitSwissalpS/Propel2/bin/propel'; //SwissalpS_FRAMEWORK_DIR . DIR_SEP . '_synergize' . DIR_SEP . 'PHOCOA' . DIR_SEP . 'propel_generator-1.3' . DIR_SEP . 'bin' . DIR_SEP . 'propel-gen';
 						$sPropelBinArgs = ' --config-dir "' . $sPathPropelBuild . '"'
 								   . ' --output-dir "' . $sPathPropelBuild . '"';
 
