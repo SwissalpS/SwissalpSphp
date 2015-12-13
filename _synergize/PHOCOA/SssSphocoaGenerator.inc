@@ -31,10 +31,10 @@ class SssSphocoaGenerator {
 	public function SssSphocoaGenerator() {} // SssSphocoaGenerator
 
 	// dealloc
-	static public function bail() {	echo NL . 'SssSphocoaGenerator exiting...' . NL; exit(0); } // bail
+	public static function bail() {	echo NL . 'SssSphocoaGenerator exiting...' . NL; exit(0); } // bail
 
 	// main cli 'inlet'
-	static public function runCLI() {
+	public static function runCLI() {
 		$a = $_SERVER['argv'];
 		$sInvocation = array_shift($a); // get $0 path
 		//echo NL . $sInvocation . '<-sInvocation-';
@@ -104,7 +104,7 @@ class SssSphocoaGenerator {
 
 
 	// cli 'inlet'
-	static public function runCLIinPlaceReplacement() {
+	public static function runCLIinPlaceReplacement() {
 		$a = $_SERVER['argv'];
 		$sInvocation = array_shift($a); // get $0 path
 		$sPathInvocationBase = self::parseInvocationBase($sInvocation);
@@ -135,7 +135,7 @@ class SssSphocoaGenerator {
 
 
 	// cli 'inlet'
-	static public function runCLIupdatePlistVersion1To2() {
+	public static function runCLIupdatePlistVersion1To2() {
 
 		self::updatePlistVersion(1, 2);
 
@@ -143,7 +143,7 @@ class SssSphocoaGenerator {
 
 
 	// cli 'inlet'
-	static public function runCLIupdatePlistVersion1To3() {
+	public static function runCLIupdatePlistVersion1To3() {
 
 		self::updatePlistVersion(1, 3);
 
@@ -151,14 +151,14 @@ class SssSphocoaGenerator {
 
 
 	// cli 'inlet'
-	static public function runCLIupdatePlistVersion2To3() {
+	public static function runCLIupdatePlistVersion2To3() {
 
 		self::runCLIupdatePlistVersion(2, 3);
 
 	} // runCLIupdatePlistVersion2To3
 
 
-	static protected function runCLIupdatePlistVersion($iFromVersion = 1, $iToVersion = 3) {
+	protected static function runCLIupdatePlistVersion($iFromVersion = 1, $iToVersion = 3) {
 
 		$a = $_SERVER['argv'];
 		$sInvocation = array_shift($a); // get $0 path
@@ -247,7 +247,7 @@ class SssSphocoaGenerator {
 
 
 	// default values
-	static public function defaultPlist($iVersion = 1) {
+	public static function defaultPlist($iVersion = 1) {
 
 		$a = array();
 
@@ -275,7 +275,7 @@ class SssSphocoaGenerator {
 
 
 	// main interactive wizard
-	static public function makeNewSssSphocoaProject($bUseAllDefaults = false) {
+	public static function makeNewSssSphocoaProject($bUseAllDefaults = false) {
 
 		self::makeNewSssSphocoaProjectWithPlist(self::defaultPlist(0), $bUseAllDefaults);
 
@@ -283,7 +283,7 @@ class SssSphocoaGenerator {
 
 
 	// make from settings in a plist file interactively changing or complementing arguments
-	static public function makeNewSssSphocoaProjectWithPlist(
+	public static function makeNewSssSphocoaProjectWithPlist(
 			$mPlist = null, // SssS_Plist object a path or a plist xml string or an array
 			$bUseAllDefaults = false,
 			$sPathDest = false,
@@ -670,7 +670,7 @@ class SssSphocoaGenerator {
 
 
 	// make from settings in a plist file interactively changing or complementing arguments
-	static public function makeNewSssSphocoaProjectWithPlist1(
+	public static function makeNewSssSphocoaProjectWithPlist1(
 			$mPlist = null, // SssS_Plist object a path or a plist xml string or an array
 			$bUseAllDefaults = false,
 			$sPathDest = false,
@@ -1069,7 +1069,7 @@ class SssSphocoaGenerator {
 
 
 	// make from settings in a plist file interactively changing or complementing arguments
-	static public function makeNewSssSphocoaProjectWithPlist2(
+	public static function makeNewSssSphocoaProjectWithPlist2(
 			$mPlist = null, // SssS_Plist object a path or a plist xml string or an array
 			$bUseAllDefaults = false,
 			$sPathDest = false,
@@ -1822,7 +1822,7 @@ class SssSphocoaGenerator {
 	} // findTemplatesInProject
 
 
-	static public function parseInvocationBase($sInvocation) {
+	public static function parseInvocationBase($sInvocation) {
 
 		$sPathInvocationBase = null;
 
@@ -1871,7 +1871,7 @@ class SssSphocoaGenerator {
 	} // showHelpCLI
 
 
-	static public function trimOrUnescapeShellArgument($s) {
+	public static function trimOrUnescapeShellArgument($s) {
 
 		return ('"' == $s{0} || "'" == $s{0})
 					? trim($s, "\" \t'") 		// trim whitespace and ' "
@@ -1880,7 +1880,7 @@ class SssSphocoaGenerator {
 	} // trimOrUnescapeShellArgument
 
 
-	static public function updatePlistVersion1To2($sPlistPath) {
+	public static function updatePlistVersion1To2($sPlistPath) {
 
 		// only proceed if file exists
 		if (!is_file($sPlistPath)) return false;
@@ -1965,7 +1965,7 @@ class SssSphocoaGenerator {
 
 
 	// we need to encode passwords as they can contain special characters that can mess up the plist
-	static public function updatePlistVersion2To3($sPlistPath) {
+	public static function updatePlistVersion2To3($sPlistPath) {
 
 		// only proceed if file exists
 		if (!is_file($sPlistPath)) return false;
@@ -1998,7 +1998,7 @@ class SssSphocoaGenerator {
 	} // updatePlistVersion2To3
 
 
-	static public function warnVersion() {
+	public static function warnVersion() {
 
 		echo NL . NL . '! ! ! Warning, you are using an old version plist ! ! !' . NL . ' update with ....' . NL . NL;
 
