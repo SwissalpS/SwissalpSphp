@@ -2870,20 +2870,24 @@ class SssSphocoaGenerator {
 			// backup
 			copy($sPath, $sPath . '~');
 
-			$sNameTemplate = basename($sPath);
-			$sName = basename($sPath, '.SssStemplate');
-			if ('runner.phps' == $sName) $sName = $sAppName;
-			$sPath = dirname($sPath) . DIR_SEP;
-			$sIn = file_get_contents_safely($sPath . $sNameTemplate);
+			// output for debug and check
+			echo $sPath . ' ';
+
+			$sIn = file_get_contents_safely($sPath);
 			$sOut = str_replace($aSearches, $aReplacements, $sIn);
-			file_put_contents_safely($sPath . $sName, $sOut, 'wb');
+			$mRes = @file_put_contents_safely($sPath, $sOut, 'wb');
 
-			// replicate mode of original
-			chmod($sPath . $sName, filePerms($sPath . $sNameTemplate));
-
-			$iCountTemplatesDone++;
+			if (0 < $mRes) {
+				$iCountTemplatesDone++;
+				echo 'Y';
+			} else {
+				echo 'N';
+			} // if successfully written
+			echo NL;
 
 		} // loop each file
+
+		echo NL . 'wrote ' . $iCountTemplatesDone . 'files.' . NL;
 
 		return $iCountTemplatesDone;
 
