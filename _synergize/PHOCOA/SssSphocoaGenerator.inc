@@ -2887,7 +2887,9 @@ class SssSphocoaGenerator {
 
 		} // loop each file
 
-		echo NL . 'wrote ' . $iCountTemplatesDone . 'files.' . NL;
+		echo NL . 'wrote ' . $iCountTemplatesDone . ' files.' . NL;
+		echo 'you can remove all the backups from your project dir:' . NL;
+		echo "find . -type f -name '*\.SssStemplate~' -delete" . NL;
 
 		return $iCountTemplatesDone;
 
