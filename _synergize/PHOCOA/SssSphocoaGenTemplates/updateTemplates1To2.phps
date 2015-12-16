@@ -12,7 +12,7 @@ ini_set('include_path', '/usr/local/share/SwissalpS:' . ini_get('include_path'))
 require_once('_synergize/PHOCOA/SssSphocoaGenerator.inc');
 
 // run as CLI tool
-SssSphocoaGenerator::runCLIupdateTemplates1To2();
+SssSphocoaGenerator::runCLIupdateTemplatesVersion1To2();
 
 /* * * *\ updateTemplates1To2.phps (CC) Luke JZ aka SwissalpS /* * * */
 ?>
