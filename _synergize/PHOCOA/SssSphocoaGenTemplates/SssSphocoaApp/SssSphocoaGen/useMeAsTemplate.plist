@@ -2,23 +2,23 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist>
 	<dict>
-		<key>DEFAULT_BASE_TEMPLATE_DIR</key><string>/usr/share/php/SwissalpS/_synergize/PHOCOA/SssSphocoaGenTemplates/SssSphocoaApp</string>
-		<key>FRAMEWORK_DIR</key><string>/usr/share/php/phocoa</string>
-		<key>SwissalpS_FRAMEWORK_DIR</key><string>/usr/share/php/SwissalpS</string>
-		<key>SMARTY_DIR</key><string>/usr/share/php/Smarty</string>
-		<key>PROPEL_FRAMEWORK_DIR</key><string>/usr/share/php/propel</string>
-		<key>HORDE_FRAMEWORK_DIR</key><string>/usr/share/php/Horde</string>
-		<key>PEAR_LOG_FRAMEWORK_DIR</key><string>/usr/share/php</string>
-		<key>PHING_PATH</key><string>/usr/share/php</string>
-		<key>PROPEL_DATABASE</key><string>mysql</string>
+		<key>PATH_DIR_DEFAULT_BASE_TEMPLATE</key><string>/usr/share/php/SwissalpS/_synergize/PHOCOA/SssSphocoaGenTemplates/SssSphocoaApp</string>
+		<key>PATH_DIR_SRC_PHOCOA</key><string>/usr/share/php/phocoa</string>
+		<key>PATH_DIR_SRC_SwissalpSphp</key><string>/usr/share/php/SwissalpS</string>
+		<key>PATH_DIR_SRC_SMARTY</key><string>/usr/share/php/Smarty</string>
+		<key>PATH_DIR_SRC_PROPEL</key><string>/usr/share/php/propel</string>
+		<key>PATH_DIR_SRC_HORDE</key><string>/usr/share/php/Horde</string>
+		<key>PATH_DIR_SRC_PEAR_LOG</key><string>/usr/share/php</string>
+		<key>PATH_DIR_SRC_PHING</key><string>/usr/share/php</string>
+		<key>DB_TYPE</key><string>mysql</string>
 		<key>DB_HOST</key><string>debian2</string>
 		<key>DB_USER</key><string>phocoa</string>
 		<key>DB_PASS</key><string>cGhvY29h</string>
 		<key>DB_NAME</key><string>phocoa</string>
-		<key>SERVER_IP</key><string>127.0.0.1</string>
-		<key>SERVER_NAME</key><string>localhost</string>
-		<key>SERVER_PORT</key><integer>80</integer>
+		<key>HTTPD_IP</key><string>127.0.0.1</string>
+		<key>HTTPD_NAME</key><string>localhost</string>
+		<key>HTTPD_PORT</key><integer>80</integer>
 		<key>PHOCOA_PROJECT_NAME</key><string>SssSphocoaAppCopy</string>
-		<key>SssSphocoaGeneratorVersion</key><integer>3</integer>
+		<key>SssSphocoaGeneratorVersion</key><integer>4</integer>
 	</dict>
 </plist>
