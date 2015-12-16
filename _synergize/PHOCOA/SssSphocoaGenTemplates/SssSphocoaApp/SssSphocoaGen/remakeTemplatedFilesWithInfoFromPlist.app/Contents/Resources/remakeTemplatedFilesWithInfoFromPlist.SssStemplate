@@ -13,7 +13,7 @@
 error_reporting(E_ALL); // 0); //
 
 // add framework to include path
-ini_set('include_path', '##SwissalpS_FRAMEWORK_DIR##:' . ini_get('include_path'));
+ini_set('include_path', '##PATH_DIR_SRC_SwissalpSphp##:' . ini_get('include_path'));
 
 require_once('_synergize/PHOCOA/SssSphocoaGenerator.inc');
 

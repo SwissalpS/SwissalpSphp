@@ -13,11 +13,11 @@ if (php_sapi_name() !== 'cli')
 		exit('This is a shell php script. To be run from command line.');
 /*##RUN_BLOCKER##
 // change into ##PHOCOA_PROJECT_NAME## app-root directory
-chdir('##PHOCOA_APP_DIR##');
+chdir('##PATH_DIR_PHOCOA_APP##');
 
 // bootstrap...
 // faster
-//require('##PHOCOA_APP_DIR####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
+//require('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
 // more elegant as we already changed dir
 require_once('conf##DIR_SEP##SssSphocoaApp.conf');
 

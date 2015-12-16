@@ -4,7 +4,7 @@
 return array_merge_recursive(array (
   'log' =>
   array (
-    'name' => '##LOG_DIR####DIR_SEP##propel.log',
+    'name' => '##PATH_DIR_LOG####DIR_SEP##propel.log',
     'ident' => 'propel-##PHOCOA_PROJECT_NAME##',
     'level' => '7',
     'conf' =>
@@ -18,12 +18,12 @@ return array_merge_recursive(array (
     array (
       'basic' =>
       array (
-        'adapter' => '##PROPEL_DATABASE##',
+        'adapter' => '##DB_TYPE##',
         'connection' =>
         array (
-          'dsn' => '##PROPEL_DATABASE##:dbname=##DB_NAME##;user=##DB_USER##;host=##DB_HOST##;password=##DB_PASS##',
+          'dsn' => '##DB_TYPE##:dbname=##DB_NAME##;user=##DB_USER##;host=##DB_HOST##;password=##DB_PASS##',
           'user' => '##DB_USER##',
-          'phptype' => '##PROPEL_DATABASE##',
+          'phptype' => '##DB_TYPE##',
           'hostspec' => '##DB_HOST##',
           'database' => '##DB_NAME##',
           'username' => '##DB_USER##',

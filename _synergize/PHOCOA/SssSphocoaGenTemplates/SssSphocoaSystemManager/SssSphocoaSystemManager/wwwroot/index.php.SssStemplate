@@ -1,7 +1,7 @@
 <?php
 
 // bootstrap into application
-require('##PHOCOA_APP_DIR####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
+require('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
 
 WFApplicationMain();
 

@@ -23,7 +23,7 @@ if ($m)	$sPathConfig = $m;
 elseif (isset($argv[1]) && is_file($argv[1])) $sPathConfig = $argv[1];
 else {
 	// TODO: try to find config in executable dir, when in apps bin folder we could look at sourcepath then ../conf/SssSphocoaApp.conf
-	$sPathConfig = '##PHOCOA_APP_DIR####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf';
+	$sPathConfig = '##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf';
 } // if config path in env or arguments
 require_once($sPathConfig);
 

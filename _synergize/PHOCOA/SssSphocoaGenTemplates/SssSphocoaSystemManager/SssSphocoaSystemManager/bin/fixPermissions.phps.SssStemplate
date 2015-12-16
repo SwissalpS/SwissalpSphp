@@ -8,7 +8,7 @@
  * * @generated ##DATE_STAMP##
  * * @version 20110117_131424 (CC) Luke JZ aka SwissalpS
  * * * */
-/*##RUN_BLOCKER##require_once('##PHOCOA_APP_DIR####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
+/*##RUN_BLOCKER##require_once('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
 
 $oChmodder = new SssS_ChmodHelper();
 $sPath = RUNTIME_DIR . DIR_SEP . 'Eventsfrontend';

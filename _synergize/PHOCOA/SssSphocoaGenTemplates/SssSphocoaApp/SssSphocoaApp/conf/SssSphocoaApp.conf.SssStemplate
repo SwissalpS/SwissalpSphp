@@ -31,60 +31,60 @@ if (!defined('DIR_SEP')) define('DIR_SEP', DIRECTORY_SEPARATOR);
 /*
  * Absolute path to the base directory of the PHOCOA framework on the server. If using a PEAR-installed PHOCOA, this should be /path/to/pear/phocoa, otherwise /path/to/phocoa.
  */
-define('FRAMEWORK_DIR', '##FRAMEWORK_DIR##');
+define('FRAMEWORK_DIR', '##PATH_DIR_SRC_PHOCOA##');
 
 /* added by SwissalpS 20100502_033958
  * Absolute path to the base directory of the SwissalpS framework on the server.
  * probably ends in /SssS or /SwissalpS
  */
-define('SwissalpS_FRAMEWORK_DIR', '##SwissalpS_FRAMEWORK_DIR##');
+define('SwissalpS_FRAMEWORK_DIR', '##PATH_DIR_SRC_SwissalpSphp##');
 
 /* added by SwissalpS 20100502_033958
  * Absolute path to the base directory of the Smarty framework on the server.
  * probably ends in /Smarty/
  */
-define('SMARTY_DIR', '##SMARTY_DIR####DIR_SEP##');
+define('SMARTY_DIR', '##PATH_DIR_SRC_SMARTY####DIR_SEP##');
 
 /* added by SwissalpS 20100502_033958
  * Absolute path to the base directory of the Propel framework on the server.
  * probably ends in /propel
  */
-define('PROPEL_FRAMEWORK_DIR', '##PROPEL_FRAMEWORK_DIR##');
+define('PROPEL_FRAMEWORK_DIR', '##PATH_DIR_SRC_PROPEL##');
 
 /* added by SwissalpS 20100502_033958
  * Absolute path to the base directory of the Propel framework on the server.
  * probably ends in /pear
  */
-define('PEAR_LOG_FRAMEWORK_DIR', '##PEAR_LOG_FRAMEWORK_DIR##');
+define('PEAR_LOG_FRAMEWORK_DIR', '##PATH_DIR_SRC_PEAR_LOG##');
 
 /* added by SwissalpS 20100505_231904
  * Absolute path to the base directory of the Horde framework on the server.
  * probably ends in /Horde
  */
-define('HORDE_FRAMEWORK_DIR', '##HORDE_FRAMEWORK_DIR##');
+define('HORDE_FRAMEWORK_DIR', '##PATH_DIR_SRC_HORDE##');
 
 /* added by SwissalpS 20100509_150328
  * Absolute path to the super directory of base directory of the phing framework on the server.
  * PHING_PATH/phing.php and PHING_PATH/phing/
  */
-define('PHING_PATH', '##PHING_PATH##');
+define('PHING_PATH', '##PATH_DIR_SRC_PHING##');
 
 /*
  * Absolute path to the log directory for use by the framework. Should be world-writable.
  */
-define('LOG_DIR', '##PHOCOA_APP_CONTAINER_DIR####DIR_SEP##log');
+define('LOG_DIR', '##PATH_DIR_PHOCOA_APP_CONTAINER####DIR_SEP##log');
 
 /*
  * Absolute path to the runtime directory for use by the framework. Should be world-writable.
  */
-define('RUNTIME_DIR', '##PHOCOA_APP_CONTAINER_DIR####DIR_SEP##runtime');
+define('RUNTIME_DIR', '##PATH_DIR_PHOCOA_APP_CONTAINER####DIR_SEP##runtime');
 
 /*
  * Absolute path to the base directory of this web application.
  *
  * The directory where THIS application is based.
  */
-define('APP_ROOT', '##PHOCOA_APP_DIR##');
+define('APP_ROOT', '##PATH_DIR_PHOCOA_APP##');
 
 /*
  * Relative URL path to the base directory of this application.
@@ -121,7 +121,7 @@ if (null === //SssS_IncludeThesePathsToPHPIncludePath( // normal - checks duplic
 
 	// prepend these
 	array(SwissalpS_FRAMEWORK_DIR, FRAMEWORK_DIR,
-			PROPEL_FRAMEWORK_DIR, '##SMARTY_DIR##',
+			PROPEL_FRAMEWORK_DIR, '##PATH_DIR_SRC_SMARTY##',
 			PEAR_LOG_FRAMEWORK_DIR, APP_ROOT,
 			APP_ROOT . '##DIR_SEP##classes', PHING_PATH)
 

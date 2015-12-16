@@ -1,29 +1,29 @@
-Listen ##SERVER_IP##:##SERVER_PORT##
-<VirtualHost ##SERVER_IP##:##SERVER_PORT##>
-    ServerName ##SERVER_NAME##
-    DocumentRoot ##PHOCOA_APP_DIR##/wwwroot
+Listen ##HTTPD_IP##:##HTTPD_PORT##
+<VirtualHost ##HTTPD_IP##:##HTTPD_PORT##>
+    ServerName ##HTTPD_NAME##
+    DocumentRoot ##PATH_DIR_PHOCOA_APP##/wwwroot
 
     # map phocoa framework wwwroot - enabled PHOCOA Versioning
-    AliasMatch ^/www/framework(/[0-9\.]*)?/?(.*) ##FRAMEWORK_DIR##/wwwroot/www/framework/$2
+    AliasMatch ^/www/framework(/[0-9\.]*)?/?(.*) ##PATH_DIR_SRC_PHOCOA##/wwwroot/www/framework/$2
     # enable a normal wwwroot
-    AliasMatch ^/www/?(.*) ##PHOCOA_APP_DIR##/wwwroot/www/$1
+    AliasMatch ^/www/?(.*) ##PATH_DIR_PHOCOA_APP##/wwwroot/www/$1
 
     # enable www access to skin assets
     # security thought... can people ../../.. their way to trouble? Apache 2 at least seems to prevent this, but I am not sure how.
     # skinTypeAssetsDir
-    AliasMatch ^/skins/([^/]*)/www/(.*) ##PHOCOA_APP_DIR##/skins/$1/www/$2
+    AliasMatch ^/skins/([^/]*)/www/(.*) ##PATH_DIR_PHOCOA_APP##/skins/$1/www/$2
     # skinSharedAssetsDir and skinThemeAssetsDir
-    AliasMatch ^/skins/([^/]*)/([^/]*)/([^/]*)/(.*) ##PHOCOA_APP_DIR##/skins/$1/$2/www/$3/$4
+    AliasMatch ^/skins/([^/]*)/([^/]*)/([^/]*)/(.*) ##PATH_DIR_PHOCOA_APP##/skins/$1/$2/www/$3/$4
 
     # show phpdoc documentation
-    AliasMatch ^/docs/?(.*) ##FRAMEWORK_DIR##/docs/phpdocs/$1
+    AliasMatch ^/docs/?(.*) ##PATH_DIR_SRC_PHOCOA##/docs/phpdocs/$1
 
     # allow / to run application - THIS ONE MUST BE LAST otherwise it will override the others!
-    AliasMatch ^/?(.*) ##PHOCOA_APP_DIR##/wwwroot/index.php/$1
+    AliasMatch ^/?(.*) ##PATH_DIR_PHOCOA_APP##/wwwroot/index.php/$1
 
     # logging
-    CustomLog ##PHOCOA_APP_CONTAINER_DIR##/log/access_log combined
-    ErrorLog  ##PHOCOA_APP_CONTAINER_DIR##/log/error_log
+    CustomLog ##PATH_DIR_PHOCOA_APP_CONTAINER##/log/access_log combined
+    ErrorLog  ##PATH_DIR_PHOCOA_APP_CONTAINER##/log/error_log
 
     # various settings for this server
     # use client-side host names in redirects
@@ -31,18 +31,18 @@ Listen ##SERVER_IP##:##SERVER_PORT##
     AllowEncodedSlashes On
     UseCanonicalName Off
     DirectoryIndex index.php index.html
-    <Directory ##PHOCOA_APP_DIR##/wwwroot>
+    <Directory ##PATH_DIR_PHOCOA_APP##/wwwroot>
         # enable .htaccess stuff
         AllowOverride All
         Allow from All
     </Directory>
-    <Directory ##PHOCOA_APP_DIR##/skins>
+    <Directory ##PATH_DIR_PHOCOA_APP##/skins>
         Allow from All
     </Directory>
 
     # turn on Expires for static content
     # framework statics
-    <Directory ##FRAMEWORK_DIR##/wwwroot/www/framework/*>
+    <Directory ##PATH_DIR_SRC_PHOCOA##/wwwroot/www/framework/*>
         Allow from All
         <IfModule mod_expires.c>
             ExpiresActive On
