@@ -275,7 +275,9 @@ class SssSphocoaGenerator {
 							NL, $iYes, $iCount, $iFromVersion, 4);
 
 			// debug fails if any
-			if (!empty($aFails)) echo 'failed paths: ' . print_r($aFails, true);
+			if (!empty($aFails)) {
+				echo 'failed paths: ' . print_r($aFails, true);
+			} // if got fails
 
 			$iFromVersion++;
 
@@ -287,10 +289,10 @@ class SssSphocoaGenerator {
 		// goodbye
 		self::bail();
 
-	} // _runCLIupdatePlistVersion
+	} // runCLIupdatePlistVersion
 
 
-	public static function runCLIupdateTemplates1To2() {
+	public static function runCLIupdateTemplatesVersion1To2() {
 
 		$a = $_SERVER['argv'];
 		$sInvocation = array_shift($a); // get $0 path
@@ -304,10 +306,10 @@ class SssSphocoaGenerator {
 
 		self::bail();
 
-	} // runCLIupdateTemplates1To2
+	} // runCLIupdateTemplatesVersion1To2
 
 
-	public static function runCLIupdateTemplates2To4() {
+	public static function runCLIupdateTemplatesVersion2To4() {
 
 		$a = $_SERVER['argv'];
 		$sInvocation = array_shift($a); // get $0 path
@@ -321,7 +323,7 @@ class SssSphocoaGenerator {
 
 		self::bail();
 
-	} // runCLIupdateTemplates2To4
+	} // runCLIupdateTemplatesVersion2To4
 
 
 	// default values
