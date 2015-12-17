@@ -35,6 +35,87 @@ class SssSphocoaGenerator {
 	// dealloc
 	public static function bail() {	echo NL . 'SssSphocoaGenerator exiting...' . NL; exit(0); } // bail
 
+
+	protected static function requestPropel2connectionInfo($sPathDest, $oPdefaults = null) {
+
+		static $ats = null; static $gi = null; static $iVersion = null;
+		static $rts = null; if (!$rts) {
+
+			$rts = 'removeTrailingSlash';
+			$ats = 'addTrailingSlash';
+			$gi = 'getInputCLI';
+			$iVersion = 4;
+
+			$sDBhost = $oPdefaults->get('DB_HOST', 'localhost');
+			$sDBsocket = $oPdefaults->get('DB_MYSQL_SOCKET', '');
+			$sDBname = $oPdefaults->get('DB_NAME');
+			$sDBpass = $oPdefaults->get('DB_PASS');
+			$sDBport = $oPdefaults->get('DB_PORT', '');
+			$sDBfile = $oPdefaults->get('DB_SQLITE_FILE', $sPathDest . DIR_SEP . 'runtime' . DIR_SEP . 'db' . DIR_SEP . 'SssSphocoaAppBasic.sq3');
+			$sDBtype = $oPdefaults->get('DB_TYPE', 'sqlite');
+			$sDBuser = $oPdefaults->get('DB_USER');
+
+		} // first run
+
+		if (!(is_object($oPdefaults) && is_subclass_of($oPdefaults, 'SssS_Plist'))) {
+			$oPdefaults = self::defaultPlist(0);
+		} // if no plist with defaults given
+
+		$aOut = array();
+
+		$sDBtype = SssS_CLI_Tools::getChoiceCLI('Choose database type (DB_TYPE):',
+				array('pgsql' => 'Postgres', 'mysql' => 'MySQl',
+					  'mssql' => 'mssql', 'sqlite' => 'sqlite',
+					  'oracle' => 'oracle', 'ldap' => 'ldap'), $sDBtype);
+
+		if ('sqlite' == $sDBtype) {
+			$sDBfile = SssS_CLI_Tools::$gi(NL . 'absolute path to database file:', $sDBfile);
+			$sDBhost = 'localhost';
+			$sDBname = SssS_CLI_Tools::$gi(NL . 'connection name:', 'default');
+			$sDBpass = '';
+			$sDBport = '';
+			$sDBsocket = '';
+			$sDBuser = '';
+		} elseif ('mysql' == $sDBtype) {
+			$sDBfile = '';
+			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (leave empty when using socket):', $sDBhost);
+			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
+			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard or socket):', $sDBport);
+			$sDBsocket = SssS_CLI_Tools::$gi(NL . 'DB unix-socket (leave empty for host):', $sDBsocket);
+			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
+		} elseif ('oracle' == $sDBtype) {
+			$sDBfile = '';
+			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (optional):', $sDBhost);
+			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
+			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for none, only needed if host given):', 1521);
+			$sDBsocket = '';
+			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
+		} else {
+			$sDBfile = '';
+			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip:', $sDBhost);
+			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
+			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard):', $sDBport);
+			$sDBsocket = '';
+			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
+		} // if sqlite or other type
+
+		$aOut['DB_HOST'] = $sDBhost;
+		$aOut['DB_MYSQL_SOCKET'] = $sDBsocket;
+		$aOut['DB_NAME'] = $sDBname;
+		$aOut['DB_PASS'] = base64_encode($sDBpass);
+		$aOut['DB_PORT'] = $sDBport;
+		$aOut['DB_SQLITE_FILE'] = $sDBfile;
+		$aOut['DB_TYPE'] = $sDBtype;
+		$aOut['DB_USER'] = $sDBuser;
+
+		return $aOut;
+
+	} // requestPropel2connectionInfo
+
+
 	// main cli 'inlet'
 	public static function runCLI() {
 		$a = $_SERVER['argv'];
@@ -384,8 +465,9 @@ class SssSphocoaGenerator {
 
 		} // first run
 
-		if ($sPathInvocationBase)
+		if ($sPathInvocationBase) {
 			$sPathInvocationBase = SssS_CLI_Tools::$rts($sPathInvocationBase, DIR_SEP);
+		} // if path given
 
 		$sArgType = gettype($mPlist);
 		if (('object' == $sArgType) && is_subclass_of($mPlist, 'SssS_Plist')) {
@@ -450,15 +532,6 @@ class SssSphocoaGenerator {
 		$sPathDest = ($sPathDest)
 				?  SssS_CLI_Tools::$ats($sPathDest, DIR_SEP) . $sAppName
 				: $oP->getOrSet('PATH_DIR_PHOCOA_APP_CONTAINER', $sPathCurentWorkingDirectory . DIR_SEP . $sAppName);
-
-		// some other default values
-		// for propel -conf.xml (will ask for confirmation)
-		$sDBtype = $oP->get('DB_TYPE', 'sqlite');
-		$sDBfile = $oP->get('DB_SQLITE_FILE', $sPathDest . DIR_SEP . 'runtime' . DIR_SEP . 'db' . DIR_SEP . 'SssSphocoaAppBasic.sq3');
-		$sDBhost = $oP->get('DB_HOST', 'localhost'); //phocoaDBhost';
-		$sDBuser = $oP->get('DB_USER'); //DBuser';
-		$sDBpass = $oP->get('DB_PASS'); //DBpass';
-		$sDBname = $oP->get('DB_NAME'); //DBname'; not required for sqlite
 
 		// for apache httpd.conf (will ask for confirmation)
 		$sHTTPip	= $oP->get('HTTPD_IP', '127.0.0.1');
@@ -571,42 +644,77 @@ class SssSphocoaGenerator {
 			$sPathLog = $sPathDest . DIR_SEP . 'log';
 			$sPathLog = SssS_CLI_Tools::$gi(NL . 'log path:', $sPathLog);
 
+			$aPropelConnections = array();
+
 			// ask if uses propel
-			$sUsePropel = SssS_CLI_Tools::getChoiceCLI('Use propel for db?',
+			$sUsePropel = SssS_CLI_Tools::getChoiceCLI(
+					'Add a Propel2 db connection(s)?',
 					array('no' => 'NO', 'yes' => 'YES'), 'yes');
+
 			if ('yes' == strtolower($sUsePropel)) {
 				// get db props
 				echo NL;
 				// get propel path
 				$sPathPropelFrameWork = SssS_CLI_Tools::$rts(SssS_CLI_Tools::$gi(
 					NL . 'path to propel', $sPathPropelFrameWork));
-				echo NL;
-				$sDBtype = SssS_CLI_Tools::getChoiceCLI('Choose database type (DB_TYPE):',
-						array('pgsql' => 'Postgres', 'mysql' => 'MySQl',
-							  'mssql' => 'mssql', 'sqlite' => 'sqlite',
-							   'ldap' => 'ldap'), $sDBtype);
-				$oP->set('DB_TYPE', $sDBtype);
-
-				if ('sqlite' == $sDBtype) {
-					$sDBfile = SssS_CLI_Tools::$gi(NL . 'absolute path to database file:', $sDBfile);
-					$oP->set('DB_SQLITE_FILE', $sDBfile);
-					$sDBname = 'default';
-					$sDBuser = '';
-					$sDBpass = '';
-				} else {
-					$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name:', $sDBname);
-					$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
-					$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
-					$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip:', $sDBhost);
-					$oP->set('DB_HOST', $sDBhost);
-				} // if sqlite or other type
-				$oP->set('DB_NAME', $sDBname);
-				$oP->set('DB_USER', $sDBuser);
-				$oP->set('DB_PASS', base64_encode($sDBpass));
 				$sPathPropelGenerator = SssS_CLI_Tools::$rts(SssS_CLI_Tools::$gi(NL . 'path to propel executable', $sPathPropelGenerator));
 				$oP->set('PATH_BIN_PROPEL', $sPathPropelGenerator);
+				echo NL;
+			} // if use propel
 
-			} // if propel
+			while('yes' == strtolower($sUsePropel)) {
+
+				$aPropelConnections[] = self::requestPropel2connectionInfo($sPathDest, $oP);
+
+				// ask for more connections
+				$sUsePropel = SssS_CLI_Tools::getChoiceCLI(
+						'Add another propel db connection?',
+						array('no' => 'NO', 'yes' => 'YES'), 'yes');
+
+			} // while add propel connections
+
+			$iCountConnections = count($aPropelConnections);
+			if (0 < $iCountConnections) {
+
+				// more than one connection
+
+				// look for a connection with name: 'default'
+				$aConnection = null;
+				$iDefaultIndex = 0;
+				foreach ($aPropelConnections as $aConn) {
+					if ('default' == $aConn['DB_NAME']) {
+						$aConnection = $aConn;
+						break;
+					} // if found default
+					$iDefaultIndex++;
+				} // loop all connections looking for default
+				// reorder array if found a default
+				if ($aConnection) {
+					$aPCs = $aPropelConnections;
+					$aPropelConnections = array($aConnection);
+					$iCountIndex = 0;
+					foreach ($aPCs as $aConn) {
+						if ($iCountIndex == $iDefaultIndex) {
+							continue;
+						} // skip default as it is already added
+						$aPropelConnections[] = $aConn;
+						$iCountIndex++;
+					} // loop all connections
+				} else {
+					$aConnection = $aPropelConnections[0];
+				} // if got a default or not
+
+				$oP->set('DB_TYPE', $aConnection['DB_TYPE']);
+				$oP->set('DB_SQLITE_FILE', $aConnection['DB_SQLITE_FILE']);
+				$oP->set('DB_HOST', $aConnection['DB_HOST']);
+				$oP->set('DB_NAME', $aConnection['DB_NAME']);
+				$oP->set('DB_PASS', $aConnection['DB_PASS']);
+				$oP->set('DB_USER', $aConnection['DB_USER']);
+				$oP->set('DB_PORT', $aConnection['DB_PORT']);
+
+			} // if got connections
+
+			$oP->set('DB_CONNECTIONS_ARRAY', $aPropelConnections);
 
 			echo NL;
 
@@ -2013,6 +2121,7 @@ class SssSphocoaGenerator {
 		$oP->getOrSet('PATH_DIR_PHOCOA_APP_CONTAINER', $sPathOrig);
 		$oP->getOrSet('PATH_DIR_LOG', $sPathOrig . DIR_SEP . 'log');
 		$oP->getOrSet('PHP_BIN', SssS_ShellScriptRunner::getPHPinterpreterPath());
+		$iCountConnections = count($oP->getOrSet('DB_CONNECTIONS_ARRAY', array()));
 
 		$a = $oP->a_plist;	$aSearches = array(); $aReplacements = array();
 		forEach ($a as $sKey => $mVal) {
@@ -2045,20 +2154,230 @@ class SssSphocoaGenerator {
 
 		} // loop each entry
 
+		// propel2 config tokens
+		$sConnectionArrayAsString = '';
+		$sConnectionNamesAsString = '';
+		$sConnectionNameDefault = '';
+		foreach ($a['DB_CONNECTIONS_ARRAY'] as $aConnection) {
+
+			if ('default' == $aConnection['DB_NAME']) {
+				$sConnectionNameDefault = 'default';
+			} // if default found
+
+			$sConnectionNamesAsString .= '\'' . $aConnection['DB_NAME'] . '\',';
+			$aQueries = array();
+			$sDBtype = $aConnection['DB_TYPE'];
+
+			$sConnectionArrayAsString .= '
+	\'' . $aConnection['DB_NAME'] . '\' => [
+		//adapter: {mysql}|string
+		\'adapter\' => \'' . $sDBtype . '\',
+		// Connection class. One of the Propel\Runtime\Connection classes
+		//classname: {Propel\Runtime\Connection\ConnectionWrapper}|string
+		# The PDO dsn
+		\'dsn\' => \'';
+
+			if ('sqlite' == $aConnection['DB_TYPE']) {
+
+				$sConnectionArrayAsString .= $sDBtype . ':' . $aConnection['DB_SQLITE_FILE'];
+
+			} elseif ('mysql' == $sDBtype) {
+
+				$sConnectionArrayAsString .= $sDBtype . ':';
+
+				if (!empty($aConnection['DB_MYSQL_SOCKET'])) {
+
+					$sConnectionArrayAsString .= 'unix_socket=' . $aConnection['DB_MYSQL_SOCKET'];
+
+				} else {
+
+					$sConnectionArrayAsString .= 'host=' . $aConnection['DB_HOST'];
+
+				} // if host or socket
+
+				if (!empty($aConnection['DB_PORT'])) {
+
+					$sConnectionArrayAsString .= ';port=' . $aConnection['DB_PORT'];
+
+				} // if got port for db_host
+
+				$sConnectionArrayAsString .= ';dbname=' . $aConnection['DB_NAME'];
+
+				// Make MySQL using standard quoted identifier
+				$aQueries[] = 'SET SQL_MODE=ANSI_QUOTES';
+
+			} elseif ('pgsql' == $sDBtype) {
+
+				$sConnectionArrayAsString .= $sDBtype . ':' . 'host=' . $aConnection['DB_HOST'];
+
+				if (!empty($aConnection['DB_PORT'])) {
+
+					$sConnectionArrayAsString .= ';port=' . $aConnection['DB_PORT'];
+
+				} // if got port for db_host
+
+				$sConnectionArrayAsString .= ';dbname=' . $aConnection['DB_NAME'];
+
+			} elseif ('mssql' == $sDBtype) {
+
+				if (strstr(PHP_OS, 'WIN')) {
+
+					// windows
+
+					$sConnectionArrayAsString .= 'sqlsrv:server=' . $aConnection['DB_HOST'];
+
+					if (!empty($aConnection['DB_PORT'])) {
+
+						$sConnectionArrayAsString .= ';port=' . $aConnection['DB_PORT'];
+
+					} // if got port for db_host
+
+					$sConnectionArrayAsString .= ';database=' . $aConnection['DB_NAME'];
+
+				} else {
+
+					// not windows
+
+					$sConnectionArrayAsString .= 'dblib:host=' . $aConnection['DB_HOST'];
+
+					if (!empty($aConnection['DB_PORT'])) {
+
+						$sConnectionArrayAsString .= ';port=' . $aConnection['DB_PORT'];
+
+					} // if got port for db_host
+
+					$sConnectionArrayAsString .= ';dbname=' . $aConnection['DB_NAME'];
+
+				} // if windows platform or not
+
+				// Keep MSSQL QUOTED_IDENTIFIER is ON for standard quoting
+				$aQueries[] = 'SET QUOTED_IDENTIFIER ON';
+
+			} elseif ('ldap' == $sDBtype) {
+
+				$sConnectionArrayAsString .= $sDBtype . ':host=' . $aConnection['DB_HOST'];
+
+				if (!empty($aConnection['DB_PORT'])) {
+
+					$sConnectionArrayAsString .= ';port=' . $aConnection['DB_PORT'];
+
+				} // if got port for db_host
+
+				$sConnectionArrayAsString .= ';dbname=' . $aConnection['DB_NAME'];
+
+			} elseif ('oracle' == $sDBtype) {
+
+				$sConnectionArrayAsString .= 'oci:dbname=';
+
+				if (empty($aConnection['DB_HOST'])) {
+
+					// no host
+					$sConnectionArrayAsString .= $aConnection['DB_NAME'];
+
+				} else {
+
+					// got host
+					$sConnectionArrayAsString .= '//' . $aConnection['DB_HOST'];
+
+					if (!empty($aConnection['DB_PORT'])) {
+
+						$sConnectionArrayAsString .= ':' . $aConnection['DB_PORT'];
+
+					} else {
+
+						$sConnectionArrayAsString .= ':1521';
+
+					} // if got port for db_host
+
+					$sConnectionArrayAsString .= '/' . $aConnection['DB_NAME'];
+
+				} // if got host
+
+				$sConnectionArrayAsString .= ';charset=utf8';
+
+			} // if which type
+
+			$sConnectionArrayAsString .= '\',
+		// parser raises missing if not present
+		\'user\' => \'' . $aConnection['DB_USER'] . '\',
+		# same as with user, sqlite does not need this
+		\'password\' => \'' . base64_decode($aConnection['DB_PASS']) . '\',
+				# Driver options. See http://www.php.net/manual/en/pdo.construct.php
+				# options must be passed to the contructor of the connection object
+		#options: {empty}|array
+		\'options\' => [],
+		# See http://www.php.net/manual/en/pdo.getattribute.php
+		# Attributes are set via `setAttribute()` method, after the connection object is created
+		#attributes: {empty}|array
+		# Propel specific settings
+				#settings: {empty}|array
+		\'settings\' => [
+			#charset: {utf8}|string
+			\'charset\' => \'utf8\',
+			#Array of queries to run when the database connection is initialized
+			#query: {empty}|array
+			\'query\' => [';
+
+			foreach ($aQueries as $sQuery) {
+
+				$sConnectionArrayAsString .= '\'' . $sQuery . '\',';
+
+			} // loop each query
+
+			$sConnectionArrayAsString .= '],
+			#slaves:
+			#- dsn: mysql:host=slave-host-1;dbname=bookstore
+			#- ......
+		],
+	],
+	';
+
+		} // loop each connection
+
+		if (empty($sConnectionNameDefault)) {
+
+			if ($iCountConnections) {
+
+				$sConnectionNameDefault = $a['DB_CONNECTIONS_ARRAY'][0]['DB_NAME'];
+
+			} else {
+
+				$sConnectionNameDefault = 'default';
+
+			} // if got connections or not
+
+		} // if no default set
+
+		$aSearches[] = '##DB_CONNECTIONS_ARRAY##';
+		$aReplacements[] = $sConnectionArrayAsString;
+
+		$aSearches[] = '##DB_CONNECTIONS_NAMES##';
+		$aReplacements[] = $sConnectionNamesAsString;
+
+		$aSearches[] = '##DB_CONNECTION_NAME_DEFAULT##';
+		$aReplacements[] = $sConnectionNameDefault;
+
 		// make sure run blocker blocks get removed
 		$aSearches[] = '/*##RUN_BLOCKER##';
 		$aSearches[] = '##RUN_BLOCKER##*/';
 
 		$iCountTemplatesDone = 0;
 		foreach ($aFiles as $sPath) {
+
 			$sPath = trim($sPath);
 			if (empty($sPath)) continue;
+
 			$sNameTemplate = basename($sPath);
 			$sName = basename($sPath, '.SssStemplate');
-			if ('runner.phps' == $sName) $sName = $sAppName;
+			if ('runner.phps' == $sName) {
+				$sName = $sAppName;
+			} // if runner.phps.SssStemplate
 			$sPath = dirname($sPath) . DIR_SEP;
+
 			$sIn = file_get_contents_safely($sPath . $sNameTemplate);
 			$sOut = str_replace($aSearches, $aReplacements, $sIn);
+
+			// write to file
 			file_put_contents_safely($sPath . $sName, $sOut, 'wb');
 
 			// replicate mode of original
