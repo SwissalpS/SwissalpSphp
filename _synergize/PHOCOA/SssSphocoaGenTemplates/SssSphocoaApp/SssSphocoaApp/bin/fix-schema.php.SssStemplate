@@ -27,12 +27,13 @@ else {
 } // if config path in env or arguments
 require_once($sPathConfig);
 
-$schemaFile = APP_ROOT . '/propel-build/schema.xml';
+$schemaFile = '##PATH_DIR_PHOCOA_APP####DIR_SEP##propel-build##DIR_SEP##schema.xml';
 $xml = simplexml_load_file($schemaFile);
 
 // add WFObject as the BasePeer class
 $databaseEl = $xml->xpath('//database');
-$databaseEl[0]['basePeer'] = 'BasePeer ';
+$databaseEl[0]['namespace'] = 'SssSPropel2';
+$databaseEl[0]['basePeer'] = 'BasePeer';
 
 // prune unused tables
 $unusedTables = array(

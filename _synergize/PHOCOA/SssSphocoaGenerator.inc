@@ -77,29 +77,44 @@ class SssSphocoaGenerator {
 			$sDBsocket = '';
 			$sDBuser = '';
 		} elseif ('mysql' == $sDBtype) {
+			self::showHelpEmptyValues();
 			$sDBfile = '';
-			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (leave empty when using socket):', $sDBhost);
+			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (leave empty when using socket):-', $sDBhost);
+			if ('-' == $sDBhost) $sDBhost = '';
 			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
-			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
-			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard or socket):', $sDBport);
-			$sDBsocket = SssS_CLI_Tools::$gi(NL . 'DB unix-socket (leave empty for host):', $sDBsocket);
-			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
+			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:-', base64_decode($sDBpass));
+			if ('-' == $sDBpass) $sDBpass = '';
+			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard or socket):-', $sDBport);
+			if ('-' == $sDBport) $sDBport = '';
+			$sDBsocket = SssS_CLI_Tools::$gi(NL . 'DB unix-socket (leave empty for host):-', $sDBsocket);
+			if ('-' == $sDBsocket) $sDBsocket = '';
+			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:-', $sDBuser);
+			if ('-' == $sDBuser) $sDBuser = '';
 		} elseif ('oracle' == $sDBtype) {
+			self::showHelpEmptyValues();
 			$sDBfile = '';
-			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (optional):', $sDBhost);
+			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (optional):-', $sDBhost);
+			if ('-' == $sDBhost) $sDBhost = '';
 			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
-			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
-			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for none, only needed if host given):', 1521);
+			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:-', base64_decode($sDBpass));
+			if ('-' == $sDBpass) $sDBpass = '';
+			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for none, only needed if host given):-', 1521);
+			if ('-' == $sDBport) $sDBport = '';
 			$sDBsocket = '';
-			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
+			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:-', $sDBuser);
+			if ('-' == $sDBuser) $sDBuser = '';
 		} else {
+			self::showHelpEmptyValues();
 			$sDBfile = '';
 			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip:', $sDBhost);
 			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
-			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:', base64_decode($sDBpass));
-			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard):', $sDBport);
+			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:-', base64_decode($sDBpass));
+			if ('-' == $sDBpass) $sDBpass = '';
+			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard):-', $sDBport);
+			if ('-' == $sDBport) $sDBport = '';
 			$sDBsocket = '';
-			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:', $sDBuser);
+			$sDBuser = SssS_CLI_Tools::$gi(NL . 'DB username:-', $sDBuser);
+			if ('-' == $sDBuser) $sDBuser = '';
 		} // if sqlite or other type
 
 		$aOut['DB_HOST'] = $sDBhost;
@@ -159,19 +174,21 @@ class SssSphocoaGenerator {
 		} // loop all args building aPaths array
 
 		$aFails = array(); $iYes = 0;
+		if (empty($aPaths)) {
+			$aPaths[] = array(null, false, false, false);
+		} // if no arguments at all given
 		foreach ($aPaths as $aPath) {
 			list($sPath, $bUseAllDefaults, $sPathDest, $sAppName) = $aPath;
 			// paths in $a may come quoted or escaped
 			$sPath = self::trimOrUnescapeShellArgument($sPath);
 
-			if (self::makeNewSssSphocoaProjectWithPlist($sPath, $bUseAllDefaults, $sPathDest, $sPathInvocationBase, $sAppName))
+			if (self::makeNewSssSphocoaProjectWithPlist($sPath, $bUseAllDefaults, $sPathDest, $sPathInvocationBase, $sAppName)) {
 				$iYes++; // count success
-
-			else
+			} else {
 				$aFails[] = array('sPath' => $sPath,
 						'bUseAllDefaults' => $bUseAllDefaults,
 							  'sPathDest' => $sPathDest);
-				// record fails for debugging at end
+			} // record fails for debugging at end
 
 		} // loop all paths generating a project at each given set of values in plist or flagged form
 
@@ -477,7 +494,7 @@ class SssSphocoaGenerator {
 
 		} else { // is not an SssS_Plist or subclass
 			// mPlist is plist string or path
-			if (('string' == $sArgType) || ('array' == $sArgType)) {
+			if ((('string' == $sArgType) && (!empty($mPlist))) || ('array' == $sArgType)) {
 				$oP = new SssS_Plist($mPlist);
 				if ($sPathInvocationBase)
 					$oP->getOrSet('PATH_DIR_DEFAULT_BASE_TEMPLATE', $sPathInvocationBase);
@@ -493,7 +510,7 @@ class SssSphocoaGenerator {
 
 		if ($iVersion > $oP->getInt('SssSphocoaGeneratorVersion', 1)) {
 
-			self::warnVersion();
+			self::warnVersion($oP->getInt('SssSphocoaGeneratorVersion', 1));
 
 			return self::makeNewSssSphocoaProjectWithPlist3($oP, $bUseAllDefaults, $sPathDest, $sPathInvocationBase, $sAppName);
 
@@ -525,9 +542,14 @@ class SssSphocoaGenerator {
 
 		$oRunner = self::sharedSssS_ShellScriptRunnerForDummies();
 
-		$sPathOrig = ($sPathDefaultBaseTemplate)
-			? SssS_CLI_Tools::$rts($sPathDefaultBaseTemplate, DIR_SEP) : ($sPathInvocationBase)
-				? $sPathInvocationBase : '';
+		$sPathOrig = '';
+		if ($sPathDefaultBaseTemplate) {
+			$sPathOrig = SssS_CLI_Tools::$rts($sPathDefaultBaseTemplate, DIR_SEP);
+		} else {
+			if ($sPathInvocationBase) {
+				$sPathOrig = $sPathInvocationBase;
+			} // if got invocationBase
+		} // if got path this way or that
 
 		$sPathDest = ($sPathDest)
 				?  SssS_CLI_Tools::$ats($sPathDest, DIR_SEP) . $sAppName
@@ -648,7 +670,7 @@ class SssSphocoaGenerator {
 
 			// ask if uses propel
 			$sUsePropel = SssS_CLI_Tools::getChoiceCLI(
-					'Add a Propel2 db connection(s)?',
+					'Add Propel2 db connection(s)?',
 					array('no' => 'NO', 'yes' => 'YES'), 'yes');
 
 			if ('yes' == strtolower($sUsePropel)) {
@@ -1321,7 +1343,7 @@ class SssSphocoaGenerator {
 
 		if ($iVersion > $oP->getInt('SssSphocoaGeneratorVersion', 1)) {
 
-			self::warnVersion();
+			self::warnVersion($oP->getInt('SssSphocoaGeneratorVersion', 1));
 
 			return self::makeNewSssSphocoaProjectWithPlist1($oP, $bUseAllDefaults, $sPathDest, $sPathInvocationBase, $sAppName);
 
@@ -1707,7 +1729,7 @@ class SssSphocoaGenerator {
 
 		if ($iVersion > $oP->getInt('SssSphocoaGeneratorVersion', 1)) {
 
-			self::warnVersion();
+			self::warnVersion($oP->getInt('SssSphocoaGeneratorVersion', 1));
 
 			return self::makeNewSssSphocoaProjectWithPlist2($oP, $bUseAllDefaults, $sPathDest, $sPathInvocationBase, $sAppName);
 
@@ -2089,7 +2111,7 @@ class SssSphocoaGenerator {
 
 		if ($iVersion > $oP->getInt('SssSphocoaGeneratorVersion', 1)) {
 
-			self::warnVersion();
+			self::warnVersion($oP->getInt('SssSphocoaGeneratorVersion', 1));
 
 			return self::inPlaceRefreshTemplatesInPlist3($oP, $aFiles, $sPathInvocationBase);
 
@@ -2432,7 +2454,7 @@ class SssSphocoaGenerator {
 
 		if ($iVersion > $oP->getInt('SssSphocoaGeneratorVersion', 1)) {
 
-			self::warnVersion();
+			self::warnVersion($oP->getInt('SssSphocoaGeneratorVersion', 1));
 
 			return self::inPlaceRefreshTemplatesInPlist2($oP, $aFiles, $sPathInvocationBase);
 
@@ -2566,7 +2588,7 @@ class SssSphocoaGenerator {
 
 		if ($iVersion > $oP->getInt('SssSphocoaGeneratorVersion', 1)) {
 
-			self::warnVersion();
+			self::warnVersion($oP->getInt('SssSphocoaGeneratorVersion', 1));
 
 			return self::inPlaceRefreshTemplatesInPlist1($oP, $aFiles, $sPathInvocationBase);
 
@@ -2776,6 +2798,8 @@ class SssSphocoaGenerator {
 
 		if (false !== strstr($sInvocation, self::sAppleScriptletBitInPlace)) {
 			$sPathInvocationBase = substr($sInvocation, 0, strlen($sInvocation) - strlen(self::sAppleScriptletBitInPlace));
+		} elseif (false !== strstr($sInvocation, self::sAppleScriptletBitNew)) {
+			$sPathInvocationBase = substr($sInvocation, 0, strlen($sInvocation) - strlen(self::sAppleScriptletBitNew));
 		} // if got an optional source path because run from winthin realpath()
 		// AppleScript.app in a SssSphocoaGen directory.
 		// That directory could be used as sPathDefaultBaseTemplate
@@ -2811,12 +2835,27 @@ class SssSphocoaGenerator {
 		-withInteraction (default) prompt for each value
 
 		arguments are not case sensitive, values are.
-	your_script needs to make sure SssSphocoaGenerator.inc is loaded
 ';
 
 		echo $sHelpText;
 
 	} // showHelpCLI
+
+
+	public static function showHelpEmptyValues() {
+
+		static $sHelpText = null; if (!$sHelpText) $sHelpText =
+		'NOTE: some values are optional or may be left blank.
+		But if the suggested default value is not blank, just hitting enter
+		will cause the default to be used. To avoid this, you may
+			enter a single \'-\' (dash/minus) to specify a blank value.
+		Fields to which this applies can be recognized by the prompt ending
+		with \':-\' instead of the standard \':\'.
+';
+
+		echo $sHelpText;
+
+	} // showHelpEmptyValues
 
 
 	public static function trimOrUnescapeShellArgument($s) {
@@ -3215,9 +3254,10 @@ class SssSphocoaGenerator {
 	} // updateTemplatesVersion2Or3To4
 
 
-	public static function warnVersion() {
+	public static function warnVersion($iVersion = null) {
 
-		echo NL . NL . '! ! ! Warning, you are using an old version plist ! ! !' . NL . ' update with ....' . NL . NL;
+		echo NL . NL . '! ! ! Warning, you are using an old version plist ! ! !'
+				. NL . $iVersion . ' update with ....' . NL . NL;
 
 	} // warnVersion
 
