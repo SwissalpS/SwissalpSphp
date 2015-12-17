@@ -46,16 +46,16 @@ class SssSphocoaGenerator {
 			$gi = 'getInputCLI';
 			$iVersion = 4;
 
-			$sDBhost = $oPdefaults->get('DB_HOST', 'localhost');
-			$sDBsocket = $oPdefaults->get('DB_MYSQL_SOCKET', '');
-			$sDBname = $oPdefaults->get('DB_NAME');
-			$sDBpass = $oPdefaults->get('DB_PASS');
-			$sDBport = $oPdefaults->get('DB_PORT', '');
-			$sDBfile = $oPdefaults->get('DB_SQLITE_FILE', $sPathDest . DIR_SEP . 'runtime' . DIR_SEP . 'db' . DIR_SEP . 'SssSphocoaAppBasic.sq3');
-			$sDBtype = $oPdefaults->get('DB_TYPE', 'sqlite');
-			$sDBuser = $oPdefaults->get('DB_USER');
-
 		} // first run
+
+		$sDBhost = $oPdefaults->get('DB_HOST', 'localhost');
+		$sDBsocket = $oPdefaults->get('DB_MYSQL_SOCKET', '');
+		$sDBname = $oPdefaults->get('DB_NAME');
+		$sDBpass = $oPdefaults->get('DB_PASS');
+		$sDBport = $oPdefaults->get('DB_PORT', '');
+		$sDBfile = $oPdefaults->get('DB_SQLITE_FILE', $sPathDest . DIR_SEP . 'runtime' . DIR_SEP . 'db' . DIR_SEP . 'SssSphocoaAppBasic.sq3');
+		$sDBtype = $oPdefaults->get('DB_TYPE', 'sqlite');
+		$sDBuser = $oPdefaults->get('DB_USER');
 
 		if (!(is_object($oPdefaults) && is_subclass_of($oPdefaults, 'SssS_Plist'))) {
 			$oPdefaults = self::defaultPlist(0);
@@ -678,8 +678,8 @@ class SssSphocoaGenerator {
 				echo NL;
 				// get propel path
 				$sPathPropelFrameWork = SssS_CLI_Tools::$rts(SssS_CLI_Tools::$gi(
-					NL . 'path to propel', $sPathPropelFrameWork));
-				$sPathPropelGenerator = SssS_CLI_Tools::$rts(SssS_CLI_Tools::$gi(NL . 'path to propel executable', $sPathPropelGenerator));
+					NL . 'Path to Propel2 source directory:', $sPathPropelFrameWork));
+				$sPathPropelGenerator = SssS_CLI_Tools::$rts(SssS_CLI_Tools::$gi(NL . 'Path to Propel executable:', $sPathPropelGenerator));
 				$oP->set('PATH_BIN_PROPEL', $sPathPropelGenerator);
 				echo NL;
 			} // if use propel
@@ -694,11 +694,8 @@ class SssSphocoaGenerator {
 						array('no' => 'NO', 'yes' => 'YES'), 'yes');
 
 			} // while add propel connections
-
 			$iCountConnections = count($aPropelConnections);
 			if (0 < $iCountConnections) {
-
-				// more than one connection
 
 				// look for a connection with name: 'default'
 				$aConnection = null;
@@ -717,6 +714,7 @@ class SssSphocoaGenerator {
 					$iCountIndex = 0;
 					foreach ($aPCs as $aConn) {
 						if ($iCountIndex == $iDefaultIndex) {
+							$iCountIndex++;
 							continue;
 						} // skip default as it is already added
 						$aPropelConnections[] = $aConn;
@@ -735,9 +733,7 @@ class SssSphocoaGenerator {
 				$oP->set('DB_PORT', $aConnection['DB_PORT']);
 
 			} // if got connections
-
 			$oP->set('DB_CONNECTIONS_ARRAY', $aPropelConnections);
-
 			echo NL;
 
 		} // if ask for anything
@@ -894,6 +890,14 @@ class SssSphocoaGenerator {
 		// and one more with changed name
 		$oP->set('PHOCOA_PROJECT_NAME', $oP->get('PHOCOA_PROJECT_NAME') . 'Copy');
 		$oP->saveTo($sPathGen . 'useMeAsTemplate.plist');
+
+		echo 'New SwissalpS PHOCOA project initialized.
+You may now want to wire up apache with the configuration-file
+in conf dir. Also you may want to review Propel configuration.
+
+To use interactive console to set up modules and other cool stuff
+run ' . $sPathRunner . ' -cli
+';
 
 		return $mRes;
 
@@ -2089,7 +2093,10 @@ class SssSphocoaGenerator {
 		} // first run
 
 		$sArgType = gettype($mPlist);
-		if ('object' == $sArgType && is_subclass_of($mPlist, 'SssS_Plist')) {
+
+		if ('object' == $sArgType
+			&& (('SssS_Plist' == get_class($mPlist))
+				|| (is_subclass_of($mPlist, 'SssS_Plist')))) {
 
 			$oP = $mPlist;
 
@@ -2180,6 +2187,7 @@ class SssSphocoaGenerator {
 		$sConnectionArrayAsString = '';
 		$sConnectionNamesAsString = '';
 		$sConnectionNameDefault = '';
+
 		foreach ($a['DB_CONNECTIONS_ARRAY'] as $aConnection) {
 
 			if ('default' == $aConnection['DB_NAME']) {
@@ -2191,13 +2199,13 @@ class SssSphocoaGenerator {
 			$sDBtype = $aConnection['DB_TYPE'];
 
 			$sConnectionArrayAsString .= '
-	\'' . $aConnection['DB_NAME'] . '\' => [
-		//adapter: {mysql}|string
-		\'adapter\' => \'' . $sDBtype . '\',
-		// Connection class. One of the Propel\Runtime\Connection classes
-		//classname: {Propel\Runtime\Connection\ConnectionWrapper}|string
-		# The PDO dsn
-		\'dsn\' => \'';
+				\'' . $aConnection['DB_NAME'] . '\' => [
+					//adapter: {mysql}|string
+					\'adapter\' => \'' . $sDBtype . '\',
+					// Connection class. One of the Propel\Runtime\Connection classes
+					//classname: {Propel\Runtime\Connection\ConnectionWrapper}|string
+					# The PDO dsn
+					\'dsn\' => \'';
 
 			if ('sqlite' == $aConnection['DB_TYPE']) {
 
@@ -2320,25 +2328,25 @@ class SssSphocoaGenerator {
 			} // if which type
 
 			$sConnectionArrayAsString .= '\',
-		// parser raises missing if not present
-		\'user\' => \'' . $aConnection['DB_USER'] . '\',
-		# same as with user, sqlite does not need this
-		\'password\' => \'' . base64_decode($aConnection['DB_PASS']) . '\',
-				# Driver options. See http://www.php.net/manual/en/pdo.construct.php
-				# options must be passed to the contructor of the connection object
-		#options: {empty}|array
-		\'options\' => [],
-		# See http://www.php.net/manual/en/pdo.getattribute.php
-		# Attributes are set via `setAttribute()` method, after the connection object is created
-		#attributes: {empty}|array
-		# Propel specific settings
-				#settings: {empty}|array
-		\'settings\' => [
-			#charset: {utf8}|string
-			\'charset\' => \'utf8\',
-			#Array of queries to run when the database connection is initialized
-			#query: {empty}|array
-			\'query\' => [';
+					// parser raises missing if not present
+					\'user\' => \'' . $aConnection['DB_USER'] . '\',
+					# same as with user, sqlite does not need this
+					\'password\' => \'' . base64_decode($aConnection['DB_PASS']) . '\',
+					# Driver options. See http://www.php.net/manual/en/pdo.construct.php
+					# options must be passed to the contructor of the connection object
+					#options: {empty}|array
+					\'options\' => [],
+					# See http://www.php.net/manual/en/pdo.getattribute.php
+					# Attributes are set via `setAttribute()` method, after the connection object is created
+					#attributes: {empty}|array
+					# Propel specific settings
+							#settings: {empty}|array
+					\'settings\' => [
+						#charset: {utf8}|string
+						\'charset\' => \'utf8\',
+						#Array of queries to run when the database connection is initialized
+						#query: {empty}|array
+						\'query\' => [';
 
 			foreach ($aQueries as $sQuery) {
 
@@ -2347,12 +2355,11 @@ class SssSphocoaGenerator {
 			} // loop each query
 
 			$sConnectionArrayAsString .= '],
-			#slaves:
-			#- dsn: mysql:host=slave-host-1;dbname=bookstore
-			#- ......
-		],
-	],
-	';
+						#slaves:
+						#- dsn: mysql:host=slave-host-1;dbname=bookstore
+						#- ......
+					],
+				],';
 
 		} // loop each connection
 
@@ -2432,7 +2439,9 @@ class SssSphocoaGenerator {
 		} // first run
 
 		$sArgType = gettype($mPlist);
-		if ('object' == $sArgType && is_subclass_of($mPlist, 'SssS_Plist')) {
+		if ('object' == $sArgType
+			&& (('SssS_Plist' == get_class($mPlist))
+				|| (is_subclass_of($mPlist, 'SssS_Plist')))) {
 
 			$oP = $mPlist;
 
@@ -2566,7 +2575,9 @@ class SssSphocoaGenerator {
 		} // first run
 
 		$sArgType = gettype($mPlist);
-		if ('object' == $sArgType && is_subclass_of($mPlist, 'SssS_Plist')) {
+		if ('object' == $sArgType
+			&& (('SssS_Plist' == get_class($mPlist))
+				|| (is_subclass_of($mPlist, 'SssS_Plist')))) {
 
 			$oP = $mPlist;
 
@@ -2702,10 +2713,12 @@ class SssSphocoaGenerator {
 		} // first run
 
 		$sArgType = gettype($mPlist);
-		if ('object' == $sArgType && is_subclass_of($mPlist, 'SssS_Plist'))
+		if ('object' == $sArgType
+			&& (('SssS_Plist' == get_class($mPlist))
+				|| (is_subclass_of($mPlist, 'SssS_Plist')))) {
 			$oP = $mPlist;
 
-		else { // is not an SssS_Plist or subclass
+		} else { // is not an SssS_Plist or subclass
 			// mPlist is plist string or path
 			if (('string' == $sArgType) || ('array' == $sArgType))
 				$oP = new SssS_Plist($mPlist);
@@ -2846,9 +2859,12 @@ class SssSphocoaGenerator {
 
 		static $sHelpText = null; if (!$sHelpText) $sHelpText =
 		'NOTE: some values are optional or may be left blank.
-		But if the suggested default value is not blank, just hitting enter
-		will cause the default to be used. To avoid this, you may
-			enter a single \'-\' (dash/minus) to specify a blank value.
+		But if the suggested default value is not blank,
+		just hitting enter will cause the default value
+		(in square brackets) to be used.
+			To avoid this, you may
+			enter a single \'-\' (dash/minus)
+			to specify a blank value.
 		Fields to which this applies can be recognized by the prompt ending
 		with \':-\' instead of the standard \':\'.
 ';
