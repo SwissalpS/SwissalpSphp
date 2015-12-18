@@ -1,4 +1,11 @@
 <?php
+/* propel.php.dist
+ *
+ * configures Propel2 for maintenance jobs
+ * add this file to git master repo
+ * copy to propel.php and .gitignore that
+ * Settings in propel.php override settings in propel.php.dist
+ */
 
 return [
 	'propel' => [
@@ -296,5 +303,6 @@ return [
 					'datasql' => '\Propel\Generator\Builder\Sql\PgsqlDataSQLBuilder',
 				],
 			],
+		],
 	],
 ];

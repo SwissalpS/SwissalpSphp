@@ -66,8 +66,12 @@ class SssSphocoaGenerator {
 		$sDBtype = SssS_CLI_Tools::getChoiceCLI('Choose database type (DB_TYPE):',
 				array('pgsql' => 'Postgres', 'mysql' => 'MySQl',
 					  'mssql' => 'mssql', 'sqlite' => 'sqlite',
-					  'oracle' => 'oracle', 'ldap' => 'ldap'), $sDBtype);
+					  'oracle' => 'oracle'), $sDBtype); //, 'sqlsrv' => 'sqlsrv', 'ldap' => 'ldap'
+		// Propel2 at the moment of this being written accepts these: "mysql", "pgsql", "sqlite", "mssql", "sqlsrv", "oracle"
 
+		if ('Postgres' == $sDBtype) {
+			$sDBtype = 'pgsql';
+		} // if name needs fixing
 		if ('sqlite' == $sDBtype) {
 			$sDBfile = SssS_CLI_Tools::$gi(NL . 'absolute path to database file:', $sDBfile);
 			$sDBhost = 'localhost';
@@ -76,7 +80,8 @@ class SssSphocoaGenerator {
 			$sDBport = '';
 			$sDBsocket = '';
 			$sDBuser = '';
-		} elseif ('mysql' == $sDBtype) {
+		} elseif ('MySQl' == $sDBtype) {
+			$sDBtype = 'mysql';
 			self::showHelpEmptyValues();
 			$sDBfile = '';
 			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (leave empty when using socket):-', $sDBhost);
@@ -2346,7 +2351,9 @@ run ' . $sPathRunner . ' -cli
 						\'charset\' => \'utf8\',
 						#Array of queries to run when the database connection is initialized
 						#query: {empty}|array
-						\'query\' => [';
+						# commented by SwissalpS
+						# causes error:  "Expected scalar, but got array", maybe only when empty?
+						#\'query\' => [';
 
 			foreach ($aQueries as $sQuery) {
 
