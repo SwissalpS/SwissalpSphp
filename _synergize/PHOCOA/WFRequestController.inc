@@ -463,11 +463,12 @@ class WFRequestController extends WFObject
 					case 'Generate...' :
 
 						$aChoicesGenerate = array(
-							'(add/activate Propel [use phocoa tasks for now])',
 							'Propel2 database:reverse -> schema.xml',
 							'fix schema.xml',
 							'Propel2 database:build -> class files',
 							'Propel2 config:convert -> PROPEL_CONF',
+							'de/activate Propel2',
+							'---------------------------------------',
 							'create scaffolds for Propel classes',
 							'---------------------------------------',
 							'create a module',
@@ -483,8 +484,12 @@ class WFRequestController extends WFObject
 
 						// TODO: get this and other values from the .plist that created this project
 						$sPathPropelGenBin = '/gitSwissalpS/Propel2/bin/propel'; //SwissalpS_FRAMEWORK_DIR . DIR_SEP . '_synergize' . DIR_SEP . 'PHOCOA' . DIR_SEP . 'propel_generator-1.3' . DIR_SEP . 'bin' . DIR_SEP . 'propel-gen';
-						$sPropelBinArgs = ' --config-dir "' . $sPathPropelBuild . '"'
+						$sPropelBinArgsBuild = ' --config-dir "' . $sPathPropelBuild . '"'
 								   . ' --output-dir "' . $sPathPropelBuild . '"';
+                        $sPropelBinArgsClasses = ' --config-dir "' . $sPathPropelBuild . '"'
+								   . ' --output-dir "' . APP_ROOT . DIR_SEP . 'classes' . '"';
+                        $sPropelBinArgsConf = ' --config-dir "' . $sPathPropelBuild . '"'
+								   . ' --output-dir "' . APP_ROOT . DIR_SEP . 'conf' . '"';
 
 						$sPathPhocoaScripts = FRAMEWORK_DIR . DIR_SEP . 'framework' . DIR_SEP . 'script';
 
@@ -507,9 +512,36 @@ class WFRequestController extends WFObject
 			        				break;
 
 			        			case 'Propel2 database:reverse -> schema.xml' :
-			        				// TODO: look for .plist and make/remake config files in propel-build
+                                    // which connection?
+                                    // we can not assume that propel is initiated yet
+                                    $aPropelConfigLocal = array();
+                                    $aPropelConfigRepo = array();
+                                    if (is_file($sPathPropelBuild . DIR_SEP . 'propel.php')) {
+                                        $aPropelConfigLocal = include($sPathPropelBuild . DIR_SEP . 'propel.php');
+                                    } // if got local config
+                                    if (is_file($sPathPropelBuild . DIR_SEP . 'propel.php.dist')) {
+                                        $aPropelConfigRepo = include($sPathPropelBuild . DIR_SEP . 'propel.php.dist');
+                                    }
+                                    // merge both
+                                    $aPropelConfig = array_merge($aPropelConfigRepo, $aPropelConfigLocal);
+
+                                    $aPropelConnectionNames = array();
+                                    if (!isset($aPropelConfig['propel']['database']['connections'])) {
+                                        echo $nl . 'error: Propel2 main config files not found or incorect' . $nl;
+                                        break;
+                                    } // if bad config
+                                    foreach ($aPropelConfig['propel']['database']['connections'] as $aPropelConnectionName => $aPropelConnection) {
+                                        $aPropelConnectionNames[] = $aPropelConnectionName;
+                                    } // loop gathering all names
+                                    if (empty($aPropelConnectionNames)) {
+                                        echo $nl . 'error: no Propel2 connections found.' . $nl;
+                                        break;
+                                    } // if no connections found
+                                    $sPropelConnection = SssS_CLI_Tools::getChoiceCLI(
+                                            'which connection to reverse',
+                                            $aPropelConnectionNames, $aPropelConnectionNames[0]);
 			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' database:reverse' . $sPropelBinArgs, $iRes);
+			        				passthru($sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $sPropelBinArgsBuild, $iRes);
 			        				break;
 
 			        			case 'fix schema.xml' :
@@ -519,13 +551,71 @@ class WFRequestController extends WFObject
 
 			        			case 'Propel2 database:build -> class files' :
 			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' model:build' . $sPropelBinArgs, $iRes);
+			        				passthru($sPathPropelGenBin . ' model:build' . $sPropelBinArgsClasses, $iRes);
 			        				break;
 
-							case 'Propel2 config:convert -> PROPEL_CONF' :
-								$iRes = null;
-								passthru($sPathPropelGenBin . ' config:convert' . $sPropelBinArgs, $iRes);
-								break;
+                                case 'Propel2 config:convert -> PROPEL_CONF' :
+                                    $iRes = null;
+                                    $sPathPropelBuildConf = $sPathPropelBuild . DIR_SEP . 'config.php';
+                                    if (is_file($sPathPropelBuildConf)) {
+                                        rename($sPathPropelBuildConf, $sPathPropelBuildConf . '.last');
+                                    } // make sure old file is gone
+                                    passthru($sPathPropelGenBin . ' config:convert' . $sPropelBinArgsBuild, $iRes);
+                                    if (is_file($sPathPropelBuildConf)) {
+                                        if (is_file(PROPEL2_RUNTIME_CONFIG)) {
+                                            rename(PROPEL2_RUNTIME_CONFIG, PROPEL2_RUNTIME_CONFIG . '.last');
+                                        } // if got old config
+                                        rename($sPathPropelBuildConf, PROPEL2_RUNTIME_CONFIG);
+                                    } else {
+                                        echo $nl . 'error, did not generate new runtime config!';
+                                    } // if new file created
+                                    break;
+
+                                case 'de/activate Propel2' :
+                                    $iRes = null;
+                                    $sSearchPropelAct = '/define\(\'PROPEL2_ACTIVATED\',\s?(\w+)\);/';
+                                    $sPathAppConfActive = APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf';
+                                    $sPathAppConfTemplate = $sPathAppConfActive . '.SssStemplate';
+                                    if (defined('PROPEL2_ACTIVATED') && PROPEL2_ACTIVATED) {
+                                        $sNewValue = 'false';
+                                        echo 'Switching OFF Propel2 integration' . $nl . 'Repeat to reactivate.' . $nl;
+                                    } else {
+                                        $sNewValue = 'true';
+                                        echo 'Switching ON Propel2 integration' . $nl . 'Repeat to deactivate.' . $nl
+                                            . 'Make sure you have something like this in your application delegate class::initialize()' . $nl
+                                            . '
+    if (PROPEL2_ACTIVATED) {
+        if (is_readable(PROPEL2_RUNTIME_CONFIG)) {
+            ////////////// THIS IS IMPORTANT ////////////////
+            require_once(PROPEL2_RUNTIME_CONFIG);
+        } else {
+            throw new WFException(\'could not read Propel2 config file at \' . PROPEL2_RUNTIME_CONFIG);
+        } // if got propel config at all
+    } // if propel is activated' . $nl . $nl;
+                                    } // if currently activated or not
+
+                                    foreach (array($sPathAppConfActive, $sPathAppConfTemplate) as $sPathAppConf) {
+                                        if (is_writable($sPathAppConf)) {
+                                            $sAppConf = @file_get_contents_safely($sPathAppConf);
+                                            echo 'Searching in ' . $sPathAppConf . $nl . 'for "define("PROPEL2_ACTIVATED", ...);"' . $nl;
+                                            $aRes = array();
+                                            $iRes = preg_match($sSearchPropelAct, $sAppConf, $aRes);
+                                            if ($iRes) {
+                                                echo 'Found: ' . $aRes[0] . $nl;
+                                                $sAppConf = str_replace($aRes[0], 'define(\'PROPEL2_ACTIVATED\', ' . $sNewValue . ');', $sAppConf);
+                                                file_put_contents_safely($sPathAppConf, $sAppConf, 'wb');
+                                            } else {
+                                                echo 'error: could not find "define("PROPEL2_ACTIVATED", ...);" in ' . $sPathAppConf . $nl
+                                                    . 'add define("PROPEL2_ACTIVATED", true); manually.' . $nl;
+                                            } // if found
+                                        } else {
+                                            echo $nl . 'error, can not write to ' . $sPathAppConf . $nl;
+                                            if ($sPathAppConf == $sPathAppConfActive) {
+                                                echo 'try to remakeTemplatedFiles and try again.' . $nl;
+                                            } // if has template for conf
+                                        } // if can write to config or not
+                                    } // loop both config and template
+                                    break;
 
 			        			case 'create scaffolds for Propel classes' :
 			        				if (!is_file(PROPEL_CONF)) {
