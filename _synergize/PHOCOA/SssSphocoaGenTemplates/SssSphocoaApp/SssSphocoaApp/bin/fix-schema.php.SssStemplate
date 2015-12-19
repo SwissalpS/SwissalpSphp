@@ -31,9 +31,10 @@ $schemaFile = '##PATH_DIR_PHOCOA_APP####DIR_SEP##propel-build##DIR_SEP##schema.x
 $xml = simplexml_load_file($schemaFile);
 
 // add WFObject as the BasePeer class
+//$databaseEl[0]['basePeer'] = 'BasePeer';
 $databaseEl = $xml->xpath('//database');
-$databaseEl[0]['namespace'] = 'SssSPropel2';
-$databaseEl[0]['basePeer'] = 'BasePeer';
+$sDBname = $databaseEl[0]['name'];
+$databaseEl[0]['namespace'] = 'SssSPropel2\\' . $sDBname;
 
 // prune unused tables
 $unusedTables = array(
