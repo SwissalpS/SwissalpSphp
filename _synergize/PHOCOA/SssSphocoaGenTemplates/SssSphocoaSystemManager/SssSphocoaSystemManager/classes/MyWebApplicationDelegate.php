@@ -21,7 +21,13 @@ class MyWebApplicationDelegate
         $webapp->addModulePath('examples', FRAMEWORK_DIR . '/modules/examples');
 
         // load propel
-        //Propel::init(PROPEL_CONF);
+		if (PROPEL2_ACTIVATED) {
+			if (is_readable(PROPEL2_RUNTIME_CONFIG)) {
+				require_once(PROPEL2_RUNTIME_CONFIG);
+			} else {
+				throw new WFException('could not read Propel2 config file at ' . PROPEL2_RUNTIME_CONFIG);
+			} // if got propel config at all
+		} // if propel is activated
 
 		// for interactive cli mode
         $this->bRunning = false;

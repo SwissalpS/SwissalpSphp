@@ -130,7 +130,11 @@ if (null === //SssS_IncludeThesePathsToPHPIncludePath( // normal - checks duplic
 
 	)) trigger_error('Error including paths to include path', E_USER_NOTICE);
 
-define('PROPEL_CONF', APP_ROOT . '##DIR_SEP##conf##DIR_SEP####PHOCOA_PROJECT_NAME##-conf.php');
+// old Propel 1.x config
+define('PROPEL_CONF', null);
+// new Propel 2.x config
+define('PROPEL2_RUNTIME_CONFIG', APP_ROOT . '##DIR_SEP##conf##DIR_SEP##Propel2conf_##PHOCOA_PROJECT_NAME##.php');
+define('PROPEL2_ACTIVATED', false);
 
 // we need to define a time-zone to avoid flooding with warnings
 date_default_timezone_set('UTC');
