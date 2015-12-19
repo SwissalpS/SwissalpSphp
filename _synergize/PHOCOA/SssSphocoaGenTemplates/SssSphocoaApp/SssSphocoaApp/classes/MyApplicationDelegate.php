@@ -41,14 +41,17 @@ class MyApplicationDelegate
 
     } // initialize
 
+
     function defaultInvocationPath() {
         return 'examples/widgets/toc';
     } // defaultInvocationPath
+
 
     // switch between different skin catalogs; admin, public, partner reporting, etc
     function defaultSkinDelegate() {
         return 'simple';
     } // defaultSkinDelegate
+
 
 	function handleUncaughtException($e) {
 		if (!$this->bRunning) return false;
@@ -56,6 +59,7 @@ class MyApplicationDelegate
 		echo chr(10) . '!!' . chr(10) . $e . chr(10) . '!!' . chr(10);
 		return true;
 	} // handleUncaughtException
+
 
 	function handleError($errNum, $errString, $file, $line, $contextArray) {
 		echo '!#!' . chr(10) . $errNum . ' ' . $errString . chr(10) . '!#!';
