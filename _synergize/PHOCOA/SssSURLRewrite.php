@@ -340,20 +340,21 @@ class SssSURLRewrite {
 	} // check
 
 
-	static function lg($s) {
+	static function lg($a) {
 		if (defined('IS_PRODUCTION') && true == IS_PRODUCTION) return;
 
 		static $sLogFile = null;
 		static $nl = null;
-		if (!$sLogFile && isset($s['logFile'])) {
-			$sLogFile = $s['logFile'];
+		if (!$sLogFile && isset($a['logFile'])) {
+			$sLogFile = $a['logFile'];
+		} // if not yet set but given logFile
+		if (!$nl) {
 			$nl = chr(10);
-			$s = null;
 		} // if first call
 
-		$sLine = (empty($s)) ? $nl
+		$sLine = (empty($a)) ? $nl
 				: date('Ymd_His') . ' ' . $_SERVER['REQUEST_URI'] . ' '
-				. (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'no HTTP_REFERER') . $nl . $s . $nl;
+				. (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'no HTTP_REFERER') . $nl . print_r($a, true) . $nl;
 
 		$mRes = @file_put_contents($sLogFile, $sLine, FILE_APPEND);
 
