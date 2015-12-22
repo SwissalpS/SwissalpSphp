@@ -30,6 +30,16 @@ class WFIncluding {
 	 *  @return boolean TRUE if we handled the loading, false otherwise.
 	 */
 	static public function autoload($sClassName) {
+
+		// using namespace?
+		$aNamespaceParts = explode('\\', $sClassName);
+		if (1 < count($aNamespaceParts)) {
+			if (self::autoloadPSR($aNamespaceParts)) {
+				// dealt with
+				return true;
+			} // if loaded
+		} // if got namespace
+
 		// I am guessing that using a hashmap will be faster than a big switch statement... no tests yet, but... in any case I'll do it this way first.
 		// other option is to add a bunch of paths to include_path, but that seems like a bad idea... YES that's a VERY BAD IDEA. Searching paths is much more expensive
 		// than including files directly because it hits the filesystem a lot to find the files.
@@ -67,8 +77,8 @@ class WFIncluding {
 				=> PEAR_LOG_FRAMEWORK_DIR . '/Log.php',
 				'medoo'
 				=> SwissalpS_FRAMEWORK_DIR . '/_external/medoo.php',
-				'Propel'
-				=> PROPEL_FRAMEWORK_DIR . '/Propel.php',
+				//'Propel'
+				//=> PROPEL_FRAMEWORK_DIR . '/Propel.php',
 				'SaferScript'
 				=> SwissalpS_FRAMEWORK_DIR . '/_external/SaferScript.inc',
 				'Smarty'
@@ -456,8 +466,14 @@ class WFIncluding {
 				=> 'framework/WFPagination.php',
 				'WFModelBuilderPropel'
 				=> 'framework/generator/WFGeneratorPropel12_13.php',
+				'WFModelBuilderPropel12'
+				=> 'framework/generator/WFGeneratorPropel12_13.php',
+				'WFModelBuilderPropel13'
+				=> 'framework/generator/WFGeneratorPropel12_13.php',
 				'WFModelBuilderPropel15'
 				=> 'framework/generator/WFGeneratorPropel15.php',
+				'WFModelBuilderPropel2'
+				=> 'framework/generator/WFGeneratorPropel2.php',
 				'WFPropelException'
 				=> 'framework/util/WFPropelIntegration.php',
 				'WFObject_Propel'
@@ -523,6 +539,54 @@ class WFIncluding {
 		$oApp = WFWebApplication::sharedWebApplication();
 		return $oApp->autoload($sClassName);
 	} // autoload
+
+
+	public static function autoloadPSR($aNamespaceParts) {
+
+		$sNamespaceBase = $aNamespaceParts[0];
+		$sNamespacePartsPath = DIR_SEP . implode(DIR_SEP, $aNamespaceParts);
+		$sFullClassName = implode('\\', $aNamespaceParts);
+		$sPathVendor = dirname(APP_ROOT) . DIR_SEP . 'vendor';
+//var_dump('--', $sPathVendor, PROPEL_FRAMEWORK_DIR, $sNamespacePartsPath, $sFullClassName, '/-');
+		$sPathFile = null;
+		switch($sNamespaceBase) {
+			case 'Propel':
+				$sPathFile = PROPEL_FRAMEWORK_DIR . $sNamespacePartsPath . '.php';
+				break;
+
+			// generated from database with Propel2
+			case 'SssSPropel2':
+				$sPathFile = APP_ROOT . DIR_SEP . 'classes' . $sNamespacePartsPath . '.php';
+				break;
+
+			default;
+				// try vendor in project dir (composer)
+				$sPathFile = $sPathVendor . $sNamespacePartsPath . '.php';
+
+		} // switch case
+
+//var_dump('got path file', $sPathFile);
+		if (is_readable($sPathFile)) {
+//var_dump('is readable');
+			require_once($sPathFile);
+			// 9 == strlen('Interface')
+			if ('Interface' == substr($sNamespacePartsPath, -9)) {
+				if (interface_exists($sFullClassName)) {
+					return true;
+				} // if interface now exists
+			} // ends in 'Interface' may thus be an interface
+//var_dump('==', $bRes, 'class ' . $sFullClassName . ' exists now?', class_exists($sFullClassName), '/=');
+			if (class_exists($sFullClassName)) {
+				return true;
+			} // if class now exists
+			return false;
+		} // if readable file
+//var_dump('is not readable');
+		// failed to load
+		return false;
+
+	} // autoloadPSR
+
 } // WFIncluding
 /* * * *\ WFIncluding.inc (CC) Luke JZ aka SwissalpS /* * * */
 ?>
