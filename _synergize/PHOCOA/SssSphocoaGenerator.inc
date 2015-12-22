@@ -2184,7 +2184,7 @@ run ' . $sPathRunner . ' -cli
 		$oP->getOrSet('PATH_DIR_PHOCOA_APP', $sPathDestAppRoot);
 		$oP->getOrSet('PATH_DIR_PHOCOA_APP_CONTAINER', $sPathOrig);
 		$oP->getOrSet('PATH_DIR_LOG', $sPathOrig . DIR_SEP . 'log');
-		$oP->getOrSet('PHP_BIN', SssS_ShellScriptRunner::getPHPinterpreterPath());
+		$oP->getOrSet('PATH_BIN_PHP', SssS_ShellScriptRunner::getPHPinterpreterPath());
 		$iCountConnections = count($oP->getOrSet('DB_CONNECTIONS_ARRAY', array()));
 
 		$a = $oP->a_plist;	$aSearches = array(); $aReplacements = array();
@@ -3059,6 +3059,8 @@ run ' . $sPathRunner . ' -cli
 
 			switch($sKey) {
 
+				case 'PHP_BIN' : $aNew['PATH_BIN_PHP'] = $mVal; break;
+
 				case 'PROPEL_GEN_BIN' : $aNew['PATH_BIN_PROPEL'] = $mVal; break;
 
 				case 'PHOCOA_APP_DIR' : $aNew['PATH_DIR_PHOCOA_APP'] = $mVal; break;
@@ -3236,6 +3238,7 @@ run ' . $sPathRunner . ' -cli
 		$sAppName = basename($sPathOrig);
 
 		$aSearches = array(
+			'##PHP_BIN##',
 			'##PROPEL_GEN_BIN##',
 			'##PHOCOA_APP_DIR##',
 			'##PHOCOA_APP_CONTAINER_DIR##',
@@ -3254,6 +3257,7 @@ run ' . $sPathRunner . ' -cli
 			'##LOG_DIR##',
 			);
 		$aReplacements = array(
+			'##PATH_BIN_PHP##',
 			'##PATH_BIN_PROPEL##',
 			'##PATH_DIR_PHOCOA_APP##',
 			'##PATH_DIR_PHOCOA_APP_CONTAINER##',

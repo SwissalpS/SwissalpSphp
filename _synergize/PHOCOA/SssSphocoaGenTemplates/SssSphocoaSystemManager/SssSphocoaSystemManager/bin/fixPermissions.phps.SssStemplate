@@ -1,4 +1,4 @@
-#!##PHP_BIN## -q
+#!##PATH_BIN_PHP## -q
 <?php
 /* * * *
  * * ##PHOCOA_PROJECT_NAME## fixPermissions.phps

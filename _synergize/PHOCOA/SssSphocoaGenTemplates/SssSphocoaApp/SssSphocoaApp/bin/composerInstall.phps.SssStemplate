@@ -1,4 +1,4 @@
-#!##PHP_BIN##
+#!##PATH_BIN_PHP##
 <?php
 /* * * *
  * * ##PHOCOA_PROJECT_NAME## (composerInstall.phps)
@@ -28,7 +28,7 @@ class SssScomposer {
 	protected $sComposerCurl;
 
 	public function __construct() {
-		$this->sPathBinPHP = '##PHP_BIN##';
+		$this->sPathBinPHP = '##PATH_BIN_PHP##';
 		$this->sPathCWD = getcwd();
 		$this->sPathDirBin = '##PATH_DIR_PHOCOA_APP####DIR_SEP##bin##DIR_SEP##';
 		$this->sComposerURLinstaller = 'https://getcomposer.org/installer';

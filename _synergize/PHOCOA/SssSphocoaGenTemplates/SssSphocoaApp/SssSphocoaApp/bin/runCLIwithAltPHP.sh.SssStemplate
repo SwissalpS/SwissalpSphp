@@ -4,6 +4,6 @@
 ## in particular propel
 ## especially on OSX or other platforms that have more than one version of PHP
 
-SssSAltPHPBASE=`dirname ##PHP_BIN##;`;
+SssSAltPHPBASE=`dirname ##PATH_BIN_PHP##;`;
 ## launch app in interactive mode prepending prefered php path to PATH
 /usr/bin/env PATH="$SssSAltPHPBASE:$PATH" ##PATH_DIR_PHOCOA_APP####DIR_SEP##bin##DIR_SEP##run -cli;

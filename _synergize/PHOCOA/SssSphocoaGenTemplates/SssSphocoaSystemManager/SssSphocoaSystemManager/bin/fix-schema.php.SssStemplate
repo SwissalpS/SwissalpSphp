@@ -1,4 +1,4 @@
-#!##PHP_BIN##
+#!##PATH_BIN_PHP##
 <?php
 /* * * *
  * * ##PHOCOA_PROJECT_NAME## (fix-schema.phps)
