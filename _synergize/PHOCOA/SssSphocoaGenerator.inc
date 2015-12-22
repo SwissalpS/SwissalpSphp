@@ -75,7 +75,7 @@ class SssSphocoaGenerator {
 		if ('sqlite' == $sDBtype) {
 			$sDBfile = SssS_CLI_Tools::$gi(NL . 'absolute path to database file:', $sDBfile);
 			$sDBhost = 'localhost';
-			$sDBname = SssS_CLI_Tools::$gi(NL . 'connection name:', 'default');
+			$sDBname = self::requestPropel2connectionName($sDBname);
 			$sDBpass = '';
 			$sDBport = '';
 			$sDBsocket = '';
@@ -86,7 +86,7 @@ class SssSphocoaGenerator {
 			$sDBfile = '';
 			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (leave empty when using socket):-', $sDBhost);
 			if ('-' == $sDBhost) $sDBhost = '';
-			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+			$sDBname = self::requestPropel2connectionName($sDBname);
 			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:-', base64_decode($sDBpass));
 			if ('-' == $sDBpass) $sDBpass = '';
 			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard or socket):-', $sDBport);
@@ -100,7 +100,7 @@ class SssSphocoaGenerator {
 			$sDBfile = '';
 			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip (optional):-', $sDBhost);
 			if ('-' == $sDBhost) $sDBhost = '';
-			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+			$sDBname = self::requestPropel2connectionName($sDBname);
 			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:-', base64_decode($sDBpass));
 			if ('-' == $sDBpass) $sDBpass = '';
 			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for none, only needed if host given):-', 1521);
@@ -112,7 +112,7 @@ class SssSphocoaGenerator {
 			self::showHelpEmptyValues();
 			$sDBfile = '';
 			$sDBhost = SssS_CLI_Tools::$gi(NL . 'DB hostname/ip:', $sDBhost);
-			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+			$sDBname = self::requestPropel2connectionName($sDBname);
 			$sDBpass = SssS_CLI_Tools::$gi(NL . 'DB password:-', base64_decode($sDBpass));
 			if ('-' == $sDBpass) $sDBpass = '';
 			$sDBport = SssS_CLI_Tools::$gi(NL . 'DB port (leave blank for standard):-', $sDBport);
@@ -134,6 +134,36 @@ class SssSphocoaGenerator {
 		return $aOut;
 
 	} // requestPropel2connectionInfo
+
+
+	protected static function requestPropel2connectionName($sDBname) {
+
+		static $aInvalidDBnames = null;
+		static $gi = null;
+
+		if (!$gi) {
+
+			$aInvalidDBnames = array('__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor', '__class__', '__dir__', '__file__', '__function__', '__line__', '__method__', '__namespace__', '__trait__');
+			$gi = 'getInputCLI';
+
+		} // if first call
+
+		while (true) {
+
+			$sDBname = SssS_CLI_Tools::$gi(NL . 'DB name (also connection name):', $sDBname);
+
+			if (!in_array(strtolower($sDBname), $aInvalidDBnames)) {
+
+				return $sDBname;
+
+			} // if valid name
+
+			echo 'You should use a differnt name as the one you chose is a ' . NL
+				. 'reserved PHP word and will cause problems down the line.' . NL;
+
+		} // loop until valid name given
+
+	} // requestPropel2connectionName
 
 
 	// main cli 'inlet'
