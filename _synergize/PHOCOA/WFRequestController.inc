@@ -332,31 +332,13 @@ class WFRequestController extends WFObject
         // point all error handling to phocoa's internal mechanisms since anything that happens after this line (try) will be routed through the framework's handler
         $this->registerErrorHandlers();
 
-		static $oIphpShell = null; static $sPathTags = null; static $nl = null;
-		static $sPathSssSphocoaAppConf = null; static $aChoices = null;
+		static $nl = null;
 
         try {
 
-        	if (!$aChoices) {
+        	if (!$nl) {
 				// prepare iphp
 				$nl = chr(10);
-				$oIphpShell = null;
-				$sPathTags = APP_ROOT . DIR_SEP . 'tags';
-				$sPathSssSphocoaAppConf =
-					APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf';
-				$oAppDelegate = WFWebApplication::sharedWebApplication()->delegate();
-
-				$aChoices = (method_exists($oAppDelegate, 'handleCLIRequest'))
-						? array('call AppDelegate->handleCLIRequest()')
-						: array();
-
-				$aChoices = array_merge($aChoices, array(
-						'dump html for an invocation path',
-						'enter iphp console...',
-						'(Lists...)',
-						'Generate...',
-						'enter phocoa phing task manager', 'quit'));
-
 			} // first run
 
 			// TODO: populate (global vars) with args to mimic an http request
@@ -391,362 +373,9 @@ class WFRequestController extends WFObject
 			} // -cgi keep-alive
 			*/
 
-        	while ($bInteractive) {
-        		echo $nl . '                 WFRequestController "menu"' . $nl;
-        		$sChoice = SssS_CLI_Tools::getChoiceCLI(
-        				'please choose an action:', $aChoices, 0);
-        		switch ($sChoice) {
-        			case 'quit': return;
-        			case 'call AppDelegate->handleCLIRequest()':
-						// let app delegate give it a go -> should return true if done,
-						// false if wants WFRequestController to continue
-						if (method_exists($oAppDelegate, 'handleCLIRequest'))
-							if ($oAppDelegate->handleCLIRequest()) return;
-
-						// if the app delegate didn't kill us, we can continue with some
-						break;
-
-					case 'dump html for an invocation path':
-						// testing if page builds
-
-						$modInvocationPath = SssS_CLI_Tools::getInputCLI(
-								$nl . 'invocation (the default shown is either the first argument passed or the default path):', $modInvocationPath);
-
-						// create the root invocation; only skin if we're not in an XHR
-						$this->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL, (self::isAjax() ? NULL : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
-						// get HTML result of the module, and output it
-
-						$html = $this->rootModuleInvocation->execute();
-
-						// read about this above handleHTTPRequest()
-						if (isset($_REQUEST[WFRPC::PARAM_ENABLE_AJAX_IFRAME_RESPONSE_MODE])
-								&& (1 == $_REQUEST[WFRPC::PARAM_ENABLE_AJAX_IFRAME_RESPONSE_MODE])) {
-							//header('Content-Type: text/xml');
-							$html = "<?xml version=\"1.0\"?><raw><![CDATA[\n{$html}\n]]></raw>";
-						} // if ajax special situation with iframe
-						print $html;
-						break;
-
-				// if all went well to this point, we can start the iphp shell
-					case 'enter iphp console':
-						print $nl . 'starting iphp shell' . $nl;
-
-						if (null == $oIphpShell)
-							$oIphpShell = new iphp(array(
-								'tags' => $sPathTags,
-								'require' => $sPathSssSphocoaAppConf,
-								'commands' => array('iphp_command_stop'))); // \stop to exit iphp and reenter loop with appDelegate having a go and outputting current request path
-
-						$oIphpShell->runREPL();
-        				break;
-
-        			case 'enter phocoa phing task manager' :
-						print $nl . 'starting phocoa phing task manager' . $nl;
-						$sCommand = '';
-						self::setEnvForPhocoaPhingPropel();
-						$bContinuePhocoaTasks = true;
-						while ($bContinuePhocoaTasks) {
-							// run without args to show menu
-							$sShellLine = //'cd "' . APP_ROOT . '";' .
-								FRAMEWORK_DIR . DIR_SEP . 'phing' . DIR_SEP . 'phocoa ' . $sCommand;
-								//. ';cd ' . getCwd();
-							passthru($sShellLine);
-
-							// ask for command
-							$sCommand = SssS_CLI_Tools::getInputCLI($nl . '                 WFRequestController "phing task manager"' . $nl .'what to do? ("back" to go back, -l or -list for list of phing tasks)', 'back');
-							// if not stop
-							if (in_array(trim(strtolower($sCommand)), array('back', 'stop', 'exit', 'quit', 'halt', 'die'))) $bContinuePhocoaTasks = false;
-							// pass on command
-						} //
-						break;
-
-					case 'Generate...' :
-
-						$aChoicesGenerate = array(
-							'Propel2 database:reverse -> schema.xml',
-							'fix schema.xml',
-							'Propel2 database:build -> class files',
-							'Propel2 config:convert -> PROPEL_CONF',
-							'de/activate Propel2',
-							'---------------------------------------',
-							'create scaffolds for Propel classes',
-							'---------------------------------------',
-							'create a module',
-							'create a page',
-							'---------------------------------------',
-							'Create a test stub for phocoa classes',
-							'---------------------------------------',
-							'back to main menu');
-
-						$sPathBin = APP_ROOT . DIR_SEP . 'bin';
-
-						$sPathPropelBuild = APP_ROOT . DIR_SEP . 'propel-build';
-
-						// TODO: get this and other values from the .plist that created this project
-						$sPathPropelGenBin = '/gitSwissalpS/Propel2/bin/propel'; //SwissalpS_FRAMEWORK_DIR . DIR_SEP . '_synergize' . DIR_SEP . 'PHOCOA' . DIR_SEP . 'propel_generator-1.3' . DIR_SEP . 'bin' . DIR_SEP . 'propel-gen';
-						$sPropelBinArgsBuild = ' --config-dir "' . $sPathPropelBuild . '"'
-								   . ' --output-dir "' . $sPathPropelBuild . '"';
-                        $sPropelBinArgsClasses = ' --config-dir "' . $sPathPropelBuild . '"'
-								   . ' --output-dir "' . APP_ROOT . DIR_SEP . 'classes' . '"';
-                        $sPropelBinArgsConf = ' --config-dir "' . $sPathPropelBuild . '"'
-								   . ' --output-dir "' . APP_ROOT . DIR_SEP . 'conf' . '"';
-
-						$sPathPhocoaScripts = FRAMEWORK_DIR . DIR_SEP . 'framework' . DIR_SEP . 'script';
-
-						$sPHPbin = SssS_ShellScriptRunner::getPHPinterpreterPath();
-
-						$oRunner = new SssS_ShellScriptRunnerForDummies();
-
-						$bContinueGenerateMenu = true;
-						while ($bContinueGenerateMenu) {
-
-							$sChoiceGenerate =
-								SssS_CLI_Tools::getChoiceCLI(
-									'please choose an action:',
-									$aChoicesGenerate, 'back to main menu');
-
-			        		switch ($sChoiceGenerate) {
-
-			        			case 'back to main menu' :
-			        				$bContinueGenerateMenu = false;
-			        				break;
-
-			        			case 'Propel2 database:reverse -> schema.xml' :
-                                    // which connection?
-                                    // we can not assume that propel is initiated yet
-                                    $aPropelConfigLocal = array();
-                                    $aPropelConfigRepo = array();
-                                    if (is_file($sPathPropelBuild . DIR_SEP . 'propel.php')) {
-                                        $aPropelConfigLocal = include($sPathPropelBuild . DIR_SEP . 'propel.php');
-                                    } // if got local config
-                                    if (is_file($sPathPropelBuild . DIR_SEP . 'propel.php.dist')) {
-                                        $aPropelConfigRepo = include($sPathPropelBuild . DIR_SEP . 'propel.php.dist');
-                                    }
-                                    // merge both
-                                    $aPropelConfig = array_merge($aPropelConfigRepo, $aPropelConfigLocal);
-
-                                    $aPropelConnectionNames = array();
-                                    if (!isset($aPropelConfig['propel']['database']['connections'])) {
-                                        echo $nl . 'error: Propel2 main config files not found or incorect' . $nl;
-                                        break;
-                                    } // if bad config
-                                    foreach ($aPropelConfig['propel']['database']['connections'] as $aPropelConnectionName => $aPropelConnection) {
-                                        $aPropelConnectionNames[] = $aPropelConnectionName;
-                                    } // loop gathering all names
-                                    if (empty($aPropelConnectionNames)) {
-                                        echo $nl . 'error: no Propel2 connections found.' . $nl;
-                                        break;
-                                    } // if no connections found
-                                    $sPropelConnection = SssS_CLI_Tools::getChoiceCLI(
-                                            'which connection to reverse',
-                                            $aPropelConnectionNames, $aPropelConnectionNames[0]);
-			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $sPropelBinArgsBuild, $iRes);
-			        				break;
-
-			        			case 'fix schema.xml' :
-			        				$iRes = null;
-			        				passthru($sPathBin . DIR_SEP . 'fix-schema.php', $iRes);
-			        				break;
-
-			        			case 'Propel2 database:build -> class files' :
-			        				$iRes = null;
-			        				passthru($sPathPropelGenBin . ' model:build' . $sPropelBinArgsClasses, $iRes);
-			        				break;
-
-                                case 'Propel2 config:convert -> PROPEL_CONF' :
-                                    $iRes = null;
-                                    $sPathPropelBuildConf = $sPathPropelBuild . DIR_SEP . 'config.php';
-                                    if (is_file($sPathPropelBuildConf)) {
-                                        rename($sPathPropelBuildConf, $sPathPropelBuildConf . '.last');
-                                    } // make sure old file is gone
-                                    passthru($sPathPropelGenBin . ' config:convert' . $sPropelBinArgsBuild, $iRes);
-                                    if (is_file($sPathPropelBuildConf)) {
-                                        if (is_file(PROPEL2_RUNTIME_CONFIG)) {
-                                            rename(PROPEL2_RUNTIME_CONFIG, PROPEL2_RUNTIME_CONFIG . '.last');
-                                        } // if got old config
-                                        rename($sPathPropelBuildConf, PROPEL2_RUNTIME_CONFIG);
-                                    } else {
-                                        echo $nl . 'error, did not generate new runtime config!';
-                                    } // if new file created
-                                    break;
-
-                                case 'de/activate Propel2' :
-                                    $iRes = null;
-                                    $sSearchPropelAct = '/define\(\'PROPEL2_ACTIVATED\',\s?(\w+)\);/';
-                                    $sPathAppConfActive = APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf';
-                                    $sPathAppConfTemplate = $sPathAppConfActive . '.SssStemplate';
-                                    if (defined('PROPEL2_ACTIVATED') && PROPEL2_ACTIVATED) {
-                                        $sNewValue = 'false';
-                                        echo 'Switching OFF Propel2 integration' . $nl . 'Repeat to reactivate.' . $nl;
-                                    } else {
-                                        $sNewValue = 'true';
-                                        echo 'Switching ON Propel2 integration' . $nl . 'Repeat to deactivate.' . $nl
-                                            . 'Make sure you have something like this in your application delegate class::initialize()' . $nl
-                                            . '
-    if (PROPEL2_ACTIVATED) {
-        if (is_readable(PROPEL2_RUNTIME_CONFIG)) {
-            ////////////// THIS IS IMPORTANT ////////////////
-            require_once(PROPEL2_RUNTIME_CONFIG);
-        } else {
-            throw new WFException(\'could not read Propel2 config file at \' . PROPEL2_RUNTIME_CONFIG);
-        } // if got propel config at all
-    } // if propel is activated' . $nl . $nl;
-                                    } // if currently activated or not
-
-                                    foreach (array($sPathAppConfActive, $sPathAppConfTemplate) as $sPathAppConf) {
-                                        if (is_writable($sPathAppConf)) {
-                                            $sAppConf = @file_get_contents_safely($sPathAppConf);
-                                            echo 'Searching in ' . $sPathAppConf . $nl . 'for "define("PROPEL2_ACTIVATED", ...);"' . $nl;
-                                            $aRes = array();
-                                            $iRes = preg_match($sSearchPropelAct, $sAppConf, $aRes);
-                                            if ($iRes) {
-                                                echo 'Found: ' . $aRes[0] . $nl;
-                                                $sAppConf = str_replace($aRes[0], 'define(\'PROPEL2_ACTIVATED\', ' . $sNewValue . ');', $sAppConf);
-                                                file_put_contents_safely($sPathAppConf, $sAppConf, 'wb');
-                                            } else {
-                                                echo 'error: could not find "define("PROPEL2_ACTIVATED", ...);" in ' . $sPathAppConf . $nl
-                                                    . 'add define("PROPEL2_ACTIVATED", true); manually.' . $nl;
-                                            } // if found
-                                        } else {
-                                            echo $nl . 'error, can not write to ' . $sPathAppConf . $nl;
-                                            if ($sPathAppConf == $sPathAppConfActive) {
-                                                echo 'try to remakeTemplatedFiles and try again.' . $nl;
-                                            } // if has template for conf
-                                        } // if can write to config or not
-                                    } // loop both config and template
-                                    break;
-
-			        			case 'create scaffolds for Propel classes' :
-			        				if (!is_file(PROPEL_CONF)) {
-			        					echo $nl . 'Propel configuration file could NOT be found at: ' . PROPEL_CONF . $nl;
-			        					break;
-			        				} // if no propel configuration file
-
-			        				$aPropelConfig = include(PROPEL_CONF);
-			        				if (!isset($aPropelConfig['propel']['datasources'][basename(APP_ROOT)]['classes'])) {
-			        					echo $nl . 'no classes found' . $nl . 'you may need to reverse first' . $nl;
-			        					break;
-
-			        				} // if no classes in propel configuration
-
-			        				$iLenPeer = strLen('Query'); $iLenMapBuilder = strLen('MapBuilder');
-			        				$sAvailableClasses = '';
-			        				foreach ($aPropelConfig['propel']['datasources'][basename(APP_ROOT)]['classes'] as $sClassName => $sClassPath) {
-
-			        					// ends with Query?
-			        					if ('Query' == substr($sClassName, -$iLenPeer)) continue;
-			        					// ends with MapBuilder?
-			        					if ('MapBuilder' == substr($sClassName, -$iLenMapBuilder)) continue;
-
-			        					$sAvailableClasses .= $sClassName . ' ';
-
-			        				} // loop classes cleaning out Peer and builder classes
-
-			        				echo $nl . 'available classes to build scaffolds for:' . $nl . $sAvailableClasses . $nl;
-			        				$sEntityList = SssS_CLI_Tools::getInputCLI($nl . 'Which entities do you want to create scaffolds for?', $sAvailableClasses);
-			        				$sPathToPutScaffolds = SssS_CLI_Tools::getInputCLI($nl . 'Where should the scaffolds be created?', APP_ROOT . DIR_SEP . 'modules');
-			        				self::setEnvForPhocoaPhingPropel();
-			        				$sShellLine = 'cd "' . $sPathToPutScaffolds . '";'
-			        					. $sPHPbin . ' ' . $sPathPhocoaScripts . DIR_SEP . 'scaffold.php ' . $sEntityList
-			        					. ';cd ' . getCwd();
-			        				$iRes = null;
-			        				passthru($sShellLine, $iRes);
-			        				break; // create scaffolds for Propel classes
-
-			        			case 'create a module' :
-			        				$sPathToModules = SssS_CLI_Tools::removeTrailingSlash(SssS_CLI_Tools::getInputCLI($nl . 'Where should the module be created?', APP_ROOT . DIR_SEP . 'modules'), DIR_SEP);
-			        				if (!is_dir($sPathToModules)) $oRunner->makePath($sPathToModules);
-
-			        				$sModuleName = SssS_CLI_Tools::getInputCLI($nl . 'Module name:', 'newmodule');
-			        				$sDefaultPageName = SssS_CLI_Tools::getInputCLI($nl . 'Default page [blank for none]:', '');
-			        				//self::setEnvForPhocoaPhingPropel();
-			        				$sShellLine = 'cd "' . $sPathToModules . '";'
-			        					. $sPHPbin . ' ' . $sPathPhocoaScripts . DIR_SEP . 'createModule.php ' . $sModuleName . ' ' . $sDefaultPageName
-			        					. ';cd ' . getCwd();
-			        				$iRes = null;
-			        				passthru($sShellLine, $iRes);
-			        				break; // create a module
-
-			        			case 'create a page' :
-			        				$sPathToPage = SssS_CLI_Tools::removeTrailingSlash(SssS_CLI_Tools::getInputCLI($nl . 'Where should the page be created?', APP_ROOT . DIR_SEP . 'modules'), DIR_SEP);
-			        				if (!is_dir($sPathToPage)) $oRunner->makePath($sPathToPage);
-
-			        				$sPageName = SssS_CLI_Tools::getInputCLI($nl . 'Page name:', 'newpage');
-			        				//self::setEnvForPhocoaPhingPropel();
-			        				$sShellLine = 'cd "' . $sPathToPage . '";'
-			        					. $sPHPbin . ' ' . $sPathPhocoaScripts . DIR_SEP . 'createPage.php ' . $sPageName
-			        					. ';cd ' . getCwd();
-			        				$iRes = null;
-			        				passthru($sShellLine, $iRes);
-
-			        				// now lets add to module, if ok
-			        				$sModuleName = basename($sPathToPage);
-			        				$aChoicesYN = array('no', 'yes');
-			        				$sChoice = trim(strToLower(SssS_CLI_Tools::getChoiceCLI('add page delegate to ' . $sModuleName . '.php?', $aChoicesYN, 'yes')));
-			        				if ('no' == $sChoice) break;
-
-			        				require_once($sPathPhocoaScripts . DIR_SEP . 'scriptComponents.php');
-			        				$sModuleName = basename($sPathToPage);
-			        				$sModulePageBit = _pageForModule($sModuleName, $sPageName);
-			        				$sModuleFilePath = $sPathToPage . DIR_SEP . $sModuleName . '.php';
-			        				if (is_file($sModuleFilePath)) {
-			        					$sModuleOriginal = file_get_contents($sModuleFilePath);
-			        					$iCount = 0;
-			        					$sModuleNew = str_replace('?' . '>', $sModulePageBit . $nl . '?' . '>', $sModuleOriginal, $iCount);
-			        					switch ($iCount) {
-
-			        						case 0 : // no closing php tag
-			        							file_put_contents($sModuleFilePath, $sModuleOriginal . $sModulePageBit);
-			        							echo $nl . 'NOTICE: no closing php tag ie ?' . '> in ' . $sModuleFilePath . $nl . 'added page module without adding closing tag for php';
-			        							break;
-
-			        						case 1 : // fine, let's save
-			        							file_put_contents($sModuleFilePath, $sModuleNew);
-			        							echo $nl . 'added page module to ' . $sModuleFilePath . $nl;
-			        							break;
-
-			        						default : // oops, multiple occurences
-			        							file_put_contents($sModuleFilePath . '.prop', $sModuleOriginal . $nl . '<' . '?' . 'php' . $nl . '// this is the proposed structure. you need to manually check your php opening and closing tags' . $nl . $sModulePageBit . $nl . '?' . '>');
-			        							echo $nl . 'WARNING:oops, multiple occurences of closing php tag ie ?' . '> in ' . $sModuleFilePath . $nl . 'made a proposition in ' . $sModuleFilePath . '.prop' . $nl;
-
-			        					} // switch count of php closing tags
-
-			        				} else {
-			        					// no module yet
-			        					$sModuleNew = '<' . '?' . 'php' . $nl . _moduleBit($sModuleName, $sPageName) . $nl . $sModulePageBit . $nl . '?' . '>';
-			        					file_put_contents($sModuleFilePath, $sModuleNew);
-			        					echo $nl . 'there was no ' . $sModuleName . '.php so it has been created with ' . $sPageName . ' as default page.' . $nl . $sModuleFilePath . $nl;
-
-			        				} // if module php file already exists or not
-			        				break; // create a page
-
-			        			case 'Create a test stub for phocoa classes' :
-			        				$sPathToTest = SssS_CLI_Tools::removeTrailingSlash(SssS_CLI_Tools::getInputCLI($nl . 'Where should the teststub be created?', APP_ROOT), DIR_SEP);
-			        				if (!is_dir($sPathToTest)) $oRunner->makePath($sPathToTest);
-
-			        				$sTestClassName = SssS_CLI_Tools::getInputCLI($nl . 'Name of class to test:', 'WFObject');
-			        				self::setEnvForPhocoaPhingPropel();
-			        				$sShellLine = 'cd "' . $sPathToTest . '";'
-			        					. $sPHPbin . ' ' . $sPathPhocoaScripts . DIR_SEP . 'createTestStub.php ' . $sTestClassName
-			        					. ';cd ' . getCwd();
-			        				break; // test stub
-
-			        			default:
-			        				echo 'that is an idea that needs to be worked on.' . $nl;
-
-							} // switch Generate Menu itemes
-
-						} // loop while not asked to move up a menu
-						break;
-
-        			default:
-        				echo 'that is an idea that needs to be worked on.' . $nl;
-
-        		} // switch choice
-
-        		usleep(5000); // maybe this helps maybe it hurts -> find out TEST:
-        	} // loop until someone kills us or one or the other shell does :-)
+            $oMenuMain = new SssSCLI_Menu_Main();
+            $oMenuMain->ask();
+            return;
 
         } catch (WFRequestController_HTTPException $e) {
             //header("HTTP/1.0 {$e->getCode()}");
@@ -831,6 +460,25 @@ class WFRequestController extends WFObject
 		return $bDone;
 
 	} // setEnvForPhocoaPhingPropel
+
+
+	static function setEnvForPhocoaPropel() {
+
+		static $bDone = false;
+		if ($bDone) return true;
+
+		//if (!getenv('PHOCOA_HOME')) putenv('PHOCOA_HOME=' . FRAMEWORK_DIR);
+		//if (!getenv('PHP_CLASSPATH')) putenv('PHP_CLASSPATH=' . PHING_PATH);
+		//if (!getenv('PHING_COMMAND')) putenv('PHING_COMMAND=' . SssS_ShellScriptRunner::getPHPinterpreterPath() . ' -d html_errors=off -qC ' . PHING_PATH . DIR_SEP . 'phing.php -logger phing.listener.DefaultLogger');
+		// . SssS_ShellScriptRunner::getPHPinterpreterPath() . ' -d html_errors=off -qC ' . PHING_PATH . DIR_SEP . 'phing.php -logger phing.listener.AnsiColorLogger -debug');-debug -l
+
+		if (!getenv('PHOCOA_PROJECT_CONF')) putenv('PHOCOA_PROJECT_CONF=' . APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf');
+
+		$bDone = true;
+
+		return $bDone;
+
+	} // setEnvForPhocoaPropel
 
 
 	function parseCliRequest() {
@@ -1113,6 +761,739 @@ class WFRequestController extends WFObject
         return $singleton;
     }
 }
+
+
+
+abstract class SssSCLI_Menu {
+
+    protected $aMenu;
+    protected $aMethods;
+    protected $mDefault;
+    protected $sPrompt;
+    protected $sTitle;
+
+    public function __construct(Array $aMenu, Array $aMethods, $sTitle = null, $sPrompt = null, $mDefault = 0) {
+
+        if (empty($sTitle)) {
+            $sTitle = 'Menu';
+        } // if no title set
+        if (empty($sPrompt)) {
+            $sPrompt = 'please choose an action:';
+        } // if no prompt given
+
+        $this->aMenu = array();
+        $this->aMethods = array();
+        for ($iCount = 0; $iCount < count($aMethods); $iCount++) {
+            $this->aMenu[] = $aMenu[$iCount];
+            $this->aMethods[base64_encode($aMenu[$iCount])] = $aMethods[$iCount];
+        } // loop all entries
+        $this->mDefault = $mDefault;
+        $this->sPrompt = $sPrompt;
+        $this->sTitle = $sTitle;
+
+    } // __construct
+
+
+    public function ask($mDefault = null) {
+
+        if (null === $mDefault) {
+            $mDefault = $this->mDefault;
+        } // if no default given, use object's default
+
+        do {
+
+            echo '
+' . $this->sTitle . '
+';
+
+            $sChoice = SssS_CLI_Tools::getChoiceCLI($this->sPrompt, $this->aMenu, $mDefault);
+
+        } while($this->executeEntry($sChoice));
+
+        return $this;
+
+    } // ask
+
+
+    protected function executeEntry($sChoice) {
+
+        $sMethod = $this->aMethods[base64_encode($sChoice)];
+        if (method_exists($this, $sMethod)) {
+            return $this->$sMethod();
+        } // if got the method
+
+        echo '
+error: method, ' . $sMethod . ', does not exist in ' . get_class($this) . '
+';
+
+        return true;
+
+    } // executeEntry
+
+
+    protected function notYetImplemented() {
+
+        echo '
+not yet implemented.
+';
+
+        return true;
+
+    } // notYetImplemented
+
+
+    protected function quit() {
+        return false;
+    } // quit
+
+} // SssSCLI_Menu
+
+
+class SssSCLI_Menu_Main extends SssSCLI_Menu {
+
+    protected $oAppDelegate;
+
+    public function __construct($aMenu = null, $aMethods = null, $sTitle = '                 WFRequestController "menu"', $sPrompt = null, $mDefault = null) {
+
+        $this->oAppDelegate = WFWebApplication::sharedWebApplication()->delegate();
+var_dump($this->oAppDelegate);
+
+        if (is_array($aMenu) && is_array($aMethods) && (count($aMenu) == count($aMethods))) {
+
+            return parent::__construct($aMenu, $aMethods, $sTitle, $sPrompt, $mDefault);
+
+        } // if array given
+
+        $aChoices = array();
+        $aMethods = array();
+        if (!!$this->oAppDelegate && method_exists($this->oAppDelegate, 'handleCLIRequest')) {
+            $aChoices[] = 'call AppDelegate->handleCLIRequest()';
+            $aMethods[] = 'callAppDelegate';
+        } // if got app delegate and has method handleCLIRequest()
+
+        $aChoices = array_merge($aChoices, array(
+            'dump html for an invocation path',
+            'enter iphp console...',
+            '(Lists...)',
+            'Generate...',
+            'enter phocoa phing task manager',
+            'quit'
+        ));
+        $aMethods = array_merge($aMethods, array(
+            'dumpHTMLforAnInvocatonPath',
+            'enterIphpConsole_',
+            'notYetImplemented',
+            'generate_',
+            'enterPhocoaPhingTaskManager_',
+            'quit'
+        ));
+
+        return parent::__construct($aChoices, $aMethods, $sTitle, $sPrompt, $mDefault);
+
+    } // __construct
+
+
+    protected function callAppDelegate() {
+
+        // let app delegate give it a go -> should return true if done,
+        // false if wants WFRequestController to continue
+        if (!!$this->oAppDelegate && method_exists($this->oAppDelegate, 'handleCLIRequest')) {
+            return !($this->oAppDelegate->handleCLIRequest());
+        } // if got a suitable app delegate
+
+        return true;
+
+    } // callAppDelegate
+
+
+    protected function dumpHTMLforAnInvocatonPath() {
+//TODO: catch 404 and other errors
+        $nl = chr(10);
+        $oWFRC = WFRequestController::sharedRequestController();
+
+        // testing if page builds
+        list($bInteractive, $modInvocationPath) = $oWFRC->parseCliRequest();
+
+        $modInvocationPath = SssS_CLI_Tools::getInputCLI(
+                $nl . 'invocation (the default shown is either the first argument '
+                . 'passed or the default path):', $modInvocationPath);
+
+        // create the root invocation; only skin if we're not in an XHR
+        $oWFRC->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL,
+                (WFRequestController::isAjax()
+                    ? NULL
+                    : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
+
+        // get HTML result of the module, and output it
+        $html = $oWFRC->rootModuleInvocation->execute();
+
+        // read about this above handleHTTPRequest()
+        if (isset($_REQUEST[WFRPC::PARAM_ENABLE_AJAX_IFRAME_RESPONSE_MODE])
+            && (1 == $_REQUEST[WFRPC::PARAM_ENABLE_AJAX_IFRAME_RESPONSE_MODE])) {
+            //header('Content-Type: text/xml');
+            $html = "<?xml version=\"1.0\"?><raw><![CDATA[\n{$html}\n]]></raw>";
+        } // if ajax special situation with iframe
+
+        print $html;
+
+        return true;
+
+    } // dumpHTMLforAnInvocatonPath
+
+
+    protected function enterIphpConsole_() {
+
+        static $oIphpShell = null;
+        static $sPathTags = null;
+        static $nl = null;
+
+        print $nl . 'starting iphp shell' . $nl;
+
+        if (null == $nl) {
+            $nl = chr(10);
+            $sPathTags = APP_ROOT . DIR_SEP . 'tags';
+            $sPathSssSphocoaAppConf =
+                    APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf';
+            $oIphpShell = new iphp(array(
+                            'tags' => $sPathTags,
+                            'require' => $sPathSssSphocoaAppConf,
+                            'commands' => array('iphp_command_stop')
+                            )
+            ); // \stop to exit iphp and reenter loop with appDelegate having a go and outputting current request path
+        } // if first run
+
+        $oIphpShell->runREPL();
+
+        return true;
+
+    } // enterIphpConsole_
+
+
+    protected function enterPhocoaPhingTaskManager_() {
+
+        $nl = chr(10);
+
+        print $nl . 'starting phocoa phing task manager' . $nl;
+
+        $sCommand = '';
+        WFRequestController::setEnvForPhocoaPhingPropel();
+        $bContinuePhocoaTasks = true;
+        while ($bContinuePhocoaTasks) {
+            // run without args to show menu
+            $sShellLine = //'cd "' . APP_ROOT . '";' .
+                FRAMEWORK_DIR . DIR_SEP . 'phing' . DIR_SEP . 'phocoa ' . $sCommand;
+                //. ';cd ' . getCwd();
+
+            passthru($sShellLine);
+
+            // ask for command
+            $sCommand = SssS_CLI_Tools::getInputCLI(
+                    $nl . '                 WFRequestController "phing task manager"'
+                    . $nl .'what to do? ("back" to go back, -l or -list for '
+                    . 'list of phing tasks)', 'back');
+            // if not stop
+            if (in_array(trim(strtolower($sCommand)),
+                    array('back', 'stop', 'exit', 'quit', 'halt', 'die'))) {
+                $bContinuePhocoaTasks = false;
+                // pass on command
+            } // if stop
+
+        } // loop it
+
+        return true;
+
+    } // enterPhocoaPhingTaskManager_
+
+
+    protected function generate_() {
+
+        static $oMenuGenerate = null;
+        if (!$oMenuGenerate) {
+            $oMenuGenerate = new SssSCLI_Menu_Generate();
+        } // if first run
+
+        $oMenuGenerate->ask();
+
+        return true;
+
+    } // generate_
+
+
+} // SssSCLI_Menu_Main
+
+
+
+class SssSCLI_Menu_Generate extends SssSCLI_Menu {
+
+    protected $sPathBin;
+    protected $sPathPropelBuild;
+    protected $sPathPropelGenBin;
+    protected $sPropelBinArgsBuild;
+    protected $sPropelBinArgsClasses;
+    protected $sPropelBinArgsConf;
+    protected $sPathPhocoaScripts;
+    protected $sPHPbin;
+
+    public function __construct($sTitle = '       WFRequestController "menu-Generate"') {
+
+        $this->sPathBin = APP_ROOT . DIR_SEP . 'bin';
+        $this->sPathPropelBuild = APP_ROOT . DIR_SEP . 'propel-build';
+		//TODO: get this and other values from the .plist that created this project
+        $this->sPathPropelGenBin = '/gitSwissalpS/Propel2/bin/propel';
+        $this->sPropelBinArgsBuild = ' --config-dir "' . $this->sPathPropelBuild . '"'
+								   . ' --output-dir "' . $this->sPathPropelBuild . '"';
+        $this->sPropelBinArgsClasses = ' --config-dir "' . $this->sPathPropelBuild . '"'
+								   . ' --output-dir "' . APP_ROOT . DIR_SEP . 'classes' . '"';
+        $this->sPropelBinArgsConf = ' --config-dir "' . $this->sPathPropelBuild . '"'
+								   . ' --output-dir "' . APP_ROOT . DIR_SEP . 'conf' . '"';
+        $this->sPathPhocoaScripts = FRAMEWORK_DIR . DIR_SEP . 'framework' . DIR_SEP . 'script';
+        $this->sPHPbin = SssS_ShellScriptRunner::getPHPinterpreterPath();
+
+        $aChoices = array(
+            'Propel2 database:reverse -> schema.xml',
+            'fix schema.xml',
+            'Propel2 database:build -> class files',
+            '0, 1 and 2 for all connections',
+            'Propel2 config:convert -> PROPEL_CONF',
+            'de/activate Propel2',
+            '---------------------------------------',
+            'create scaffolds for Propel classes',
+            '---------------------------------------',
+            'create a module',
+            'create a page',
+            '---------------------------------------',
+            'Create a test stub for phocoa classes',
+            '---------------------------------------',
+            'back to main menu'
+        );
+
+        $aMethods = array(
+            'propel2database_reverse',
+            'fixSchema',
+            'propel2database_build',
+            'do_0_1_2allConnections',
+            'propel2config_convert',
+            'togglePropel2',
+            '-----',
+            'createScaffolds',
+            '-----',
+            'createModule',
+            'createPage',
+            '----',
+            'createTestStub',
+            '----',
+            'quit'
+        );
+
+        return parent::__construct($aChoices, $aMethods, $sTitle, null, 'back to main menu');
+
+    } // __construct
+
+
+    protected function collectPropel2connectionNames() {
+
+        $nl = chr(10);
+
+        // we can not assume that propel is initiated yet
+        $aPropelConfigLocal = array();
+        $aPropelConfigRepo = array();
+        if (is_file($this->sPathPropelBuild . DIR_SEP . 'propel.php')) {
+            $aPropelConfigLocal = include($this->sPathPropelBuild . DIR_SEP . 'propel.php');
+        } // if got local config
+        if (is_file($this->sPathPropelBuild . DIR_SEP . 'propel.php.dist')) {
+            $aPropelConfigRepo = include($this->sPathPropelBuild . DIR_SEP . 'propel.php.dist');
+        } // if got distro config
+        // merge both
+        $aPropelConfig = array_merge($aPropelConfigRepo, $aPropelConfigLocal);
+
+        // extract location names
+        $aPropelConnectionNames = array();
+        if (!isset($aPropelConfig['propel']['database']['connections'])) {
+            echo $nl . 'error: Propel2 main config files not found or incorect' . $nl;
+            return $aPropelConnectionNames;
+        } // if bad config
+        foreach ($aPropelConfig['propel']['database']['connections'] as $aPropelConnectionName => $aPropelConnection) {
+            $aPropelConnectionNames[] = $aPropelConnectionName;
+        } // loop gathering all names
+        if (empty($aPropelConnectionNames)) {
+            echo $nl . 'error: no Propel2 connections found.' . $nl;
+            return $aPropelConnectionNames;
+        } // if no connections found
+
+        return $aPropelConnectionNames;
+
+    } // collectPropel2connectionNames
+
+
+    protected function createModule() {
+
+        $nl = chr(10);
+        $oRunner = SssS_ShellScriptRunnerForDummies();
+
+        $sPathToModules = SssS_CLI_Tools::removeTrailingSlash(SssS_CLI_Tools::getInputCLI(
+                            $nl . 'Where should the module be created?',
+                            APP_ROOT . DIR_SEP . 'modules'), DIR_SEP);
+        if (!is_dir($sPathToModules)) $oRunner->makePath($sPathToModules);
+
+        $sModuleName = SssS_CLI_Tools::getInputCLI($nl . 'Module name:', 'newmodule');
+        $sDefaultPageName = SssS_CLI_Tools::getInputCLI($nl . 'Default page [blank for none]:', '');
+        //self::setEnvForPhocoaPhingPropel();
+        $sShellLine = 'cd "' . $sPathToModules . '";'
+                    . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP
+                    . 'createModule.php ' . $sModuleName . ' ' . $sDefaultPageName
+                    . ';cd ' . getCwd();
+
+        $iRes = null;
+        passthru($sShellLine, $iRes);
+
+        return true;
+
+    } // createModule
+
+
+    protected function createPage() {
+
+        $nl = chr(10);
+
+        $oRunner = SssS_ShellScriptRunnerForDummies();
+
+        //TODO: collect dirs and also offer arbitrary like now
+        $sPathToPage = SssS_CLI_Tools::removeTrailingSlash(SssS_CLI_Tools::getInputCLI(
+                        $nl . 'Where should the page be created?',
+                        APP_ROOT . DIR_SEP . 'modules'), DIR_SEP);
+        if (!is_dir($sPathToPage)) $oRunner->makePath($sPathToPage);
+
+        $sPageName = SssS_CLI_Tools::getInputCLI($nl . 'Page name:', 'newpage');
+        //self::setEnvForPhocoaPhingPropel();
+        $sShellLine = 'cd "' . $sPathToPage . '";'
+                    . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP . 'createPage.php ' . $sPageName
+                    . ';cd ' . getCwd();
+
+        $iRes = null;
+        passthru($sShellLine, $iRes);
+
+        // now lets add to module, if ok
+        $sModuleName = basename($sPathToPage);
+        $aChoicesYN = array('no', 'yes');
+        $sChoice = trim(strToLower(SssS_CLI_Tools::getChoiceCLI('add page delegate to ' . $sModuleName . '.php?', $aChoicesYN, 'yes')));
+        if ('no' == $sChoice) return true;
+
+        require_once($this->sPathPhocoaScripts . DIR_SEP . 'scriptComponents.php');
+        $sModuleName = basename($sPathToPage);
+        $sModulePageBit = _pageForModule($sModuleName, $sPageName);
+        $sModuleFilePath = $sPathToPage . DIR_SEP . $sModuleName . '.php';
+        if (is_file($sModuleFilePath)) {
+            $sModuleOriginal = file_get_contents($sModuleFilePath);
+            $iCount = 0;
+            $sModuleNew = str_replace('?' . '>', $sModulePageBit . $nl . '?'
+                                      . '>', $sModuleOriginal, $iCount);
+            switch ($iCount) {
+                case 0 : // no closing php tag
+                    file_put_contents($sModuleFilePath, $sModuleOriginal . $sModulePageBit);
+                    echo $nl . 'NOTICE: no closing php tag ie ?' . '> in '
+                        . $sModuleFilePath . $nl
+                        . 'added page module without adding closing tag for php';
+                    break;
+
+                case 1 : // fine, let's save
+                    file_put_contents($sModuleFilePath, $sModuleNew);
+                    echo $nl . 'added page module to ' . $sModuleFilePath . $nl;
+                    break;
+
+                default : // oops, multiple occurences
+                    file_put_contents($sModuleFilePath . '.prop', $sModuleOriginal
+                                      . $nl . '<' . '?' . 'php' . $nl
+                                      . '// this is the proposed structure. you need '
+                                      . 'to manually check your php opening and '
+                                      . 'closing tags' . $nl . $sModulePageBit
+                                      . $nl . '?' . '>');
+                    echo $nl . 'WARNING:oops, multiple occurences of closing php '
+                            . 'tag ie ?' . '> in ' . $sModuleFilePath . $nl
+                            . 'made a proposition in ' . $sModuleFilePath . '.prop' . $nl;
+
+            } // switch count of php closing tags
+
+        } else {
+
+            // no module yet
+            $sModuleNew = '<' . '?' . 'php' . $nl
+                    . _moduleBit($sModuleName, $sPageName) . $nl
+                    . $sModulePageBit . $nl . '?' . '>';
+            file_put_contents($sModuleFilePath, $sModuleNew);
+            echo $nl . 'there was no ' . $sModuleName
+                    . '.php so it has been created with ' . $sPageName
+                    . ' as default page.' . $nl . $sModuleFilePath . $nl;
+
+        } // if module php file already exists or not
+
+        return true;
+
+    } // createPage
+
+
+    protected function createScaffolds() {
+
+        $nl = chr(10);
+        $aConnections = $this->collectPropel2connectionNames();
+        $iLenQuery = strLen('Query');
+        $sPathClassesBase = APP_ROOT . DIR_SEP . 'classes' . DIR_SEP . 'SssSPropel2' . DIR_SEP;
+        $sAvailableClasses = '';
+        foreach ($aConnections as $sConnetion) {
+            $sPath = $sPathClassesBase . $sConnetion . DIR_SEP;
+            $rDir = opendir($sPath);
+            if (false === $rDir) {
+                echo $nl . 'error: could not open ' . $sPath . $nl;
+                continue;
+            } // if could not open dir
+            while (false !== $sFile = readdir($rDir)) {
+                $sPathFile = $sPath . $sFile;
+                $aInfo = pathinfo($sPathFile);
+                if (!(isset($aInfo['extension'])
+                      && 'php' == $aInfo['extension'])) {
+                    continue;
+                } // skip any non php
+
+                $sClassName = $aInfo['filename'];
+
+                // ends with Query?
+                if ('Query' == substr($sClassName, -$iLenQuery)) {
+                    continue;
+                } // if query-class, skip
+
+                $sAvailableClasses .= 'SssSPropel2\\' . $sConnetion . '\\' . $sClassName . ' ';
+
+            } // loop all files in dir
+
+        } // loop all connection directories
+
+        if (empty($sAvailableClasses)) {
+            echo 'you don\'t seem to have any generated classes yet.' . $nl;
+            return true;
+        } // if no classes found
+
+        echo $nl . 'available classes to build scaffolds for:' . $nl
+            . $sAvailableClasses . $nl;
+        $sEntityList = SssS_CLI_Tools::getInputCLI(
+            $nl . 'Which entities do you want to create scaffolds for?',
+            $sAvailableClasses);
+        $sPathToPutScaffolds = SssS_CLI_Tools::getInputCLI(
+            $nl . 'Where should the scaffolds be created?', APP_ROOT
+            . DIR_SEP . 'modules');
+        WFRequestController::setEnvForPhocoaPropel();
+        $sShellLine = 'cd "' . $sPathToPutScaffolds . '";'
+                    . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP
+                    . 'scaffold.php ' . escapeshellarg($sEntityList)
+                    . ';cd ' . getCwd();
+        $iRes = null;
+        passthru($sShellLine, $iRes);
+
+        return true;
+
+    } // createScaffolds
+
+
+    protected function createTestStub() {
+
+        $nl = chr(10);
+        $oRunner = new SssS_ShellScriptRunnerForDummies();
+
+        //TODO: offer better default
+        $sPathToTest = SssS_CLI_Tools::removeTrailingSlash(SssS_CLI_Tools::getInputCLI(
+                $nl . 'Where should the teststub be created?', APP_ROOT), DIR_SEP);
+        if (!is_dir($sPathToTest)) $oRunner->makePath($sPathToTest);
+
+        $sTestClassName = SssS_CLI_Tools::getInputCLI($nl . 'Name of class to test:', 'WFObject');
+        WFRequestController::setEnvForPhocoaPhingPropel();
+        $sShellLine = 'cd "' . $sPathToTest . '";'
+                    . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP
+                    . 'createTestStub.php ' . $sTestClassName
+                    . ';cd ' . getCwd();
+
+        return true;
+
+    } // createTestStub
+
+
+    protected function do_0_1_2allConnections() {
+
+        $nl = chr(10);
+
+        // we can not assume that propel is initiated yet
+        // collect connection names
+        $aPropelConnectionNames = $this->collectPropel2connectionNames();
+
+        foreach ($aPropelConnectionNames as $sPropelConnection) {
+            echo $nl . 'propel database:reverse ' . $sPropelConnection . $nl;
+            $iRes = null;
+            passthru($this->sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
+            if (0 !== $iRes) {
+                echo $nl . 'error: abborting jobs on this connection.' . $nl;
+                continue;
+            } // if error
+
+            echo $nl . 'fix-schema' . $nl;
+            $iRes = null;
+            passthru($this->sPathBin . DIR_SEP . 'fix-schema.php', $iRes);
+            if (0 !== $iRes) {
+                echo $nl . 'error: abborting jobs on this connection.' . $nl;
+                continue;
+            } // if error
+
+            echo $nl . 'propel database:build' . $nl;
+            $iRes = null;
+            passthru($this->sPathPropelGenBin . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
+            if (0 !== $iRes) {
+                echo $nl . 'error: oops.' . $nl;
+                continue;
+            } // if error
+
+        } // loop each connection
+
+        return true;
+
+    } // do_0_1_2allConnections
+
+
+    protected function fixSchema() {
+
+        $iRes = null;
+        passthru($this->sPathBin . DIR_SEP . 'fix-schema.php', $iRes);
+
+        return true;
+
+    } // fixSchema
+
+
+    protected function propel2config_convert() {
+
+        $nl = chr(10);
+
+        $iRes = null;
+        $sPathPropelBuildConf = $this->sPathPropelBuild . DIR_SEP . 'config.php';
+        if (is_file($sPathPropelBuildConf)) {
+            rename($sPathPropelBuildConf, $sPathPropelBuildConf . '.last');
+            echo 'backed up existing conf in build dir to ' . $sPathPropelBuildConf . '.last' . $nl;
+        } // make sure old file is gone
+        passthru($this->sPathPropelGenBin . ' config:convert' . $this->sPropelBinArgsBuild, $iRes);
+        if (is_file($sPathPropelBuildConf)) {
+            if (is_file(PROPEL2_RUNTIME_CONFIG)) {
+                rename(PROPEL2_RUNTIME_CONFIG, PROPEL2_RUNTIME_CONFIG . '.last');
+                echo 'backed up current conf to ' . PROPEL2_RUNTIME_CONFIG . '.last' . $nl;
+            } // if got old config
+            rename($sPathPropelBuildConf, PROPEL2_RUNTIME_CONFIG);
+            echo 'moved conf from build dir to ' . PROPEL2_RUNTIME_CONFIG . $nl;
+        } else {
+            echo $nl . 'error, did not generate new runtime config!';
+        } // if new file created
+
+        return true;
+
+    } // propel2config_convert
+
+
+    protected function propel2database_build() {
+
+        $iRes = null;
+        passthru($this->sPathPropelGenBin . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
+
+        return true;
+
+    } // propel2database_build
+
+
+    protected function propel2database_reverse() {
+
+        $nl = chr(10);
+
+        // which connection?
+        $aPropelConnectionNames = $this->collectPropel2connectionNames();
+        if (empty($aPropelConnectionNames)) {
+            return true;
+        } // if no connections found
+        $sPropelConnection = SssS_CLI_Tools::getChoiceCLI(
+                                'which connection to reverse',
+                                $aPropelConnectionNames, $aPropelConnectionNames[0]);
+        $iRes = null;
+        passthru($this->sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
+
+        return true;
+
+    } // propel2database_reverse
+
+
+    protected function togglePropel2() {
+
+        static $nl = null;
+        static $sSearchPropelAct, $sPathAppConfActive, $sPathAppConfTemplate;
+        static $sCommentOFF, $sCommentON, $sCommentRestart;
+        if (!$nl) {
+            $nl = chr(10);
+            $sSearchPropelAct = '/define\(["\']PROPEL2_ACTIVATED["\'],\s?(\w+)\);/';
+            $sPathAppConfActive = APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf';
+            $sPathAppConfTemplate = $sPathAppConfActive . '.SssStemplate';
+            $sCommentOFF = 'Switching OFF Propel2 integration' . $nl . 'Repeat to reactivate.'
+                    . '(after restarting app)' . $nl;
+            $sCommentON = 'Switching ON Propel2 integration' . $nl . 'Repeat to deactivate.'
+                    . '(after restarting app)'  . $nl
+                    . 'Make sure you have something like this in your '
+                    . 'application delegate class::initialize()' . $nl
+                    . '
+    if (PROPEL2_ACTIVATED) {
+        if (is_readable(PROPEL2_RUNTIME_CONFIG)) {
+            ////////////// THIS IS IMPORTANT ////////////////
+            require_once(PROPEL2_RUNTIME_CONFIG);
+        } else {
+            throw new WFException(\'could not read Propel2 config file at \' . PROPEL2_RUNTIME_CONFIG);
+        } // if got propel config at all
+    } // if propel is activated' . $nl . $nl;
+            $sCommentRestart = $nl . 'You need to restart the app to toggle again.' . $nl . 'Or you can edit your conf and template manually.' . $nl;
+        } // if first run
+
+        if (defined('PROPEL2_ACTIVATED') && PROPEL2_ACTIVATED) {
+            $sNewValue = 'false';
+            $sComment = $sCommentOFF;
+        } else {
+            $sNewValue = 'true';
+            $sComment = $sCommentON;
+        } // if currently activated or not
+
+        foreach (array($sPathAppConfActive, $sPathAppConfTemplate) as $sPathAppConf) {
+            if (is_writable($sPathAppConf)) {
+                $sAppConf = @file_get_contents_safely($sPathAppConf);
+                echo 'Searching in ' . $sPathAppConf . $nl . 'for "define("PROPEL2_ACTIVATED", ...);"' . $nl;
+                $aRes = array();
+                $iRes = preg_match($sSearchPropelAct, $sAppConf, $aRes);
+                if ($iRes) {
+                    echo 'Found: ' . $aRes[0] . $nl;
+                    $sAppConf = str_replace($aRes[0], 'define(\'PROPEL2_ACTIVATED\', ' . $sNewValue . ');', $sAppConf);
+                    file_put_contents_safely($sPathAppConf, $sAppConf, 'wb');
+                } else {
+                    $sComment2 = 'error: could not find "define("PROPEL2_ACTIVATED", ...);" in ' . $sPathAppConf . $nl
+                        . 'add define("PROPEL2_ACTIVATED", true); manually.' . $nl;
+                    $sComment .= $nl . $sComment;
+                    echo $sComment2;
+                } // if found
+            } else {
+                $sComment2 = $nl . 'error, can not write to ' . $sPathAppConf . $nl;
+                $sComment .= $sComment2;
+                echo $sComment2;
+                if ($sPathAppConf == $sPathAppConfActive) {
+                    $sComment2 = 'try to remakeTemplatedFiles and try again.' . $nl;
+                    $sComment .= $nl . $sComment2;
+                    echo $sComment2;
+                } // if has template for conf
+            } // if can write to config or not
+        } // loop both config and template
+
+        echo $sComment . $sCommentRestart;
+
+        return true;
+
+    } // togglePropel2
+
+} // SssSCLI_Menu_Generate
+
+
 
 /**
  * Helper class to allow modules to easily redirect the client to a given URL.
