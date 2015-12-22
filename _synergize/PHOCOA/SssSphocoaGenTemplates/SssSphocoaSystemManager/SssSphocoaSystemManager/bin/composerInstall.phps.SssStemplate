@@ -1,0 +1,191 @@
+#!##PHP_BIN##
+<?php
+/* * * *
+ * * ##PHOCOA_PROJECT_NAME## (composerInstall.phps)
+ * *
+ * * install composer and dependencies
+ * *
+ * * @generated ##DATE_STAMP##
+ * * @version 20151222_175917 (CC) Luke JZ aka SwissalpS
+ * * * */
+//error_reporting(E_ALL); // 0); //
+/*##RUN_BLOCKER##
+if (!defined('NL')) { define('NL', chr(10)); }
+// TODO: try to find config in executable dir, when in apps bin folder we could look at sourcepath then ../conf/SssSphocoaApp.conf
+$sPathConfig = '##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf';
+// bootstrap
+require_once($sPathConfig);
+
+SssScomposer::runInstallWithDependencies();
+
+class SssScomposer {
+
+	// which php to use (there may be several versions installed)
+	protected $sPathBinPHP;
+	protected $sPathCWD;
+	protected $sPathDirBin;
+	protected $sComposerURLinstaller;
+	protected $sComposerCurl;
+
+	public function __construct() {
+		$this->sPathBinPHP = '##PHP_BIN##';
+		$this->sPathCWD = getcwd();
+		$this->sPathDirBin = '##PATH_DIR_PHOCOA_APP####DIR_SEP##bin##DIR_SEP##';
+		$this->sComposerURLinstaller = 'https://getcomposer.org/installer';
+		$this->sComposerCurl = 'curl -sS ' . $this->sComposerURLinstaller
+								. ' | ' . $this->sPathBinPHP;
+	} // __construct
+
+
+	public function bail($iRet = 0) {
+
+		chdir($this->sPathCWD);
+
+		echo NL . 'Have a nice day.' . NL;
+
+		exit($iRet);
+
+	} // bail
+
+
+	public function composerInstall() {
+
+		if (!$this->isComposerInstalled()) {
+
+			echo 'composer does not seem to be installed in this project.' . NL;
+
+			return $this;
+
+		} // if composer not installed
+
+		$sScript = 'cd ' . dirname(APP_ROOT) . ';'
+				. $this->sPathBinPHP . ' '
+				. $this->sPathDirBin . 'composer.phar install;';
+
+		passthru($sScript);
+
+		return $this;
+
+	} // composerInstall
+
+
+	public function hasCurl() {
+
+		$oRunner = SssS_ShellScriptRunnerForDummies::sharedRunner();
+
+		$oRunner->doScript('curl -V');
+
+		return (0 == $oRunner->iRes());
+
+	} // hasCurl
+
+	public function installComposer($bReinstall = false) {
+
+		if ($bReinstall) {
+			$this->removeComposer();
+		} // if need to uninstall first
+
+		if ($this->isComposerInstalled()) {
+			echo 'installComposer(): composer is installed already.' . NL;
+			return $this;
+		} // if already installed
+
+		$oRunner = SssS_ShellScriptRunnerForDummies::sharedRunner();
+
+		if ($this->hasCurl()) {
+
+			$sScript = 'cd ' . $this->sPathDirBin . ';'
+					. $this->sComposerCurl . ';';
+
+			$oRunner->doScript($sScript);
+
+			if (0 == $oRunner->iRes()) {
+				echo 'composer installed with curl' . NL;
+			} else {
+				echo 'there was an error installing composer with curl.' . NL;
+				echo $oRunner->sOut() . NL;
+			} // if success
+
+		} else {
+
+			$sPathFileTmp = '/tmp/SssScomposer.tmp';
+
+			$sComposer = file_get_contents($this->sComposerURLinstaller);
+
+			if (false === $sComposer) {
+
+				echo 'error getting composer installer with php.' . NL;
+
+				return $this;
+
+			} // if failed to get installer
+
+			$mRes = @file_put_contents($sPathFileTmp, $sComposer);
+
+			if (false === $mRes) {
+
+				echo 'error writing composer installer to ' . $sPathFileTmp . NL;
+
+				return $this;
+
+			} // if failed to write to tmp file
+
+			$sScript = 'cd ' . $this->sPathDirBin . ';'
+					. 'cat ' . $sPathFileTmp . ' | ' . $this->sPathBinPHP . ';';
+
+			$oRunner->doScript($sScript);
+
+			unlink($sPathFileTmp);
+
+			if (0 == $oRunner->iRes()) {
+				echo 'composer installed with php.' . NL;
+			} else {
+				echo 'there was an error installing composer with php.' . NL;
+				echo $oRunner->sOut() . NL;
+			} // if success
+
+		} // if got curl or not
+
+		return $this;
+
+	} // installComposer
+
+
+	public function isComposerInstalled() {
+
+		return is_file($this->sPathDirBin . 'composer.phar');
+
+	} // isComposerInstalled
+
+
+	public function removeComposer() {
+
+		if (!$this->isComposerInstalled()) return $this;
+
+		unlink($this->sPathDirBin . 'composer.phar');
+
+		return $this;
+
+	} // removeComposer
+
+
+	public static function runInstallWithDependencies() {
+
+		$o = new SssScomposer();
+
+		// make sure composer is installed
+		$this->installComposer();
+
+		// install the dependencies
+		$this->composerInstall();
+
+		// and exit
+		$this->bail();
+
+	} // runInstallWithDependencies
+
+} // SssScomposer
+
+##RUN_BLOCKER##*/
+/* * * *\ ##PHOCOA_PROJECT_NAME## (composerInstall.phps) (CC) Luke JZ aka SwissalpS /* * * */
+?>
