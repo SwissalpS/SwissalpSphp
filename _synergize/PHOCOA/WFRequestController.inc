@@ -1280,9 +1280,12 @@ class SssSCLI_Menu_Generate extends SssSCLI_Menu {
             $nl . 'Where should the scaffolds be created?', APP_ROOT
             . DIR_SEP . 'modules');
         WFRequestController::setEnvForPhocoaPropel();
+        if (!is_dir($sPathToPutScaffolds)) {
+            SssS_ShellScriptRunnerForDummies::sharedRunner()->makePath($sPathToPutScaffolds);
+        }
         $sShellLine = 'cd "' . $sPathToPutScaffolds . '";'
                     . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP
-                    . 'scaffold.php ' . escapeshellarg($sEntityList)
+                    . 'scaffold.php ' . escapeshellarg(trim($sEntityList))
                     . ';cd ' . getCwd();
         $iRes = null;
         passthru($sShellLine, $iRes);
