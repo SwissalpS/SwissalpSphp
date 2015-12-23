@@ -919,6 +919,8 @@ class SssSphocoaGenerator {
 		$oP->set('PATH_DIR_PHOCOA_APP_CONTAINER', $sPathDest);
 		$oP->saveTo($sPathGen . 'useMeToRebuildInPlace.plist');
 
+		self::initGitIn($sPathDest);
+
 		// and so we can reuse another method
 		$mRes = self::inPlaceRefreshTemplatesInPlist($oP, null, $sPathDest);
 
@@ -2108,6 +2110,40 @@ run ' . $sPathRunner . ' -cli
 		return self::inPlaceRefreshTemplatesInPlist($oP, null, $sPathDest);
 
 	} // makeNewSssSphocoaProjectWithPlist3
+
+
+	public static function initGitIn($sPath) {
+
+		$oRunner = SssS_ShellScriptRunnerForDummies::sharedRunner();
+
+		// check if git is available at all
+		$sScript = 'which git;';
+		$oRunner->doScript($sScript);
+		if (0 !== $oRunner->iRes()) {
+
+			echo 'can not find git, skipping git init.' . NL;
+
+			return;
+
+		} // if no git
+
+		// check existance of given path
+		if (!is_dir($sPath)) {
+
+			echo 'path, ' . $sPath . ',' . NL
+				. 'is not valid, skipping git init.' . NL;
+
+			return;
+
+		} // if not valid path given
+
+		// init git repo as is
+		$sScript = 'cd ' . $sPath . ';'
+			. 'git init; git add .; git commit -m "SssSphocoaApp creation";';
+
+		$oRunner->doScript($sScript);
+
+	} // initGitIn
 
 
 	public static function inPlaceRefreshTemplatesInPlist(
