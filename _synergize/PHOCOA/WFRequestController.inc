@@ -163,6 +163,9 @@ class WFRequestController extends WFObject
 
         // modern format
         $standardErrorData = WFExceptionReporting::generatedStandardizedErrorDataFromException($e);
+        if (!isset($_SERVER['HTTP_HOST'])) {
+            $_SERVER['HTTP_HOST'] = 'unknown.host';
+        } // if no host set
         $exceptionPage->assign('location', "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
         $exceptionPage->assign('headline', "{$standardErrorData[0]['title']}: {$standardErrorData[0]['message']}");
         $exceptionPage->assign('standardErrorData', $standardErrorData);
@@ -479,6 +482,13 @@ class WFRequestController extends WFObject
 		return $bDone;
 
 	} // setEnvForPhocoaPropel
+
+
+    public function setRootModuleInvocation(WFModuleInvocation $oInvocation) {
+
+        $this->rootModuleInvocation = $oInvocation;
+
+    } // setRootModuleInvocation
 
 
 	function parseCliRequest() {
@@ -919,13 +929,13 @@ var_dump($this->oAppDelegate);
                 . 'passed or the default path):', $modInvocationPath);
 
         // create the root invocation; only skin if we're not in an XHR
-        $oWFRC->rootModuleInvocation = new WFModuleInvocation($modInvocationPath, NULL,
+        $oWFRC->setRootModuleInvocation(new WFModuleInvocation($modInvocationPath, NULL,
                 (WFRequestController::isAjax()
                     ? NULL
-                    : WFWebApplication::sharedWebApplication()->defaultSkinDelegate()));
+                    : WFWebApplication::sharedWebApplication()->defaultSkinDelegate())));
 
         // get HTML result of the module, and output it
-        $html = $oWFRC->rootModuleInvocation->execute();
+        $html = $oWFRC->rootModuleInvocation()->execute();
 
         // read about this above handleHTTPRequest()
         if (isset($_REQUEST[WFRPC::PARAM_ENABLE_AJAX_IFRAME_RESPONSE_MODE])
