@@ -10,6 +10,7 @@
  * * * */
 if (!defined('FRAMEWORK_DIR') || !defined('SwissalpS_FRAMEWORK_DIR')
 		|| !defined('PROPEL_FRAMEWORK_DIR') || !defined('SMARTY_DIR')
+		|| !defined('HORDE_FRAMEWORK_DIR') || !defined('PEAR_LOG_FRAMEWORK_DIR')
 		|| !defined('LOG_DIR') || !defined('RUNTIME_DIR')
 		|| !defined('APP_ROOT') || !defined('WWW_ROOT')
 		|| !defined('WEBAPP_DELEGATE') || !defined('SssS_APP_DELEGATE')
@@ -26,8 +27,6 @@ require($aTmp['sPathSssSsynPhocoa'] . 'util' . DIR_SEP . 'WFIncluding.inc');
 $aTmp['bOK'] = spl_autoload_register(array('WFIncluding', 'autoload'));
 if (true !== $aTmp['bOK'])
 		throw new Exception("Error registering WFIncluding::autoload()");
-
-if (!defined('AUTO_INCLUDING')) define('AUTO_INCLUDING', true);
 
 // This version number should be updated with each release - this version number, among other things, is used to construct version-unique URLs for static resources
 // thus anytime anything in wwwroot/www/framework changes, this should be bumped. This version string should match [0-9\.]*
