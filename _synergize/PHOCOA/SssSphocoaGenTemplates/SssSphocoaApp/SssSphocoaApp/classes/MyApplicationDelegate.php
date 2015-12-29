@@ -166,19 +166,23 @@ class MyApplicationDelegate
  ';
 	} // helpCLI
 
-    function autoload($className) {
+    function autoload($sClassName) {
 
         $requirePath = NULL;
 
-    	switch ($className) {
+		$aNamespacePath = explode('\\', $sClassName);
+
+		$sNamespaceBase = $aNamespacePath[0];
+
+    	switch ($sNamespaceBase) {
             // Custom Classes - add in handlers for any custom classes used here.
-            case 'Propel':
+            case 'Propel14':
                 $requirePath = 'propel/Propel.php';
                 break;
         }
 
         if ($requirePath) {
-            require($requirePath);
+            require_once($requirePath);
             return true;
         }
 

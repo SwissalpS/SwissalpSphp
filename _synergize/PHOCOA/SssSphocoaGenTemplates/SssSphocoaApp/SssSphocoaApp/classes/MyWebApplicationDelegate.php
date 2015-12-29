@@ -172,7 +172,7 @@ class MyWebApplicationDelegate
 
     	switch ($className) {
             // Custom Classes - add in handlers for any custom classes used here.
-            case 'Propel':
+            case 'Propel14':
                 $requirePath = 'propel/Propel.php';
                 break;
         }

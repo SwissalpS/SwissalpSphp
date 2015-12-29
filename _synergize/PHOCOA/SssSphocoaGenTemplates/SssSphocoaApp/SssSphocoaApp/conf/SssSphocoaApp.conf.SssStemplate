@@ -121,14 +121,14 @@ if (null === //SssS_IncludeThesePathsToPHPIncludePath( // normal - checks duplic
 
 	// prepend these
 	array(
-		  #SwissalpS_FRAMEWORK_DIR,
+		  //SwissalpS_FRAMEWORK_DIR,
 		  FRAMEWORK_DIR,
-		  #PROPEL_FRAMEWORK_DIR,
-		  #'##PATH_DIR_SRC_SMARTY##',
-		  #PEAR_LOG_FRAMEWORK_DIR,
-		  #APP_ROOT,
-		  APP_ROOT . '##DIR_SEP##classes',
-		  #PHING_PATH
+		  //PROPEL_FRAMEWORK_DIR,
+		  //'##PATH_DIR_SRC_SMARTY##',
+		  //PEAR_LOG_FRAMEWORK_DIR,
+		  //APP_ROOT,
+		  //APP_ROOT . '##DIR_SEP##classes',
+		  //PHING_PATH
 	),
 
 	// remove these (optional)
@@ -141,7 +141,7 @@ define('PROPEL_CONF', null);
 // new Propel 2.x config
 define('PROPEL2_RUNTIME_CONFIG', APP_ROOT . '##DIR_SEP##conf##DIR_SEP##Propel2conf_##PHOCOA_PROJECT_NAME##.php');
 define('PROPEL2_ACTIVATED', false);
-define('ORM_MODEL_ADAPTER', 'Propel2');
+define('ORM_MODEL_ADAPTER', 'Propel2'); // for scaffold
 
 // we need to define a time-zone to avoid flooding with warnings
 date_default_timezone_set('UTC');
