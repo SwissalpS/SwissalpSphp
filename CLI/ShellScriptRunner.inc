@@ -1,11 +1,11 @@
 <?php
 /* * * *
- * * SssS_ShellScriptRunner.inc
+ * * SwissalpS/CLI/ShellScriptRunner.inc
  * *
  * * basically runs shell scripts as system calls. Either directly or by
  * * placing the script in a file first and changing it's mode to executable
  * *
- * * @version 20151229_164226 depricated, use SwissalpS\CLI\ShellScriptRunner instead
+ * * @version 20151228_200647 moved to namespace
  * * @version 20111117_021840 + added sharedRunner()
  * * @version 20100502_175315 + added backgroundable and 2>&1 for file running.
  * * @version 20100501_200518 + added some quick getters iRes(), sOut() etc.
@@ -13,13 +13,12 @@
  * * @version 20091024_202143 + file_get/put_contents_safely
  * * @version 20090823_151325 (CC) Luke JZ aka SwissalpS
  * * * */
+namespace SwissalpS\CLI;
+
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'SssS_FileGetPutContents.inc');
 
 
-require_once('SssS_FileGetPutContents.inc');
-
-
-
-class SssS_ShellScriptRunner {
+class ShellScriptRunner {
 
 	// var chosen for all 3 to enable maximum flexibility
 	// the current script or the one just executed
@@ -29,18 +28,18 @@ class SssS_ShellScriptRunner {
 	// shebang paths per intepreter @see initShellScriptRunnerInterpreterPaths
 	var $aShellScriptRunnerInterpreterPaths;
 
-	function SssS_ShellScriptRunner() {
+	function __construct() {
 
 		//$this->fReset();
 
-	} // SssS_ShellScriptRunner
+	} // __construct
 
 
 	// added: 20111117_021840
 	static function sharedRunner() {
 
 		static $o = null;
-		if (!$o) $o = new SssS_ShellScriptRunner();
+		if (!$o) $o = new ShellScriptRunner();
 
 		return $o;
 
@@ -180,11 +179,11 @@ class SssS_ShellScriptRunner {
 					$this->aShellScriptRunnerInterpreterPaths[$sInterpreter])) {
 				$this->aResults = array(
 					'scriptExitCode'	=> null,
-					'fullOutput'		=> 'unknown interpreter chosen for SssS_ShellScriptRunner->doScriptAsFileForInterpreter'
+					'fullOutput'		=> 'unknown interpreter chosen for ShellScriptRunner->doScriptAsFileForInterpreter'
 					. "\n" . 'passed interpreter string: ' . $sInterpreter
 					. "\n" . 'passed script: ' . $s
 					. "\n" . 'target path: ' . $sPath,
-					'lastLine'			=> 'unknown interpreter chosen for SssS_ShellScriptRunner->doScriptAsFileForInterpreter');
+					'lastLine'			=> 'unknown interpreter chosen for ShellScriptRunner->doScriptAsFileForInterpreter');
 				return $this->aResults;
 			} // if interpreter not in list
 
@@ -267,8 +266,7 @@ class SssS_ShellScriptRunner {
 
     function __toString() { return print_r($this, true); } // __toString
 
-} // SssS_ShellScriptRunner
+} // ShellScriptRunner
 
 
-/* * * *\ SssS_ShellScriptRunner.inc (CC)2009 Luke JZ aka SwissalpS /* * * */
-?>
+/* * * *\ SwissalpS/CLI/ShellScriptRunner.inc (CC)2009 Luke JZ aka SwissalpS /* * * */

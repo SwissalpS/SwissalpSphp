@@ -1,5 +1,13 @@
 <?php
 /* * * *
+ * * SwissalpS/XML/XHTML.inc
+ * * based on SssS_xhtml.inc
+ * * WARNING: there is a backward incompatibility when outputting
+ * * as string. Use __toString(). XHTML() has been removed!
+ * *
+ * * @version 20151228_182957 (CC) Luke JZ aka SwissalpS
+ * * * */
+/* * * *
  * * SssS_xhtml.inc
  * *
  * * class SssS_XHTML(
@@ -13,7 +21,7 @@
  * * declaring the charset
  * *
  * * see example.php for usage
- * * @version 20151228_193426 depricated, use SwissalpS\XML\XHTML. Use ::__toString() over ::XHTML()
+ * * @version 20151228_182828 + moved to namespace, depricating ::XHTML() over __toString()
  * * @version 20140825_120410 + $a_noShortcutCloseTags don't use /> for tags in this array
  * * @version 20091024_201456 + require functions file_get/put_contents_safely
  * * @version 20090803_220831 (CC)2008 Luke JZ aka SwissalpS mb_ detection
@@ -37,8 +45,13 @@
  * - manages scripts and styles adding them as tag or coalascating with existing tags in the head
  * - a basic DOM tree with paths (SssS_DOM {subclass} is planned to include a getElementsOfPath() and node duplicating functions)
  */
-require_once('SssS_FileGetPutContents.inc');
-class SssS_XHTML {
+namespace SwissalpS\XML;
+
+
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'SssS_FileGetPutContents.inc');
+
+
+class XHTML {
 	/* base vars */
  	/**
  	 * @var array array tree of tags (DOM) can hold several root tags
@@ -53,17 +66,17 @@ class SssS_XHTML {
  	 */
 	var $s_lang;		// 'en', 'de', 'fr' etc.
  	/**
- 	 * @var int used to set the XHTML declaration read SssS_XHTML::SssS_XHTML() and SssS_XHTML::getDocType()
+ 	 * @var int used to set the XHTML declaration read XHTML::__toString() and XHTML::getDocType()
  	 */
-	var $i_DTDflag;		// read description of function SssS_xhtml and look at getDocType
+	var $i_DTDflag;		// read description of function XHTML and look at getDocType
  	/**
  	 * @var string the full doctype declaration
  	 */
-	var $s_docType;		// the doctype declaration string used by XHTML()
+	var $s_docType;		// the doctype declaration string used by __toString()
  	/**
  	 * @var string XML declaration string
  	 */
-	var $s_XMLdeclaration; // the xml declaration string used by XHTML()
+	var $s_XMLdeclaration; // the xml declaration string used by __toString()
  	/**
  	 * @var string XML version, used for XML declaration
  	 */
@@ -85,11 +98,11 @@ class SssS_XHTML {
  	/**
  	 * @var int id of style tag - use addStyle()
  	 */
-	var $i_style;		// id of style tag - use SssS_XHTML::addStyle()
+	var $i_style;		// id of style tag - use XHTML::addStyle()
  	/**
  	 * @var int id of script tag - use addScript()
  	 */
-	var $i_script;		// id of script tag - use SssS_XHTML::addScript()
+	var $i_script;		// id of script tag - use XHTML::addScript()
  	/**
  	 * @var int id of meta tag charset
  	 */
@@ -101,9 +114,9 @@ class SssS_XHTML {
 
 	/*controllers*/
  	/**
- 	 * @var array array of strings of tags which will be ignored when using SssS_XHTML::XHTMLaa() or the newline-flag in SssS_XHTML::outputTag()
+ 	 * @var array array of strings of tags which will be ignored when using XHTML::XHTMLaa() or the newline-flag in XHTML::outputTag()
  	 */
-	var $a_skipTheseFromFlagIdNameClass; // array that holds tags which will be ignored when using SssS_XHTML::XHTMLaa() or the newline-flag in SssS_XHTML::outputTag()
+	var $a_skipTheseFromFlagIdNameClass; // array that holds tags which will be ignored when using XHTML::XHTMLaa() or the newline-flag in XHTML::outputTag()
  	/**
  	 * @var string textnodes need a common tag to help sort and filter them, this should be some tag you don't use elsewhere. Defaults to "ssss_xml_textnode"
  	 */
@@ -127,7 +140,7 @@ class SssS_XHTML {
 	var $a_noShortcutCloseTags;
 
 	/* * *
-	 * * void function SssS_XHTML(
+	 * * void function XHTML(
 	 * *		  s_charset	= 'UTF-8'	charset
 	 * *		, s_lang 		= 'en'	2 character language id
 	 * *		, s_XMLversion = '1.0'	xml version for declaration
@@ -148,7 +161,7 @@ class SssS_XHTML {
 	 * * version 0.1 (CC)2007 Luke JZ aka SwissalpS
 	 * * */
 	 /**
-	  * constructs the SssS_XHTML object
+	  * constructs the XHTML object
 	  *
 	  * $i_DTDflag value table:
 	  *
@@ -170,28 +183,28 @@ class SssS_XHTML {
 	  * @param string $s_XMLversion (optional) xml version string, defaults to "1.0"
 	  * @param int $i_DTDflag (optional) defaults to 0 (XHTML1.0 transitional)
 	  *
-	  * @uses SssS_XHTML::resetDeclarations()
-	  * @uses SssS_XHTML::addTag() to add basic xhtml tags
-	  * @uses SssS_XHTML::$s_charset sets it with the passed parameter or default ("UTF-8") and then to handle string conversion later on
-	  * @uses SssS_XHTML::$s_lang set to lowercase of passed value
-	  * @uses SssS_XHTML::$s_XMLversion set to "1.0" or the passed value
-	  * @uses SssS_XHTML::$i_DTDflag set to passed value or if invalid to 3 -> XHTML1.1
-	  * @uses SssS_XHTML::$a_tags resets it to empty array
-	  * @uses SssS_XHTML::$a_skipTheseFromFlagIdNameClass set to array("br") (you might want to add others like "hr")
-	  * @uses SssS_XHTML::$a_newLineAfterOpenTags preset with defaults (echo var_dump to see which)
-	  * @uses SssS_XHTML::$a_newLineAfterCloseTags preset with defaults (echo var_dump to see which)
-	  * @uses SssS_XHTML::$s_textNodeName set to "ssss_xml_textnode"
-	  * @uses SssS_XHTML::$i_html set to root id (0)
-	  * @uses SssS_XHTML::$i_head set id
-	  * @uses SssS_XHTML::$i_title set id and title tag content
-	  * @uses SssS_XHTML::$i_body set id
-	  * @uses SssS_XHTML::$i_mChar set id and charset meta tag
+	  * @uses XHTML::resetDeclarations()
+	  * @uses XHTML::addTag() to add basic xhtml tags
+	  * @uses XHTML::$s_charset sets it with the passed parameter or default ("UTF-8") and then to handle string conversion later on
+	  * @uses XHTML::$s_lang set to lowercase of passed value
+	  * @uses XHTML::$s_XMLversion set to "1.0" or the passed value
+	  * @uses XHTML::$i_DTDflag set to passed value or if invalid to 3 -> XHTML1.1
+	  * @uses XHTML::$a_tags resets it to empty array
+	  * @uses XHTML::$a_skipTheseFromFlagIdNameClass set to array("br") (you might want to add others like "hr")
+	  * @uses XHTML::$a_newLineAfterOpenTags preset with defaults (echo var_dump to see which)
+	  * @uses XHTML::$a_newLineAfterCloseTags preset with defaults (echo var_dump to see which)
+	  * @uses XHTML::$s_textNodeName set to "ssss_xml_textnode"
+	  * @uses XHTML::$i_html set to root id (0)
+	  * @uses XHTML::$i_head set id
+	  * @uses XHTML::$i_title set id and title tag content
+	  * @uses XHTML::$i_body set id
+	  * @uses XHTML::$i_mChar set id and charset meta tag
 	  *
-	  * @version 0.2 (CC)2008 Luke JZ aka SwissalpS ( added SssS_XHTML::$a_skipTheseFromFlagIdNameClass; needed for the new SssS_XHTML::outputTag() and SssS_XHTML::XHTMLaa() )
+	  * @version 0.2 (CC)2008 Luke JZ aka SwissalpS ( added XHTML::$a_skipTheseFromFlagIdNameClass; needed for the new XHTML::outputTag() and XHTML::XHTMLaa() )
 	  * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
 	  */
 	  // TO DO: read the defaults from files in a conf directory to emphasise the modularity and simple management. On the other hand, this class is designed to fit into larger projects which probably already have those abilities and reuse them to integrate/bootstrap these defaults. Stay *NIX SwissalpS!
-	function SssS_XHTML($s_charset = 'UTF-8', $s_lang = 'en'
+	function __construct($s_charset = 'UTF-8', $s_lang = 'en'
 			, $s_XMLversion = '1.0', $i_DTDflag = 0) {
 
 		static $bMB_strtolower; // TODO: global? class static?
@@ -230,8 +243,8 @@ class SssS_XHTML {
 					, 'content'			=> 'text/html;charset='
 											. $this->s_charset));
 		unset($a_args);
-	}
-	/* * *\ SssS_XHTML (CC)2007 Luke JZ aka SwissalpS /* * */
+	} // __construct
+	/* * *\ XHTML (CC)2007 Luke JZ aka SwissalpS /* * */
 
 	/* * *
 	 * * boolean function addAttribute(
@@ -254,8 +267,8 @@ class SssS_XHTML {
 	 * @param string $s_attName the attributes name (defaults to "id")
 	 * @return bool true on success and false if $i_tag isn't valid or a text node
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to check $i_tag
-	 * @uses SssS_XHTML::$a_tags read and write access
+	 * @uses XHTML::isValidTagID() to check $i_tag
+	 * @uses XHTML::$a_tags read and write access
 	 *
 	 * @todo mb-support(? not really, would anyone use mb chars in a tag? that wouldn't be clean, but then again we do specify the charset... thoughts?)
 	 *
@@ -281,8 +294,8 @@ class SssS_XHTML {
 	 *
 	 * @return bool true on success
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to check $i_tag
-	 * @uses SssS_XHTML::$a_tags read and write access
+	 * @uses XHTML::isValidTagID() to check $i_tag
+	 * @uses XHTML::$a_tags read and write access
 	 *
 	 * @version 20090728_024004 (CC)2009 Luke JZ aka SwissalpS
 	 */
@@ -324,14 +337,14 @@ class SssS_XHTML {
 	 * @param int $i_attachTo (optional) tag id to attach $s_script to
 	 * @param string $s_url (optional) include this script url in head. The other two arguments should be "" if this is used
 	 *
-	 * @return int|string id of script tag if it has been added to something as standalone or textnode or string $s_script if script was added to the collective script-tag in SssS_XHTML::$i_head
+	 * @return int|string id of script tag if it has been added to something as standalone or textnode or string $s_script if script was added to the collective script-tag in XHTML::$i_head
 	 *
-	 * @uses SssS_XHTML::addTextNode() to add $s_script that has own tags ie begins with "<". Or to add $s_script to existing script tag in header
-	 * @uses SssS_XHTML::addTag() to add a new script tag in header or attached to another tag but also to add the script url to head
-	 * @uses SssS_XHTML::$i_head reads
-	 * @uses SssS_XHTML::$a_tags reads (writes with handlers)
-	 * @uses SssS_XHTML::$s_textNodeName reads to identify text nodes
-	 * @uses SssS_XHTML::$i_script to initialize and use
+	 * @uses XHTML::addTextNode() to add $s_script that has own tags ie begins with "<". Or to add $s_script to existing script tag in header
+	 * @uses XHTML::addTag() to add a new script tag in header or attached to another tag but also to add the script url to head
+	 * @uses XHTML::$i_head reads
+	 * @uses XHTML::$a_tags reads (writes with handlers)
+	 * @uses XHTML::$s_textNodeName reads to identify text nodes
+	 * @uses XHTML::$i_script to initialize and use
 	 *
 	 * @version 0.2 (CC)2008 Luke JZ aka SwissalpS (now we sort text nodes and inner nodes correctly, changes shouldn't affect scripts using 0.1 )
 	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
@@ -400,10 +413,10 @@ class SssS_XHTML {
 	 *
 	 * @return int|bool int id of script text node tag if style has been added to global script tag or the id of the new link tag of the head tag when passing $s_url. false if nothing fit.
 	 *
-	 * @uses SssS_XHTML::addTextNode() to add $s_style (from file or passed) to existing style tag in header
-	 * @uses SssS_XHTML::addTag() to add a new style or link tag in header
-	 * @uses SssS_XHTML::$i_head reads
-	 * @uses SssS_XHTML::$i_style to initialize and use
+	 * @uses XHTML::addTextNode() to add $s_style (from file or passed) to existing style tag in header
+	 * @uses XHTML::addTag() to add a new style or link tag in header
+	 * @uses XHTML::$i_head reads
+	 * @uses XHTML::$i_style to initialize and use
 	 *
 	 * @version 0.2 (CC)2007 Luke JZ aka SwissalpS
 	 */
@@ -446,7 +459,7 @@ class SssS_XHTML {
 	/**
 	 * adds a child tag to tag with id $i_parent
 	 *
-	 * the tags attributes can be added later with SssS_XHTML::addAttribute()
+	 * the tags attributes can be added later with XHTML::addAttribute()
 	 *
 	 * @param string $s_tag (optional, defaults to "span") tag label/name
 	 * @param int $i_parent (optional, defaults to 0 ie root tag) tag id of receiving tag
@@ -456,12 +469,12 @@ class SssS_XHTML {
 	 *
 	 * @todo there are still some strings being processed without mb-support: make a way to toggle as some older systems (our targets don't all have mb_substr and partners available.
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to check $i_parent
-	 * @uses SssS_XHTML::addTextNode() to add loose text
-	 * @uses SssS_XHTML::$a_tags read and write access
-	 * @uses SssS_XHTML::$s_textNodeName to detect text node tag
+	 * @uses XHTML::isValidTagID() to check $i_parent
+	 * @uses XHTML::addTextNode() to add loose text
+	 * @uses XHTML::$a_tags read and write access
+	 * @uses XHTML::$s_textNodeName to detect text node tag
 	 *
-	 * @version 0.3 (CC)2009 Luke JZ aka SwissalpS checks $i_parent for validity with SssS_XHTML::isValidTagID()
+	 * @version 0.3 (CC)2009 Luke JZ aka SwissalpS checks $i_parent for validity with XHTML::isValidTagID()
 	 * @version 0.2 (CC)2008 Luke JZ aka SwissalpS (now makes sure attributes are lowercase, it is now possible to pass attributes as array or as string, also the tag is now positioned inside it's parents contents-> won't work for nodes in root)
 	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
 	 */
@@ -528,14 +541,14 @@ class SssS_XHTML {
 	 * adds a text node to $i_attachTo
 	 *
 	 * @param int $i_attachTo the tag id to attach the text node to. If this is a text node itself, then the new node is attached to $i_attachTo's parent as another child
-	 * @param string $s_contents the string contents, this may be just text, xml, xhtml or the output of another tag -> SssS_XHTML::outputTag()
+	 * @param string $s_contents the string contents, this may be just text, xml, xhtml or the output of another tag -> XHTML::outputTag()
 	 *
 	 * @return bool|int false if $i_attachTo isn't a valid id otherwise returns id of new tag
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to check $i_attachTo
-	 * @uses SssS_XHTML::addTag() to add the textnode
-	 * @uses SssS_XHTML::$s_textNodeName to add the textnode
-	 * @uses SssS_XHTML::$a_tags for reading
+	 * @uses XHTML::isValidTagID() to check $i_attachTo
+	 * @uses XHTML::addTag() to add the textnode
+	 * @uses XHTML::$s_textNodeName to add the textnode
+	 * @uses XHTML::$a_tags for reading
 	 *
 	 * @version 0.1 (CC)2008 Luke JZ aka SwissalpS
 	 */
@@ -564,8 +577,8 @@ class SssS_XHTML {
 	 *
 	 * @return string ready for html insertion
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to check $i_tag
-	 * @uses SssS_XHTML::$a_tags to read attributes
+	 * @uses XHTML::isValidTagID() to check $i_tag
+	 * @uses XHTML::$a_tags to read attributes
 	 *
 	 * @todo test if it throws an error when wrong input
 	 * @todo check if we need to use mb_strtolower and substr
@@ -601,8 +614,8 @@ class SssS_XHTML {
 	/**
 	 * xhtml doctype declaration as a string ready for html
 	 *
-	 * @uses SssS_XHTML::$s_lang read to complete the doctype declaration
-	 * @uses SssS_XHTML::$i_DTDflag read to determine which template to use
+	 * @uses XHTML::$s_lang read to complete the doctype declaration
+	 * @uses XHTML::$i_DTDflag read to determine which template to use
 	 *
 	 * @return string xhtml doctype declaration as a string ready for html
 	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
@@ -690,8 +703,8 @@ class SssS_XHTML {
 	 * returns xml declaration as a string ready for html
 	 *
 	 * @return string xml declaration as a string ready for html
-	 * @uses SssS_XHTML::$s_XMLversion for output
-	 * @uses SssS_XHTML::$s_charset for output
+	 * @uses XHTML::$s_XMLversion for output
+	 * @uses XHTML::$s_charset for output
 	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
 	 */
 	function getXMLdeclaration() {
@@ -719,7 +732,7 @@ class SssS_XHTML {
 	 *
 	 * @return bool true if $i_tag is in range of defined tags else false
 	 *
-	 * @uses SssS_XHTML::$a_tags to count entries
+	 * @uses XHTML::$a_tags to count entries
 	 *
 	 * @version 0.1 (CC)2008 Luke JZ aka SwissalpS
 	 */
@@ -747,7 +760,7 @@ class SssS_XHTML {
 	/**
 	 * content of tag including children as xml string ready for html
 	 *
-	 * note: by default $i_flagIdNameClass ignores br-tag. Which tags are ignored is controlled by SssS_XHTML::$a_skipTheseFromFlagIdNameClass
+	 * note: by default $i_flagIdNameClass ignores br-tag. Which tags are ignored is controlled by XHTML::$a_skipTheseFromFlagIdNameClass
 	 *
 	 * @param int $i_tag tag id of node to be outputed
 	 * @param int $i_level indentation level (defaults to 0)
@@ -756,14 +769,14 @@ class SssS_XHTML {
 	 *
 	 * @return string
 	 *
-	 * @uses SssS_XHTML::isValidTagID() check validity of $i_tag
-	 * @uses SssS_XHTML::getAttributes() for tags attributes
-	 * @uses SssS_XHTML::outputTag() to loop tags children
-	 * @uses SssS_XHTML::$a_tags reading
-	 * @uses SssS_XHTML::$s_textNodeName to identify text nodes
-	 * @uses SssS_XHTML::$a_skipTheseFromFlagIdNameClass to know which tags to ignore
-	 * @uses SssS_XHTML::$a_newLineAfterOpenTags to know which tags have trailing new lines after opening tag
-	 * @uses SssS_XHTML::$a_newLineAfterCloseTags to know which tags have trailing new lines after closing tag
+	 * @uses XHTML::isValidTagID() check validity of $i_tag
+	 * @uses XHTML::getAttributes() for tags attributes
+	 * @uses XHTML::outputTag() to loop tags children
+	 * @uses XHTML::$a_tags reading
+	 * @uses XHTML::$s_textNodeName to identify text nodes
+	 * @uses XHTML::$a_skipTheseFromFlagIdNameClass to know which tags to ignore
+	 * @uses XHTML::$a_newLineAfterOpenTags to know which tags have trailing new lines after opening tag
+	 * @uses XHTML::$a_newLineAfterCloseTags to know which tags have trailing new lines after closing tag
 	 *
 	 * @todo make it possible to position children in contents: DONE as of 0.2 only now TO DO: clean output
 	 *
@@ -853,10 +866,10 @@ $b_leadIn = (in_array($a_thisTag['tag'], $this->a_newLineAfterCloseTags));
 	/**
 	 * resets docType and XMLdeclaration strings according to the current settings i.e. language
 	 *
-	 * @uses SssS_XHTML::getDocType() to reset SssS_XHTML::$s_docType
-	 * @uses SssS_XHTML::getXMLdeclaration() to reset SssS_XHTML::$s_XMLdeclaration
-	 * @uses SssS_XHTML::$s_docType set to value returned from SssS_XHTML::getDocType()
-	 * @uses SssS_XHTML::$s_XMLdeclaration set to value returned from SssS_XHTML::getXMLdeclaration()
+	 * @uses XHTML::getDocType() to reset XHTML::$s_docType
+	 * @uses XHTML::getXMLdeclaration() to reset XHTML::$s_XMLdeclaration
+	 * @uses XHTML::$s_docType set to value returned from XHTML::getDocType()
+	 * @uses XHTML::$s_XMLdeclaration set to value returned from XHTML::getXMLdeclaration()
 	 *
 	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
 	 */
@@ -866,30 +879,6 @@ $b_leadIn = (in_array($a_thisTag['tag'], $this->a_newLineAfterCloseTags));
 	}
 	/* * *\ resetDeclarations (CC)2007 Luke JZ aka SwissalpS /* * */
 
-	/* * *
-	 * * string function XHTML()
-	 * *
-	 * * returns tidy xhtml string ready for output to file or browser
-	 * * @deprecated
-	 * * version 0.1 (CC)2007 Luke JZ aka SwissalpS
-	 * * */
-	/**
-	 * tidy xhtml string ready for output to file or browser
-	 *
-	 * complete with doctype and xml declarations
-	 *
-	 * @return string tidy xhtml string ready for output to file or browser
-	 *
-	 * @uses SssS_XHTML::outputTag() for output
-	 * @uses SssS_XHTML::$i_DTDflag to determine if SssS_XHTML::$s_XMLdeclaration is required
-	 * @uses SssS_XHTML::$s_XMLdeclaration for output if SssS_XHTML::$i_DTDflag == 4 -> Plist
-	 * @uses SssS_XHTML::$s_docType for output
-	 * @uses SssS_XHTML::$i_html as parameter for SssS_XHTML::outputTag()
-	 *
-	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
-	 */
-	function XHTML() { return $this->__toString(); }
-	/* * *\ XHTML (CC)2007 Luke JZ aka SwissalpS /* * */
 
 	/* * *
 	 * * string function XHTMLaa(
@@ -919,9 +908,9 @@ $b_leadIn = (in_array($a_thisTag['tag'], $this->a_newLineAfterCloseTags));
 	 *
 	 * @return string tidy xhtml string ready for output to file or browser
 	 *
-	 * @uses SssS_XHTML::outputTag() for output
-	 * @uses SssS_XHTML::$s_docType for output
-	 * @uses SssS_XHTML::$s_XMLdeclaration for output
+	 * @uses XHTML::outputTag() for output
+	 * @uses XHTML::$s_docType for output
+	 * @uses XHTML::$s_XMLdeclaration for output
 	 *
 	 * @version 0.1 (CC)2008 Luke JZ aka SwissalpS
 	 */
@@ -934,6 +923,30 @@ $b_leadIn = (in_array($a_thisTag['tag'], $this->a_newLineAfterCloseTags));
 	/* * *\ XHTML aa(CC)2008 Luke JZ aka SwissalpS /* * */
 
 
+	/* * *
+	 * * string function XHTML()
+	 * *
+	 * * returns tidy xhtml string ready for output to file or browser
+	 * *
+	 * * version 0.1 (CC)2007 Luke JZ aka SwissalpS
+	 * * */
+	/**
+	 * tidy xhtml string ready for output to file or browser
+	 *
+	 * complete with doctype and xml declarations
+	 *
+	 * @deprecated, use __toString() instead
+	 *
+	 * @return string tidy xhtml string ready for output to file or browser
+	 *
+	 * @uses XHTML::outputTag() for output
+	 * @uses XHTML::$i_DTDflag to determine if XHTML::$s_XMLdeclaration is required
+	 * @uses XHTML::$s_XMLdeclaration for output if XHTML::$i_DTDflag == 4 -> Plist
+	 * @uses XHTML::$s_docType for output
+	 * @uses XHTML::$i_html as parameter for XHTML::outputTag()
+	 *
+	 * @version 0.1 (CC)2007 Luke JZ aka SwissalpS
+	 */
 	// 20100503_123217 added __toString() for easy info
 	function __toString() {
 		$s_return = (4 == $this->i_DTDflag)
@@ -948,6 +961,6 @@ $b_leadIn = (in_array($a_thisTag['tag'], $this->a_newLineAfterCloseTags));
 	function __toPlistArray() {
 		return ($this->a_tags) ? $this->a_tags : array();
 	} // __toPlistArray
-}
-/* * * *\ SssS_XHTML (CC)2007 Luke JZ aka SwissalpS /* * * */
-?>
+
+} // XHTML
+/* * * *\ XHTML (CC)2007 Luke JZ aka SwissalpS /* * * */

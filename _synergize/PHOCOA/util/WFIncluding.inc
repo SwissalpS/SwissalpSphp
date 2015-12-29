@@ -547,7 +547,7 @@ class WFIncluding {
 		$sNamespacePartsPath = DIR_SEP . implode(DIR_SEP, $aNamespaceParts);
 		$sFullClassName = implode('\\', $aNamespaceParts);
 		$sPathVendor = dirname(APP_ROOT) . DIR_SEP . 'vendor';
-//var_dump('--', $sPathVendor, PROPEL_FRAMEWORK_DIR, $sNamespacePartsPath, $sFullClassName, '/-');
+//var_dump('--', $sNamespaceBase, $sNamespacePartsPath, $sFullClassName, '/-');
 		$sPathFile = null;
 		switch($sNamespaceBase) {
 			case 'Propel':
@@ -557,6 +557,10 @@ class WFIncluding {
 			// generated from database with Propel2
 			case 'SssSPropel2':
 				$sPathFile = APP_ROOT . DIR_SEP . 'classes' . $sNamespacePartsPath . '.php';
+				break;
+
+			case 'SwissalpS':
+				$sPathFile = SwissalpS_FRAMEWORK_DIR . substr($sNamespacePartsPath, 10) . '.inc';
 				break;
 
 			default;

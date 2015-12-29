@@ -5,12 +5,15 @@
  * *
  * * @version 20151226_170552 (CC) Luke JZ aka SwissalpS
  * * * */
-if (!defined('SwissalpS_FRAMEWORK_DIR')) {
-    define('SwissalpS_FRAMEWORK_DIR', dirname(__FILE__));
-} // if not defined where SwissalpSphp is
 if (!defined('DIR_SEP')) {
     define('DIR_SEP', DIRECTORY_SEPARATOR);
 } // if dir_sep not defined yet
+if (!defined('NL')) {
+    define('NL', chr(10));
+} // if no NL yet
+if (!defined('SwissalpS_FRAMEWORK_DIR')) {
+    define('SwissalpS_FRAMEWORK_DIR', dirname(__FILE__));
+} // if not defined where SwissalpSphp is
 // phocoa framework dir
 if (!defined('FRAMEWORK_DIR')) {
     if (defined('PATH_DIR_SRC_PHOCOA')) {

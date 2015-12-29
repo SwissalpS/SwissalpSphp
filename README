@@ -2,6 +2,7 @@ SwissalpSphp.git/README
 author: Luke aka SwissalpS@LukeZimmermann.com
 licence: Creative Commons where not specified otherwise.
 group: developers tools
+version(date): 20151229_160707
 version(date): 20110205_220032
 
 This is a collection of php classes, functions and snippets that I have found
@@ -18,6 +19,14 @@ fully written by me, SwissalpS, or I have done reasonable changes to the origina
 script. Without the 'SssS' prefix, the file probably comes from someone else.
 To be sure, look at the information in the files. Though they may lack some
 commenting, the credits are there.
+
+This is true for the base directory, the '_synergize', '_external' and 'TextWrangler' folders.
+As of 20151229_160707 I am moving to namespaced code. This means the file names of my code, no longer begin with 'SssS' and are distributed into a tree that mimics the namespace.
+
+Code by others will move to 'external' while '_external' is kept for compatibility with older systems.
+Also the files in 'root' will remain for older PHP apps.
+
+The namespaced classes also do not have an ending ? > tag and tend to use spaces instead of tabs for indentation and other traits over time to make my code more acceptable to the larger crowd.
 
 .inc Extensions are php files with < ? php ? > tags and are not meant to output
 	anything if included.

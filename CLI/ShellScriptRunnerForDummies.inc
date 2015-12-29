@@ -1,28 +1,26 @@
 <?php
 /* * * *
- * * SssS_ShellScriptRunnerForDummies.inc
+ * * SwissalpS/CLI/ShellScriptRunnerForDummies.inc
  * *
- * * extends SssS_ShellScriptRunner with usefull shortcuts that don't need to
+ * * extends ShellScriptRunner with usefull shortcuts that don't need to
  * * be in the base class
  * *
- * * @uses SssS_ShellScriptRunner
- * * @version 20151229_164226 depricated, use SwissalpS\CLI\ShellScriptRunnerForDummies instead
+ * * @uses ShellScriptRunner
+ * * @version 20151228_200647 moved to namespace
  * * @version 20111117_021840 + sharedRunner()
  * * @version 20100501_203928 (CC) Luke JZ aka SwissalpS
  * * * */
+namespace SwissalpS\CLI;
 
-if (!defined('AUTO_INCLUDING')) {
-	require_once('SssS_ShellScriptRunner.inc');
-} // if not autoincluding but on php's include path
 
-class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
+class ShellScriptRunnerForDummies extends ShellScriptRunner {
 	/**
-	 * SssS_ShellScriptRunnerForDummies()
+	 * ShellScriptRunnerForDummies()
 	 * __construct()
 	 *
 	 * @param none
 	 *
-	 * @uses SssS_ShellScriptRunner - base class
+	 * @uses ShellScriptRunner - base class
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -30,16 +28,16 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 * @copyright 2007 Luke JZ aka SwissalpS
 	 * @version 20100501_204844 (CC)2007 Luke JZ aka SwissalpS
 	 */
-	public function SssS_ShellScriptRunnerForDummies() {
-		$this->SssS_ShellScriptRunner();
-	} // SssS_ShellScriptRunnerForDummies constructor/initializer
+	public function __construct() {
+		parent::__construct();
+	} // ShellScriptRunnerForDummies constructor/initializer
 
 
 	// added: 20111117_021840
 	static function sharedRunner() {
 
 		static $o = null;
-		if (!$o) $o = new SssS_ShellScriptRunnerForDummies();
+		if (!$o) $o = new ShellScriptRunnerForDummies();
 
 		return $o;
 
@@ -58,7 +56,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool success
 	 *
-	 * @uses SssS_ShellScriptRunnerForDummies->symlinkToAt() to run link script
+	 * @uses ShellScriptRunnerForDummies->symlinkToAt() to run link script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -82,7 +80,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool success or not
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run copy script
+	 * @uses ShellScriptRunner->doScript - to run copy script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -106,7 +104,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool  true if is a directory false if not
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run test script
+	 * @uses ShellScriptRunner->doScript - to run test script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -130,7 +128,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool true means: yes there is something there
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run test script
+	 * @uses ShellScriptRunner->doScript - to run test script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -154,7 +152,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool true on success...
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run mkdir script
+	 * @uses ShellScriptRunner->doScript - to run mkdir script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -179,7 +177,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool true on success...
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run move script
+	 * @uses ShellScriptRunner->doScript - to run move script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -188,10 +186,14 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 * @version 20100501_231537 (CC)2007 Luke JZ aka SwissalpS
 	 */
 	public function moveOrRename($sPathOrig, $sPathDest, $bMuted = true) {
+
 		if (empty($sPathOrig) || empty($sPathDest)) return false;
+
 		$this->doScript('mv "' . $sPathOrig . '" "' . $sPathDest . '";',
 																	$bMuted);
+
 		return (0 === $this->iRes());
+
 	} // moveOrRename
 
 	/**
@@ -206,7 +208,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return bool success
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run link script
+	 * @uses ShellScriptRunner->doScript - to run link script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -218,7 +220,9 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 		if (empty($sPathOrig) || empty($sPathDest)) return false;
 		$this->doScript('ln -s "' . $sPathOrig . '" "' . $sPathDest . '";',
 																	$bMuted);
+
 		return (0 === $this->iRes());
+
 	} // symlinkToAt
 
 	/**
@@ -230,7 +234,7 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 *
 	 * @return string currently active user running the script or empty string on fail
 	 *
-	 * @uses SssS_ShellScriptRunner->doScript - to run whoami script
+	 * @uses ShellScriptRunner->doScript - to run whoami script
 	 *
 	 * @package __SssS__ - __package_desciption_here__
 	 * @author Luke JZ aka SwissalpS <SwissalpS@LukeZimmerman.com>
@@ -239,11 +243,13 @@ class SssS_ShellScriptRunnerForDummies extends SssS_ShellScriptRunner {
 	 * @version 20100501_221029 (CC)2007 Luke JZ aka SwissalpS
 	 */
 	public function whoami($bMuted = true) {
+
 		$this->doScript('whoami;', $bMuted);
+
 		return (0 === $this->iRes()) ? strval($this->sLline()) : '';
+
 	} // whoami
 
-} // SssS_ShellScriptRunnerForDummies
-/* * *\ SssS_ShellScriptRunnerForDummies END /* * */
-/* * * *\ SssS_ShellScriptRunnerForDummies.inc (CC) Luke JZ aka SwissalpS /* * * */
-?>
+} // ShellScriptRunnerForDummies
+/* * *\ ShellScriptRunnerForDummies END /* * */
+/* * * *\ SwissalpS/CLI/ShellScriptRunnerForDummies.inc (CC) Luke JZ aka SwissalpS /* * * */

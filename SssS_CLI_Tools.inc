@@ -7,7 +7,7 @@
  * * more sophisticated options can be had with SssS_SocketController and
  * * SssS_ServerCommander classes using ANSI coloring etc.
  * *
- * * @used by _synergize/PHOCOA/SssSphocoaGenerator
+ * * @version 20151228_172204 (CC) depricated, use SwissalpS\CLI\Tools
  * * @version 20110609_214718 (CC) added checks for constants STDIN, STOUT, STDERR
  * * @version 20100501_083218 (CC) Luke JZ aka SwissalpS
  * * * */

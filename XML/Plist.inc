@@ -1,8 +1,13 @@
 <?php
+/* * * *
+ * * SwissalpS/XML/Plist.inc
+ * *
+ * * @version 20151228_182957 (CC) Luke JZ aka SwissalpS
+ * * * */
 // MODIFIED FOR mb_ less & mb_ ed machines
 /** SssS_Plist.inc
  *
- * @version 20151228_185435 depricated, use SwissalpS\XML\Plist
+ * @version 20151228_182828 + moved to namespace
  * @version 20111116_101323 + read binary format and sets a flag
  * @version 20110128_134728 + split '?' . '>' in regex to keep editors from confusion
  * @version 20100503_123217 + added __toString() for easy info. + Now handles NULL -> removes key if want to set to null. + added __toPlistArray(), __toDataBase64() and serializeAndEncodeObject() in conjunction with adding more support for adding non Plist values. Still triggers E_USER_NOTICE and informs what has been done. Read in parseArrayToTag() to see exact order of options: $o->__toPlistArray(), $o->__toDataBase64(), $o->__toString() and finally serializeAndEncodeObject($o)
@@ -11,15 +16,13 @@
  * @version 20091024_183354 + file_get/put_safely + save + saveTo + save as and a whole bunch of set/get values for key path functions
  * @version 20090803_213406
 **/
-if (!defined('AUTO_INCLUDING')) {
-	require_once('SssS_xhtml.inc');
-} // if not autoincluding but on php's include path
+namespace SwissalpS\XML;
 
 /**
- * adds plist functionality to SssS_XHTML
+ * adds plist functionality to XHTML
  */
 // extends the base class
-class SssS_Plist extends SssS_XHTML {
+class Plist extends XHTML {
  	/**
  	 * @var array array representation of plist e.g. your preference settings in an array tree
 	 * this is what you use to acces settings directly and quickly
@@ -32,8 +35,8 @@ class SssS_Plist extends SssS_XHTML {
 	 */
 	var $s_path = '';
 	/**
-	 * @var int base id &= i_html (of SssS_XHTML)
-	 * @see SssS_XHTML::$i_html aliased to SssS_Plist::$i_plist
+	 * @var int base id &= i_html (of XHTML)
+	 * @see XHTML::$i_html aliased to Plist::$i_plist
 	 */
 	var $i_plist;			// base id &= i_html
 	/**
@@ -79,29 +82,29 @@ class SssS_Plist extends SssS_XHTML {
 	 * @param string $s_lang optional, defaults to "en"
 	 * @param string $s_XMLversion optional, defaults to "1.0"
 	 *
-	 * @uses SssS_XHTML::SssS_XHTML() init super with given parameters and $i_DTDflag of 4 -> PLIST
-	 * @uses SssS_XHTML::addTag() to add the root tag at id -1
-	 * @uses SssS_Plist::initFromString() if $m_plist is string and not empty
-	 * @uses SssS_Plist::initFromArray() if $m_plist is not a string but a non empty array
-	 * @uses SssS_XHTML::$a_tags empties it
-	 * @uses SssS_Plist::$i_timeZone sets to 0
-	 * @uses SssS_Plist::$s_dateFormat sets to null
-	 * @uses SssS_Plist::$b_outPlistKeyOnOwnLine set to false
-	 * @uses SssS_Plist::$b_identifyDataAndDatesInOutputArray set to true
-	 * @uses SssS_XHTML::$i_head set to null as not required
-	 * @uses SssS_XHTML::$i_title set to null as not required
-	 * @uses SssS_XHTML::$i_body set to null as not required
-	 * @uses SssS_XHTML::$i_mChar set to null as not required
-	 * @uses SssS_XHTML::$i_html aliased with SssS_Plist::$i_plist
-	 * @uses SssS_Plist::$i_plist set to the root id for this plist ( returned id from addTag('plist', -1, array("version" => "1.0")) )
+	 * @uses XHTML::XHTML() init super with given parameters and $i_DTDflag of 4 -> PLIST
+	 * @uses XHTML::addTag() to add the root tag at id -1
+	 * @uses Plist::initFromString() if $m_plist is string and not empty
+	 * @uses Plist::initFromArray() if $m_plist is not a string but a non empty array
+	 * @uses XHTML::$a_tags empties it
+	 * @uses Plist::$i_timeZone sets to 0
+	 * @uses Plist::$s_dateFormat sets to null
+	 * @uses Plist::$b_outPlistKeyOnOwnLine set to false
+	 * @uses Plist::$b_identifyDataAndDatesInOutputArray set to true
+	 * @uses XHTML::$i_head set to null as not required
+	 * @uses XHTML::$i_title set to null as not required
+	 * @uses XHTML::$i_body set to null as not required
+	 * @uses XHTML::$i_mChar set to null as not required
+	 * @uses XHTML::$i_html aliased with Plist::$i_plist
+	 * @uses Plist::$i_plist set to the root id for this plist ( returned id from addTag('plist', -1, array("version" => "1.0")) )
 	 */
 	// constructor
-	public function SssS_Plist($m_plist = '', $s_charset = '',
+	public function __construct($m_plist = '', $s_charset = '',
 			$b_outPlistKeyOnOwnLine = false,
 			$b_identifyDataAndDatesInOutputArray = true,
 			$bPathCheckCreate = false) {
 		$s_charset = (!$s_charset || '' == $s_charset) ? 'utf-8' : $s_charset;
-		$this->SssS_XHTML($s_charset, 'en', '1.0', 4);
+		parent::__construct($s_charset, 'en', '1.0', 4);
 		$this->a_tags = array();
 		$this->i_timeZone = 0;
 		$this->s_dateFormat = null;
@@ -145,14 +148,14 @@ class SssS_Plist extends SssS_XHTML {
 	} // constructor
 
 	/**
-	 * reads the doctype declaration and populates instance variables: SssS_XHTML::$s_docType, SssS_Plist::$s_docTypeID, SssS_Plist::$s_pubSysID and SssS_XHTML::$s_lang
+	 * reads the doctype declaration and populates instance variables: XHTML::$s_docType, Plist::$s_docTypeID, Plist::$s_pubSysID and XHTML::$s_lang
 	 * only populates if a value is found
 	 * @return void
-	 * @uses SssS_Plist::$s_plist to extract doctype (and remove it)
-	 * @uses SssS_XHTML::$s_docType set to the full doctype declaration (if found)
-	 * @uses SssS_Plist::$s_docTypeID sets it to parsed value (if found)
-	 * @uses SssS_Plist::$s_pubSysID sets it to found value (if found)
-	 * @uses SssS_XHTML::$s_lang sets it to found language in doctype (if found)
+	 * @uses Plist::$s_plist to extract doctype (and remove it)
+	 * @uses XHTML::$s_docType set to the full doctype declaration (if found)
+	 * @uses Plist::$s_docTypeID sets it to parsed value (if found)
+	 * @uses Plist::$s_pubSysID sets it to found value (if found)
+	 * @uses XHTML::$s_lang sets it to found language in doctype (if found)
 	 * @todo this is ok when you have only one doc imported or if all are of the same language and encoding. For our Plist class this is ok as we allways have utf-8 encoding and en language
 	 */
 	// void fetchDocTypeFromS_PLIST()
@@ -191,12 +194,12 @@ class SssS_Plist extends SssS_XHTML {
 	} // fetchDocTypeFromS_PLIST
 
 	/**
-	 * reads the xml declaration and populates instance variables: SssS_XHTML::$s_XMLversion and SssS_XHTML::$s_charset
+	 * reads the xml declaration and populates instance variables: XHTML::$s_XMLversion and XHTML::$s_charset
 	 * only populates if a value is found
 	 * @return void
-	 * @uses SssS_Plist::$s_plist removes the XMLDeclaration if one was found
-	 * @uses SssS_XHTML::$s_XMLversion set with information extracted from SssS_Plist::$s_plist (if found)
-	 * @uses SssS_XHTML::$s_charset set with information extracted from SssS_Plist::$s_plist (if found)
+	 * @uses Plist::$s_plist removes the XMLDeclaration if one was found
+	 * @uses XHTML::$s_XMLversion set with information extracted from Plist::$s_plist (if found)
+	 * @uses XHTML::$s_charset set with information extracted from Plist::$s_plist (if found)
 	 * @todo this is ok when you have only one doc imported or if all are of the same language and encoding. For our Plist class this is ok as we allways have utf-8 encoding and en language
 	 */
 	// void fetchXMLDeclarationFromS_PLIST()
@@ -303,7 +306,7 @@ class SssS_Plist extends SssS_XHTML {
 	/**
 	 * get a value from the plist representation
 	 *
-	 * companion of SssS_Plist::outputPlistArray()
+	 * companion of Plist::outputPlistArray()
 	 *
 	 * @param int $i_tag the id of the tag whose value we seek
 	 * @return array|string|bool|int|float|null depending on the type of the value
@@ -315,17 +318,17 @@ class SssS_Plist extends SssS_XHTML {
 	 * if the tag is defined as "real", then we cast as float
 	 * null is returned if no other match was found or $i_tag is an invalid id
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to filter invalid ids
-	 * @uses SssS_Plist::outputPlistArray() to return arrays and dictionaries
-	 * @uses SssS_Plist::formatDate() to return dates as set with SssS_Plist::$s_dateFormat
-	 * @uses SssS_XHTML::$a_tags to read data
-	 * @uses SssS_Plist::$s_dateFormat to ensure that dates are returned as needed
-	 * @uses SssS_Plist::$i_timeZone to ensure that dates are returned as needed
-	 * @uses SssS_Plist::$b_identifyDataAndDatesInOutputArray to know if respective entries should be marked
+	 * @uses XHTML::isValidTagID() to filter invalid ids
+	 * @uses Plist::outputPlistArray() to return arrays and dictionaries
+	 * @uses Plist::formatDate() to return dates as set with Plist::$s_dateFormat
+	 * @uses XHTML::$a_tags to read data
+	 * @uses Plist::$s_dateFormat to ensure that dates are returned as needed
+	 * @uses Plist::$i_timeZone to ensure that dates are returned as needed
+	 * @uses Plist::$b_identifyDataAndDatesInOutputArray to know if respective entries should be marked
 	 *
 	 * @version 0.3 (CC)2008 Luke JZ aka SwissalpS
 	 * @author Matsuda Shota
-	 * @see SssS_Plist::formatDate() for Matsuda's info
+	 * @see Plist::formatDate() for Matsuda's info
 	 * @author Luke JZ aka SwissalpS cloned this function and made little changes
 	 */
 	// mixed getPlistValue(int i_tag)
@@ -382,23 +385,23 @@ class SssS_Plist extends SssS_XHTML {
 	 * initialize from an array (of arrays)
 	 *
 	 * resets this object and adds tags or rather items from the array
-	 * SssS_Plist::$a_plist is replaced with given array if it is not empty
-	 * finally SssS_Plist::$s_plist is filled with the xml representation
+	 * Plist::$a_plist is replaced with given array if it is not empty
+	 * finally Plist::$s_plist is filled with the xml representation
 	 *
 	 * @param array $a_plist the array to init from
 	 *
 	 * @uses resetDeclarations() to return to defaults (in case user modified or whatever)
-	 * @uses SssS_XHTML::addTag() to add root tag
-	 * @uses SssS_Plist::parseArrayToTag()
-	 * @uses SssS_Plist::outputPlist() to set SssS_Plist::$s_plist
-	 * @uses SssS_XHTML::$a_tags empties it
-	 * @uses SssS_Plist::$a_plist replaces it with $a_plist
-	 * @uses SssS_Plist::$i_plist sets it to root id (0)
-	 * @uses SssS_Plist::$s_plist replaces it with parsed array (as save-ready xml.plist)
-	 * @uses SssS_XHTML::$s_XMLdeclaration to populate SssS_Plist::$s_plist
-	 * @uses SssS_XHTML::$s_docType to populate SssS_Plist::$s_plist
+	 * @uses XHTML::addTag() to add root tag
+	 * @uses Plist::parseArrayToTag()
+	 * @uses Plist::outputPlist() to set Plist::$s_plist
+	 * @uses XHTML::$a_tags empties it
+	 * @uses Plist::$a_plist replaces it with $a_plist
+	 * @uses Plist::$i_plist sets it to root id (0)
+	 * @uses Plist::$s_plist replaces it with parsed array (as save-ready xml.plist)
+	 * @uses XHTML::$s_XMLdeclaration to populate Plist::$s_plist
+	 * @uses XHTML::$s_docType to populate Plist::$s_plist
 	 *
-	 * @todo do we really need doctype and xml declarations in SssS_Plist::$s_plist? in the returned value for sure, but otherwise we should probably keep it in a compareable state as when we initFromString
+	 * @todo do we really need doctype and xml declarations in Plist::$s_plist? in the returned value for sure, but otherwise we should probably keep it in a compareable state as when we initFromString
 	 * @todo add some error reporting ||| dates and data are treated as strings, I'll be working on it once I should need that
 	 * @version 0.2 (CC)2008 Luke JZ aka SwissalpS
 	 */
@@ -434,18 +437,18 @@ class SssS_Plist extends SssS_XHTML {
 	/**
 	 * initialize from a string (XML plist)
 	 * resets this object to newly given xml declaration and or doctype
-	 * then removes the declarations from SssS_Plist::$s_plist and parses it filling
-	 * SssS_Plist::$a_plist with the information it finds as a nested array
+	 * then removes the declarations from Plist::$s_plist and parses it filling
+	 * Plist::$a_plist with the information it finds as a nested array
 	 *
 	 * @param string $s_plist the string to init from
-	 * @uses SssS_Plist::fetchXMLDeclarationFromS_PLIST()
-	 * @uses SssS_Plist::fetchDocTypeFromS_PLIST()
-	 * @uses SssS_Plist::parseXMLStringToTag()
-	 * @uses SssS_Plist::outputPlistArray() to set SssS_Plist::$a_plist with
-	 * @uses SssS_XHTML::$a_tags empties it
-	 * @uses SssS_Plist::$s_plist sets it to the given string
-	 * @uses SssS_Plist::$i_plist is reset to 0
-	 * @uses SssS_Plist::$a_plist is filled with the parsed array returned from SssS_Plist::outputPlistArray()
+	 * @uses Plist::fetchXMLDeclarationFromS_PLIST()
+	 * @uses Plist::fetchDocTypeFromS_PLIST()
+	 * @uses Plist::parseXMLStringToTag()
+	 * @uses Plist::outputPlistArray() to set Plist::$a_plist with
+	 * @uses XHTML::$a_tags empties it
+	 * @uses Plist::$s_plist sets it to the given string
+	 * @uses Plist::$i_plist is reset to 0
+	 * @uses Plist::$a_plist is filled with the parsed array returned from Plist::outputPlistArray()
 	 * @todo add some error reporting
 	 * @version 0.2 (CC)2008 Luke JZ aka SwissalpS
 	 */
@@ -507,13 +510,13 @@ class SssS_Plist extends SssS_XHTML {
 	 * @param int $i_level indentation level
 	 * @param string $s_spacer indentation char(s) defaults to 1 tab per indentation
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to filter invalid ids
-	 * @uses SssS_Plist::outputPlist() to get children
-	 * @uses SssS_XHTML::$a_tags to read data
-	 * @uses SssS_XHTML::$s_textNodeName to identify text nodes
-	 * @uses SssS_Plist::$b_outPlistKeyOnOwnLine to know how to format output
+	 * @uses XHTML::isValidTagID() to filter invalid ids
+	 * @uses Plist::outputPlist() to get children
+	 * @uses XHTML::$a_tags to read data
+	 * @uses XHTML::$s_textNodeName to identify text nodes
+	 * @uses Plist::$b_outPlistKeyOnOwnLine to know how to format output
 	 *
-	 * @version 0.2p (CC)2008 Luke JZ aka SwissalpS(adopted from SssS_XHTML::outputTag() 0.2 dropping $i_flagIdNameClass functionality)
+	 * @version 0.2p (CC)2008 Luke JZ aka SwissalpS(adopted from XHTML::outputTag() 0.2 dropping $i_flagIdNameClass functionality)
 	 */
 	function outputPlist($i_tag = -1, $i_level = 0, $s_spacer = "\t") {
 		static $b_leadIn = true;
@@ -582,14 +585,14 @@ class SssS_Plist extends SssS_XHTML {
 	 * returns content of tag including children as array tree like plist
 	 *
 	 * thanks to Matsuda Shota for your plist class. I leaned on it for this function in particular.
-	 * @see SssS_Plist::formatDate() for Matsuda's info
+	 * @see Plist::formatDate() for Matsuda's info
 	 * @param int $i_tag tag id defaults to the root tag
-	 * @return array content of tag including children as array tree representation of SssS_Plist object
+	 * @return array content of tag including children as array tree representation of Plist object
 	 *
-	 * @uses SssS_XHTML::isValidTagID() to filter invalid ids
-	 * @uses SssS_Plist::getPlistValue() to get children values
-	 * @uses SssS_XHTML::$a_tags to read node data
-	 * @uses SssS_XHTML::$s_textNodeName to identify text nodes
+	 * @uses XHTML::isValidTagID() to filter invalid ids
+	 * @uses Plist::getPlistValue() to get children values
+	 * @uses XHTML::$a_tags to read node data
+	 * @uses XHTML::$s_textNodeName to identify text nodes
 	 *
 	 * @version 0.2 (CC)2008 Luke JZ aka SwissalpS thanks to Matsuda Shota
 	 */
@@ -631,9 +634,9 @@ class SssS_Plist extends SssS_XHTML {
 	 * @param array $a_plist the (plist) array to add to $i_addTo
 	 * @param int $i_addTo tag id (receiver) of the array or dictionary
 	 *
-	 * @uses SssS_XHTML::addTag() to add tags, duh
-	 * @uses SssS_Plist::parseArrayToTag() to process children
-	 * @uses SssS_XHTML::$s_charset to mb_substr those identified date and data 'tags'
+	 * @uses XHTML::addTag() to add tags, duh
+	 * @uses Plist::parseArrayToTag() to process children
+	 * @uses XHTML::$s_charset to mb_substr those identified date and data 'tags'
 	 *
 	 * @todo i_addTo passes unchecked for validity, that's ok?:!!!
 	 * @todo analyze string to determine between string, date and data
@@ -725,7 +728,7 @@ class SssS_Plist extends SssS_XHTML {
 										self::serializeAndEncodeObject($m_item));
 					} // if responds to methods
 				} // if object
-				trigger_error('unknown type found in SssS_Plist::parseArrayToTag() type is: ' . gettype($m_item) . ' for key: ' . $m_key . chr(10) . chr(10) . 'Valid Plist values are strings, numbers and arrays. There is some support for dates and base64 encoded data. You cannot add objects but you can pass them but be aware you may not be able to retrieve them!' . chr(10) . 'Objects that respond to __toPlistArray() will be added as the returned array containing plist valid values.' . chr(10) . 'Then checks if object responds to __toDataBase64() which should be a base64 encoded string' . chr(10) . 'Then checks if object responds to __toString and adds it as that string' . chr(10) . 'Then the object is serialized and added as base64 encoded data string.' . chr(10) . 'When retrieving objects be aware of this, as you must recreate them yourself from the given string.' . chr(10) . 'Plists are not intended to hold objects rather just small portions of values.' . chr(10) . chr(10) . 'This time I ' . $sDid . chr(10) . chr(10), E_USER_NOTICE);
+				trigger_error('unknown type found in Plist::parseArrayToTag() type is: ' . gettype($m_item) . ' for key: ' . $m_key . chr(10) . chr(10) . 'Valid Plist values are strings, numbers and arrays. There is some support for dates and base64 encoded data. You cannot add objects but you can pass them but be aware you may not be able to retrieve them!' . chr(10) . 'Objects that respond to __toPlistArray() will be added as the returned array containing plist valid values.' . chr(10) . 'Then checks if object responds to __toDataBase64() which should be a base64 encoded string' . chr(10) . 'Then checks if object responds to __toString and adds it as that string' . chr(10) . 'Then the object is serialized and added as base64 encoded data string.' . chr(10) . 'When retrieving objects be aware of this, as you must recreate them yourself from the given string.' . chr(10) . 'Plists are not intended to hold objects rather just small portions of values.' . chr(10) . chr(10) . 'This time I ' . $sDid . chr(10) . chr(10), E_USER_NOTICE);
 				debug_print_backtrace();
 	}	}	} // parseArrayToTag
 
@@ -751,7 +754,7 @@ class SssS_Plist extends SssS_XHTML {
 	 *
 	 * $s_plist is expected to be 100% strict, best without DOCTYPE and xml declaration tags
 	 * these should have been removed and brought to use when importing the string
-	 * with SssS_Plist::initFromString($s_plist)
+	 * with Plist::initFromString($s_plist)
 	 * This is NOT an HTML-parser!!!! -> regex
 	 *
 	 * To parse html and other obscure xml, please use a parser provided by your system.
@@ -761,18 +764,18 @@ class SssS_Plist extends SssS_XHTML {
 	 * could translate. The project is SwissalpS.mgp.php where MgpDB.classphp is
 	 * where to look for an example where this class has been put to use.
 	 *
-	 * NOTE: the ids of parents and children in the returned array refer to the respective of the returned array NOT SssS_XHTML::$a_tags or SssS_Plist::$a_plist
+	 * NOTE: the ids of parents and children in the returned array refer to the respective of the returned array NOT XHTML::$a_tags or Plist::$a_plist
 	 * @return array (plist) array of the newly parsed xml
 	 *
 	 * @param string $s_plist XML (plist) string to be inserted into the tree as child of $i_addTo
 	 * @param int tag id (receiver)
 	 *
-	 * @uses SssS_XHTML::$s_textNodeName to create proper textnodes
-	 * @uses SssS_XHTML::addTextNode() to add leading text or more likely contents of a node
-	 * @uses SssS_XHTML::addTag() to add found tags
+	 * @uses XHTML::$s_textNodeName to create proper textnodes
+	 * @uses XHTML::addTextNode() to add leading text or more likely contents of a node
+	 * @uses XHTML::addTag() to add found tags
 	 *
-	 * @see SssS_XHTML::$a_tags
-	 * @see SssS_Plist::initFromString()
+	 * @see XHTML::$a_tags
+	 * @see Plist::initFromString()
 	 * @version 0.1 (CC)2008 Luke JZ aka SwissalpS
 	 */
 	// void parseXMLStringToTag(string s_plist)
@@ -1026,9 +1029,9 @@ pathChecks ' . $s_path . '
 	 * @param int $i_level optional starting indentation level. Defaults to 0
 	 * @param string $s_spacer optional indentation string. Defaults to 4 spaces
 	 *
-	 * @uses SssS_Plist::outputPlist()
-	 * @uses SssS_XHTML::$s_XMLdeclaration to output
-	 * @uses SssS_XHTML::$s_docType for output
+	 * @uses Plist::outputPlist()
+	 * @uses XHTML::$s_XMLdeclaration to output
+	 * @uses XHTML::$s_docType for output
 	 *
 	 * @version 0.1 (CC)2008 Luke JZ aka SwissalpS
 	 */
@@ -1185,7 +1188,7 @@ pathChecks ' . $s_path . '
 			$iStrain = null;
 		} else {
 			$iStrain = null;
-			echo "\n" . 'strange occurance in SssS_Plist::getValueForKeyPath'
+			echo "\n" . 'strange occurance in Plist::getValueForKeyPath'
 					. "\n";
 			var_dump($this->a_tags[$iStartID]['children'], ($iStrain = $this->a_tags[$iStartID]['children'][0]));
 		} // if got kids, MT or strange
@@ -1365,7 +1368,7 @@ pathChecks ' . $s_path . '
 			$iStrain = null;
 		} else {
 			$iStrain = null;
-			echo "\n" . 'strange occurance in SssS_Plist::setValueForKeyPath'
+			echo "\n" . 'strange occurance in Plist::setValueForKeyPath'
 					. "\n";
 			var_dump($this->a_tags[$iStartID]['children'], ($iStrain = $this->a_tags[$iStartID]['children'][0]));
 		} // if got kids, MT or strange
@@ -1509,6 +1512,5 @@ var_dump("iPlist:", $this->i_plist,"iParent:", $iParent,"i:", $i);//, $this->a_t
 		return base64_encode(serialize($o)) . '==';
 	} // serializeAndEncodeObject
 
-} // SssS_Plist
-/* * *\ SssS_Plist.inc (CC)2008 Luke JZ aka SwissalpS /* * */
-?>
+} // Plist
+/* * * *\ SwissalpS/XML/Plist.inc (CC) Luke JZ aka SwissalpS /* * * */
