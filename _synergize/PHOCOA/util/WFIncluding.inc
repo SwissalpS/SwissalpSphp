@@ -44,17 +44,11 @@ class WFIncluding {
 		// other option is to add a bunch of paths to include_path, but that seems like a bad idea... YES that's a VERY BAD IDEA. Searching paths is much more expensive
 		// than including files directly because it hits the filesystem a lot to find the files.
 		static $hAutoloadClassmapCache = NULL;
-		static $sPhocoaFWstart = null;
-		static $sSssSstart_syn = null;
 		static $aDirsToCheck = null;
 		static $aSuffixesToTry = null;
 		$sRequirePath = null;
 
-		if (NULL == $hAutoloadClassmapCache)
-		{
-
-			$sPhocoaFWstart = 'framework' . DIRECTORY_SEPARATOR;
-			$sSssSstart_syn = '_synergize' . DIRECTORY_SEPARATOR;
+		if (NULL == $hAutoloadClassmapCache) {
 
 			$hAutoloadClassmapCache = array(
 			 	// SwissalpS overrides
@@ -84,403 +78,402 @@ class WFIncluding {
 				'Smarty'
 				=> SMARTY_DIR . 'Smarty.class.php',
 			 	'SssSException'
-			 	=> '_synergize/PHOCOA/SssSException.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSException.inc',
 			 	'SssS_ShellScriptRunner'
-			 	=> 'SssS_ShellScriptRunner.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . 'SssS_ShellScriptRunner.inc',
 			 	'SssS_ShellScriptRunnerForDummies'
-			 	=> 'SssS_ShellScriptRunnerForDummies.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . 'SssS_ShellScriptRunnerForDummies.inc',
 			 	'SssS_XHTML'
-			 	=> 'SssS_xhtml.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . 'SssS_xhtml.inc',
 				'WFException'
-			 //   => 'framework/WFException.php',
-				=> '_synergize/PHOCOA/WFException.inc',
+			 //   => FRAMEWORK_DIR . '/framework/WFException.php',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFException.inc',
 				'WFRequestController'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRedirectRequestException'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRequestController_RedirectException'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRequestController_InternalRedirectException'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRequestController_NotFoundException'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRequestController_BadRequestException'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRequestController_HTTPException'
-				=> '_synergize/PHOCOA/WFRequestController.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFSmarty'
-				=> '_synergize/PHOCOA/WFSmarty.php',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFSmarty.php',
 
 				// new proposal classes (SwissalpS)
 				'WFBundle'
-				=> '_synergize/PHOCOA/WFBundle.php',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFBundle.php',
 				'SssSSubmit'
-				=> '_synergize/PHOCOA/widgets/SssSSubmit.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSSubmit.inc',
 				'SssSPaginatorSortLink'
-				=> '_synergize/PHOCOA/widgets/SssSPaginatorSortLink.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSPaginatorSortLink.inc',
 				'SssSPaginatorPageInfo'
-				=> '_synergize/PHOCOA/widgets/SssSPaginatorPageInfo.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSPaginatorPageInfo.inc',
 				'SssSPaginatorNavigation'
-				=> '_synergize/PHOCOA/widgets/SssSPaginatorNavigation.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSPaginatorNavigation.inc',
 				'SssSMessageBox'
-				=> '_synergize/PHOCOA/widgets/SssSMessageBox.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSMessageBox.inc',
 				'SssSLocalizationTable'
-				=> '_synergize/PHOCOA/SssSLocalizationTable.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSLocalizationTable.inc',
 				'SssSLocalizationHelper'
-				=> '_synergize/PHOCOA/SssSLocalizationHelper.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSLocalizationHelper.inc',
 				'SssSLocalizationDelegate'
-				=> '_synergize/PHOCOA/SssSLocalizationDelegate.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSLocalizationDelegate.inc',
 				'SssSLocalization'
-				=> '_synergize/PHOCOA/SssSLocalization.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSLocalization.inc',
 				'SssSLink'
-				=> '_synergize/PHOCOA/widgets/SssSLink.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSLink.inc',
 				'SssSTextField'
-				=> '_synergize/PHOCOA/widgets/SssSTextField.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSTextField.inc',
 				'SssSLabel'
-				=> '_synergize/PHOCOA/widgets/SssSLabel.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSLabel.inc',
 				'SssSgdImageBasic'
-				=> '_synergize/PHOCOA/SssSgdImageBasic.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSgdImageBasic.inc',
 				'SssSCheckbox'
-				=> '_synergize/PHOCOA/widgets/SssSCheckbox.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSCheckbox.inc',
 				'SssSBlaWidget'
-				=> '_synergize/PHOCOA/widgets/SssSBlaWidget.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/widgets/SssSBlaWidget.inc',
 				'SssSBlaHelper'
-				=> '_synergize/PHOCOA/SssSBlaHelper.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSBlaHelper.inc',
 				'SssSBla'
-				=> '_synergize/PHOCOA/SssSBla.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSBla.inc',
 				'SssSCountries'
-				=> '_synergize/PHOCOA/SssSCountries.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSCountries.inc',
 
 				// arbitrary SwissalpS classes
 
 				'SssS_LogRotator'
-				=> '_synergize/SssS_LogRotator.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/SssS_LogRotator.inc',
 
 				'SssSMailer'
-				=> '_synergize/PHOCOA/SssSMailer.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSMailer.inc',
 
 				'SssSPlistItem'
-				=> '_synergize/PHOCOA/SssSPlistItem.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSPlistItem.inc',
 				'SssSPlistItemHelper'
-				=> '_synergize/PHOCOA/SssSPlistItem.inc',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSPlistItem.inc',
 
 				'SssSURLRewrite'
-				=> '_synergize/PHOCOA/SssSURLRewrite.php',
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSURLRewrite.php',
 
 			 	// default phocoa
-				//'Smarty' => 'Smarty/Smarty.class.php',
-				//Horde_Yaml' => 'Horde/Yaml.php', // and others
+
 				'Services_JSON'
-				=> 'libs/JSON.php',
+				=> FRAMEWORK_DIR . '/libs/JSON.php',
 
 				'Mail_Mailer'
-				=> 'framework/Mailer.php',
+				=> FRAMEWORK_DIR . '/framework/Mailer.php',
 
 				'WFModel'
-				=> 'framework/generator/WFGenerator.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFGenerator.php',
 				'WFFixture'
-				=> 'framework/generator/WFFixture.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFFixture.php',
 				'WFYaml'
-				=> 'framework/util/WFYaml.php',
+				=> FRAMEWORK_DIR . '/framework/util/WFYaml.php',
 				'WFJSON'
-				=> 'framework/util/WFJSON.php',
+				=> FRAMEWORK_DIR . '/framework/util/WFJSON.php',
 				'WFWebApplication'
-				=> 'framework/WFWebApplication.php',
+				=> FRAMEWORK_DIR . '/framework/WFWebApplication.php',
 				'WFMenuTree'
-				=> 'framework/WFMenuItem.php',
+				=> FRAMEWORK_DIR . '/framework/WFMenuItem.php',
 				'WFMenuTreeBuilding'
-				=> 'framework/WFMenuItem.php',
+				=> FRAMEWORK_DIR . '/framework/WFMenuItem.php',
 				'WFMenuItem'
-				=> 'framework/WFMenuItem.php',
+				=> FRAMEWORK_DIR . '/framework/WFMenuItem.php',
 				'WFMenuItemBasic'
-				=> 'framework/WFMenuItem.php',
+				=> FRAMEWORK_DIR . '/framework/WFMenuItem.php',
 				'WFObject'
-				=> 'framework/WFObject.php',
+				=> FRAMEWORK_DIR . '/framework/WFObject.php',
 				'WFDateTime'
-				=> 'framework/WFDateTime.php',
+				=> FRAMEWORK_DIR . '/framework/WFDateTime.php',
 				'WFDecorator'
-				=> 'framework/WFDecorator.php',
+				=> FRAMEWORK_DIR . '/framework/WFDecorator.php',
 				'WFKeyValueCoding'
-				=> 'framework/WFKeyValueCoding.php',
+				=> FRAMEWORK_DIR . '/framework/WFKeyValueCoding.php',
 				'WFKeyValueValidators'
-				=> 'framework/util/WFKeyValueValidators.php',
+				=> FRAMEWORK_DIR . '/framework/util/WFKeyValueValidators.php',
 				'WFSkin'
-				=> 'framework/WFSkin.php',
+				=> FRAMEWORK_DIR . '/framework/WFSkin.php',
 				'WFModule'
-				=> 'framework/WFModule.php',
+				=> FRAMEWORK_DIR . '/framework/WFModule.php',
 				'WFModuleInvocation'
-				=> 'framework/WFModule.php',
+				=> FRAMEWORK_DIR . '/framework/WFModule.php',
 
 				// working
 				'WFAction'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFEvent'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFClickEvent'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFJSAction'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFRPC'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFActionResponse'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFActionResponsePlain'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFActionResponseJSON'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFActionResponseXML'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 				'WFActionResponseJavascript'
-				=> 'framework/WFRPC.php',
+				=> FRAMEWORK_DIR . '/framework/WFRPC.php',
 
-				'WFPage' =>
-				'framework/WFPage.php',
-				'WFPageRendering' =>
-				'framework/WFPageRendering.php',
-				'WFView' =>
-				'framework/widgets/WFView.php',
-				'WFBinding' =>
-				'framework/WFBinding.php',
-				'WFBindingSetup' =>
-				'framework/WFBinding.php',
-				//'WFSmarty' => 'framework/WFSmarty.php',
+				'WFPage'
+				=> FRAMEWORK_DIR . '/framework/WFPage.php',
+				'WFPageRendering'
+				=> FRAMEWORK_DIR . '/framework/WFPageRendering.php',
+				'WFView'
+				=> FRAMEWORK_DIR . '/framework/widgets/WFView.php',
+				'WFBinding'
+				=> FRAMEWORK_DIR . '/framework/WFBinding.php',
+				'WFBindingSetup'
+				=> FRAMEWORK_DIR . '/framework/WFBinding.php',
+				//'WFSmarty' => FRAMEWORK_DIR . '/framework/WFSmarty.php',
 				'WFAuthorizationDelegate'
-				=> 'framework/WFAuthorization.php',
+				=> FRAMEWORK_DIR . '/framework/WFAuthorization.php',
 				'WFAuthorizationInfo'
-				=> 'framework/WFAuthorization.php',
+				=> FRAMEWORK_DIR . '/framework/WFAuthorization.php',
 				'WFAuthorizationException'
-				=> 'framework/WFAuthorization.php',
+				=> FRAMEWORK_DIR . '/framework/WFAuthorization.php',
 				'WFAuthorizationManager'
-				=> 'framework/WFAuthorization.php',
+				=> FRAMEWORK_DIR . '/framework/WFAuthorization.php',
 				'WFFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFBooleanFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFDateTimeFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFUNIXDateFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFSQLDateFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFNumberFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFSensitiveDataFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFPaginator'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFPaginatorException'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFPagedArray'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFPagedCreoleQuery'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFPagedData'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFDieselSearch'
-				=> 'framework/WFDieselpoint.php',
+				=> FRAMEWORK_DIR . '/framework/WFDieselpoint.php',
 				'WFDieselSearchHelper'
-				=> 'framework/WFDieselpoint.php',
+				=> FRAMEWORK_DIR . '/framework/WFDieselpoint.php',
 				'WFDieselKeyword'
-				=> 'framework/widgets/WFDieselKeyword.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFDieselKeyword.php',
 				'WFDieselNav'
-				=> 'framework/widgets/WFDieselNav.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFDieselNav.php',
 				'WFDieselSearchHelperStateTracking'
-				=> 'framework/WFDieselpoint.php',
+				=> FRAMEWORK_DIR . '/framework/WFDieselpoint.php',
 				'WFDieselFacet'
-				=> 'framework/widgets/WFDieselFacet.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFDieselFacet.php',
 				'WFWidget'
-				=> 'framework/widgets/WFWidget.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFWidget.php',
 				'WFDynarchMenu'
-				=> 'framework/widgets/WFDynarchMenu.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFDynarchMenu.php',
 				'WFDynamic'
-				=> 'framework/widgets/WFDynamic.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFDynamic.php',
 				'WFSelectionCheckbox'
-				=> 'framework/widgets/WFSelectionCheckbox.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFSelectionCheckbox.php',
 				'WFImage'
-				=> 'framework/widgets/WFImage.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFImage.php',
 				'WFForm'
-				=> 'framework/widgets/WFForm.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFForm.php',
 				'WFAutoForm'
-				=> 'framework/widgets/WFAutoForm.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFAutoForm.php',
 				'WFLabel'
-				=> 'framework/widgets/WFLabel.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFLabel.php',
 				'WFLink'
-				=> 'framework/widgets/WFLink.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFLink.php',
 				'WFMessageBox'
-				=> 'framework/widgets/WFMessageBox.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFMessageBox.php',
 				'WFPassword'
-				=> 'framework/widgets/WFPassword.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPassword.php',
 				'WFTextField'
-				=> 'framework/widgets/WFTextField.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFTextField.php',
 				'WFSearchField'
-				=> 'framework/widgets/WFSearchField.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFSearchField.php',
 				'WFTextArea'
-				=> 'framework/widgets/WFTextArea.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFTextArea.php',
 				'WFHTMLArea'
-				=> 'framework/widgets/WFHTMLArea.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFHTMLArea.php',
 				'WFSubmit'
-				=> 'framework/widgets/WFSubmit.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFSubmit.php',
 				'WFSelect'
-				=> 'framework/widgets/WFSelect.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFSelect.php',
 				'WFJumpSelect'
-				=> 'framework/widgets/WFJumpSelect.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFJumpSelect.php',
 				'WFTimeSelect'
-				=> 'framework/widgets/WFTimeSelect.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFTimeSelect.php',
 				'WFHidden'
-				=> 'framework/widgets/WFHidden.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFHidden.php',
 				'WFSpamHoneypot'
-				=> 'framework/widgets/WFSpamHoneypot.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFSpamHoneypot.php',
 				'WFCheckbox'
-				=> 'framework/widgets/WFCheckbox.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFCheckbox.php',
 				'WFCheckboxGroup'
-				=> 'framework/widgets/WFCheckboxGroup.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFCheckboxGroup.php',
 				'WFRadio'
-				=> 'framework/widgets/WFRadio.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFRadio.php',
 				'WFRadioGroup'
-				=> 'framework/widgets/WFRadioGroup.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFRadioGroup.php',
 				'WFUploadError'
-				=> 'framework/widgets/WFUploading.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFUploading.php',
 				'WFUploaderUtils'
-				=> 'framework/widgets/WFUploading.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFUploading.php',
 				'WFUploadedFile'
-				=> 'framework/widgets/WFUploading.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFUploading.php',
 				'WFUploadedFile_Basic'
-				=> 'framework/widgets/WFUploading.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFUploading.php',
 				'WFUpload'
-				=> 'framework/widgets/WFUpload.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFUpload.php',
 				'WFPostletUpload'
-				=> 'framework/widgets/WFPostletUpload.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPostletUpload.php',
 				'WFHTML5_Uploader'
-				=> 'framework/widgets/WFHTML5_Uploader.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFHTML5_Uploader.php',
 				'WFBulkUpload'
-				=> 'framework/widgets/WFBulkUpload.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFBulkUpload.php',
 				'WFBulkUploadFile'
-				=> 'framework/widgets/WFBulkUpload.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFBulkUpload.php',
 				'WFPaginatorNavigation'
-				=> 'framework/widgets/WFPaginatorNavigation.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPaginatorNavigation.php',
 				'WFPaginatorSortLink'
-				=> 'framework/widgets/WFPaginatorSortLink.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPaginatorSortLink.php',
 				'WFPaginatorSortSelect'
-				=> 'framework/widgets/WFPaginatorSortSelect.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPaginatorSortSelect.php',
 				'WFPaginatorState'
-				=> 'framework/widgets/WFPaginatorState.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPaginatorState.php',
 				'WFModuleView'
-				=> 'framework/widgets/WFModuleView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFModuleView.php',
 				'WFTabView'
-				=> 'framework/widgets/WFTabView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFTabView.php',
 				'WFTableView'
-				=> 'framework/widgets/WFTableView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFTableView.php',
 				'WFAppcelerator'
-				=> 'framework/widgets/WFAppcelerator.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFAppcelerator.php',
 				'WFBreadCrumb'
-				=> 'framework/widgets/WFBreadCrumb.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFBreadCrumb.php',
 				'WFBreadCrumbSetup'
-				=> 'framework/widgets/WFBreadCrumb.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFBreadCrumb.php',
 				'WFYAHOO'
-				=> 'framework/widgets/yahoo/WFYAHOO.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO.php',
 				'WFYAHOO_widget_YahooScript'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_YahooScript.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_YahooScript.php',
 				'WFYAHOO_yuiloader'
-				=> 'framework/widgets/yahoo/WFYAHOO.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO.php',
 				'WFYAHOO_widget_TreeView'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_TreeView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_TreeView.php',
 				'WFYAHOO_widget_TreeViewNode'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_TreeView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_TreeView.php',
 				'WFYAHOO_widget_Module'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Module.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Module.php',
 				'WFYAHOO_widget_Overlay'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Overlay.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Overlay.php',
 				'WFYAHOO_widget_Panel'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Panel.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Panel.php',
 				'WFYAHOO_widget_Dialog'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Dialog.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Dialog.php',
 				'WFYAHOO_widget_PhocoaDialog'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_PhocoaDialog.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_PhocoaDialog.php',
 				'WFYAHOO_widget_Logger'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Logger.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Logger.php',
 				'WFYAHOO_widget_Menu'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Menu.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Menu.php',
 				'WFYAHOO_widget_AutoComplete'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_AutoComplete.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_AutoComplete.php',
 				'WFYAHOO_widget_Tab'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_TabView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_TabView.php',
 				'WFYAHOO_widget_TabView'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_TabView.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_TabView.php',
 				'WFYAHOO_widget_ColorPicker'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_ColorPicker.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_ColorPicker.php',
 				'WFYAHOO_widget_Calendar'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Calendar.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Calendar.php',
 				'WFYAHOO_widget_DateTimePicker'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_DateTimePicker.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_DateTimePicker.php',
 				'WFYAHOO_widget_Uploader'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Uploader.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Uploader.php',
 				'WFYAHOO_widget_Carousel'
-				=> 'framework/widgets/yahoo/WFYAHOO_widget_Carousel.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/yahoo/WFYAHOO_widget_Carousel.php',
 				'WFPaginatorPageInfo'
-				=> 'framework/widgets/WFPaginatorPageInfo.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFPaginatorPageInfo.php',
 				'WFValueTransformer'
-				=> 'framework/ValueTransformers/WFValueTransformer.php',
+				=> FRAMEWORK_DIR . '/framework/ValueTransformers/WFValueTransformer.php',
 				'WFNegateBooleanTransformer'
-				=> 'framework/ValueTransformers/WFNegateBooleanTransformer.php',
+				=> FRAMEWORK_DIR . '/framework/ValueTransformers/WFNegateBooleanTransformer.php',
 				'WFIsEmptyTransformer'
-				=> 'framework/ValueTransformers/WFIsEmptyTransformer.php',
+				=> FRAMEWORK_DIR . '/framework/ValueTransformers/WFIsEmptyTransformer.php',
 				'WFEmptyToNullTransformer'
-				=> 'framework/ValueTransformers/WFEmptyToNullTransformer.php',
+				=> FRAMEWORK_DIR . '/framework/ValueTransformers/WFEmptyToNullTransformer.php',
 				'WFIsNotEmptyTransformer'
-				=> 'framework/ValueTransformers/WFIsNotEmptyTransformer.php',
+				=> FRAMEWORK_DIR . '/framework/ValueTransformers/WFIsNotEmptyTransformer.php',
 				'WFUrlencodeTransformer'
-				=> 'framework/ValueTransformers/WFUrlencodeTransformer.php',
+				=> FRAMEWORK_DIR . '/framework/ValueTransformers/WFUrlencodeTransformer.php',
 				'WFObjectController'
-				=> 'framework/WFObjectController.php',
+				=> FRAMEWORK_DIR . '/framework/WFObjectController.php',
 				'WFArrayController'
-				=> 'framework/WFArrayController.php',
+				=> FRAMEWORK_DIR . '/framework/WFArrayController.php',
 				'WFArray'
-				=> 'framework/WFArray.php',
+				=> FRAMEWORK_DIR . '/framework/WFArray.php',
 				'WFDictionary'
-				=> 'framework/WFDictionary.php',
+				=> FRAMEWORK_DIR . '/framework/WFDictionary.php',
 				'WFError'
-				=> 'framework/WFError.php',
+				=> FRAMEWORK_DIR . '/framework/WFError.php',
 				'WFErrorArray'
-				=> 'framework/WFError.php',
+				=> FRAMEWORK_DIR . '/framework/WFError.php',
 				'WFErrorsException'
-				=> 'framework/WFError.php',
+				=> FRAMEWORK_DIR . '/framework/WFError.php',
 				'WFErrorCollection'
-				=> 'framework/WFError.php',
+				=> FRAMEWORK_DIR . '/framework/WFError.php',
 				'WFExceptionReporting'
-				=> 'framework/WFExceptionReporting.php',
+				=> FRAMEWORK_DIR . '/framework/WFExceptionReporting.php',
 				'WFFunction'
-				=> 'framework/WFFunction.php',
+				=> FRAMEWORK_DIR . '/framework/WFFunction.php',
 				'WFUnixDateFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFSQLDateFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'WFNumberFormatter'
-				=> 'framework/widgets/WFFormatter.php',
+				=> FRAMEWORK_DIR . '/framework/widgets/WFFormatter.php',
 				'FCKEditor'
 				=> FRAMEWORK_DIR . '/wwwroot/www/framework/FCKEditor/fckeditor.php',
 
 				// propel
 				'WFPagedPropelQuery'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFPagedPropelModelCriteria'
-				=> 'framework/WFPagination.php',
+				=> FRAMEWORK_DIR . '/framework/WFPagination.php',
 				'WFModelBuilderPropel'
-				=> 'framework/generator/WFGeneratorPropel12_13.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFGeneratorPropel12_13.php',
 				'WFModelBuilderPropel12'
-				=> 'framework/generator/WFGeneratorPropel12_13.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFGeneratorPropel12_13.php',
 				'WFModelBuilderPropel13'
-				=> 'framework/generator/WFGeneratorPropel12_13.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFGeneratorPropel12_13.php',
 				'WFModelBuilderPropel15'
-				=> 'framework/generator/WFGeneratorPropel15.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFGeneratorPropel15.php',
 				'WFModelBuilderPropel2'
-				=> 'framework/generator/WFGeneratorPropel2.php',
+				=> FRAMEWORK_DIR . '/framework/generator/WFGeneratorPropel2.php',
 				'WFPropelException'
-				=> 'framework/util/WFPropelIntegration.php',
+				=> FRAMEWORK_DIR . '/framework/util/WFPropelIntegration.php',
 				'WFObject_Propel'
-				=> 'framework/util/WFPropelIntegration.php',
+				=> FRAMEWORK_DIR . '/framework/util/WFPropelIntegration.php',
 
 				// PHPUnit
-				'PhocoaControllerTestCase_PHPUnit' => 'phpunit/PhocoaControllerTestCase_PHPUnit.php',
+				'PhocoaControllerTestCase_PHPUnit' => FRAMEWORK_DIR . '/phpunit/PhocoaControllerTestCase_PHPUnit.php',
 			);
 
 			// windows box or other non posix '\\'
@@ -489,18 +482,8 @@ class WFIncluding {
 
 		if (isset($hAutoloadClassmapCache[$sClassName])) {
 			// including absolute paths is much faster than relative paths to the include_path dirs because one doesn't have to walk the include path.
-			// so, if it's a framework/ dir, then include it absolutely! Otherwise, let require figure it out.
+			// so, if it's a framework/ dir, then include it absolutely!
 			$sRequirePath = $hAutoloadClassmapCache[$sClassName];
-			if ($sPhocoaFWstart == substr($sRequirePath, 0, 10))
-					$sRequirePath = FRAMEWORK_DIR . DIR_SEP . $sRequirePath;
-
-			else if ($sSssSstart_syn == substr($sRequirePath, 0, 11))
-					$sRequirePath = SwissalpS_FRAMEWORK_DIR
-							. DIRECTORY_SEPARATOR . $sRequirePath;
-
-			else if ('SssS' == substr($sClassName, 0, 4))
-					$sRequirePath = SwissalpS_FRAMEWORK_DIR
-							. DIRECTORY_SEPARATOR . $sRequirePath;
 
 		} // if got cached path
 		else if ('SssS' == substr($sClassName, 0, 4)) {
