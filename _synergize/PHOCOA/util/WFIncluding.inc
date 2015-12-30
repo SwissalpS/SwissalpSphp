@@ -44,11 +44,31 @@ class WFIncluding {
 		// other option is to add a bunch of paths to include_path, but that seems like a bad idea... YES that's a VERY BAD IDEA. Searching paths is much more expensive
 		// than including files directly because it hits the filesystem a lot to find the files.
 		static $hAutoloadClassmapCache = NULL;
+		static $aDepricatedClasses = null;
+		static $aReplacementClasses = null;
 		static $aDirsToCheck = null;
 		static $aSuffixesToTry = null;
 		$sRequirePath = null;
 
 		if (NULL == $hAutoloadClassmapCache) {
+
+			$aDepricatedClasses = array(
+				'SssS_CLI_Tools',
+				'SssS_Plist',
+				'SssS_ShellScriptRunner',
+				'SssS_ShellScriptRunnerForDummies',
+				'SssS_XHTML',
+				'SssSphocoaGenerator',
+			);
+
+			$aReplacementClasses = array(
+				'SwissalpS\CLI\Tools',
+				'SwissalpS\XML\Plist',
+				'SwissalpS\CLI\ShellScriptRunner',
+				'SwissalpS\CLI\ShellScriptRunnerForDummies',
+				'SwissalpS\XML\XHTML',
+				'SwissalpS\PHOCOA\Project\Generator',
+			);
 
 			$hAutoloadClassmapCache = array(
 			 	// SwissalpS overrides
@@ -479,6 +499,22 @@ class WFIncluding {
 			// windows box or other non posix '\\'
 			str_replace(array('/', '\\'), DIR_SEP, $hAutoloadClassmapCache);
 		} // if not yet built cache map
+
+		if (!IS_PRODUCTION) {
+
+			$mPos = array_search($sClassName, $aDepricatedClasses);
+
+			if (false !== $mPos) {
+
+				$sClassNameNew = $aReplacementClasses[$mPos];
+
+				throw new Exception('WARNING: class ' . $sClassName
+									. ' is depricated. Use ' . $sClassNameNew
+									. ' instead.');
+
+			} // if depricated class
+
+		} // if not production mode
 
 		if (isset($hAutoloadClassmapCache[$sClassName])) {
 			// including absolute paths is much faster than relative paths to the include_path dirs because one doesn't have to walk the include path.
