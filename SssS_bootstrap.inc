@@ -11,6 +11,9 @@ if (!defined('DIR_SEP')) {
 if (!defined('NL')) {
     define('NL', chr(10));
 } // if no NL yet
+if (!defined('IS_PRODUCTION')) {
+    define('IS_PRODUCTION', false);
+} // if no IS_PRODUCTION yet
 if (!defined('SwissalpS_FRAMEWORK_DIR')) {
     define('SwissalpS_FRAMEWORK_DIR', dirname(__FILE__));
 } // if not defined where SwissalpSphp is
