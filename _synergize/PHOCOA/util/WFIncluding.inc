@@ -76,15 +76,15 @@ class WFIncluding {
 				'SaferScript'
 				=> SwissalpS_FRAMEWORK_DIR . '/_external/SaferScript.inc',
 				'Smarty'
-				=> SMARTY_DIR . 'Smarty.class.php',
+				=> SMARTY_DIR . '/Smarty.class.php',
 			 	'SssSException'
 			 	=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/SssSException.inc',
 			 	'SssS_ShellScriptRunner'
-			 	=> SwissalpS_FRAMEWORK_DIR . 'SssS_ShellScriptRunner.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . '/SssS_ShellScriptRunner.inc',
 			 	'SssS_ShellScriptRunnerForDummies'
-			 	=> SwissalpS_FRAMEWORK_DIR . 'SssS_ShellScriptRunnerForDummies.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . '/SssS_ShellScriptRunnerForDummies.inc',
 			 	'SssS_XHTML'
-			 	=> SwissalpS_FRAMEWORK_DIR . 'SssS_xhtml.inc',
+			 	=> SwissalpS_FRAMEWORK_DIR . '/SssS_xhtml.inc',
 				'WFException'
 			 //   => FRAMEWORK_DIR . '/framework/WFException.php',
 				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFException.inc',
