@@ -34,7 +34,13 @@ class Generator {
 	public function __construct() {} // __construct
 
 	// dealloc
-	public static function bail() {	echo NL . '\\SwissalpS\\PHOCOA\\Project\\Generator exiting...' . NL; exit(0); } // bail
+	public static function bail($iCode = 0) {
+
+		echo NL . '\\SwissalpS\\PHOCOA\\Project\\Generator exiting...' . NL;
+
+		exit($iCode);
+
+	} // bail
 
 
 	// default values
@@ -1277,6 +1283,7 @@ class Generator {
 		return $mRes;
 
 	} // makeNewSssSphocoaProjectWithPlist
+
 
 	// make from settings in a plist file interactively changing or complementing arguments
 	public static function makeNewSssSphocoaProjectWithPlist1(
