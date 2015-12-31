@@ -80,8 +80,6 @@ class MenuGenerate extends MenuAbstract {
 
     protected function collectPropel2connectionNames() {
 
-        $nl = chr(10);
-
         // we can not assume that propel is initiated yet
         $aPropelConfigLocal = array();
         $aPropelConfigRepo = array();
@@ -97,14 +95,14 @@ class MenuGenerate extends MenuAbstract {
         // extract location names
         $aPropelConnectionNames = array();
         if (!isset($aPropelConfig['propel']['database']['connections'])) {
-            echo $nl . 'error: Propel2 main config files not found or incorect' . $nl;
+            echo NL . 'error: Propel2 main config files not found or incorect' . NL;
             return $aPropelConnectionNames;
         } // if bad config
         foreach ($aPropelConfig['propel']['database']['connections'] as $aPropelConnectionName => $aPropelConnection) {
             $aPropelConnectionNames[] = $aPropelConnectionName;
         } // loop gathering all names
         if (empty($aPropelConnectionNames)) {
-            echo $nl . 'error: no Propel2 connections found.' . $nl;
+            echo NL . 'error: no Propel2 connections found.' . NL;
             return $aPropelConnectionNames;
         } // if no connections found
 
@@ -115,16 +113,15 @@ class MenuGenerate extends MenuAbstract {
 
     protected function createModule() {
 
-        $nl = chr(10);
         $oRunner = ShellScriptRunnerForDummies::sharedRunner();
 
         $sPathToModules = Tools::removeTrailingSlash(Tools::getInputCLI(
-                            $nl . 'Where should the module be created?',
+                            NL . 'Where should the module be created?',
                             APP_ROOT . DIR_SEP . 'modules'), DIR_SEP);
         if (!is_dir($sPathToModules)) $oRunner->makePath($sPathToModules);
 
-        $sModuleName = Tools::getInputCLI($nl . 'Module name:', 'newmodule');
-        $sDefaultPageName = Tools::getInputCLI($nl . 'Default page [blank for none]:', '');
+        $sModuleName = Tools::getInputCLI(NL . 'Module name:', 'newmodule');
+        $sDefaultPageName = Tools::getInputCLI(NL . 'Default page [blank for none]:', '');
         //self::setEnvForPhocoaPhingPropel();
         $sShellLine = 'cd "' . $sPathToModules . '";'
                     . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP
@@ -141,17 +138,15 @@ class MenuGenerate extends MenuAbstract {
 
     protected function createPage() {
 
-        $nl = chr(10);
-
         $oRunner = ShellScriptRunnerForDummies::sharedRunner();
 
         //TODO: collect dirs and also offer arbitrary like now
         $sPathToPage = Tools::removeTrailingSlash(Tools::getInputCLI(
-                        $nl . 'Where should the page be created?',
+                        NL . 'Where should the page be created?',
                         APP_ROOT . DIR_SEP . 'modules'), DIR_SEP);
         if (!is_dir($sPathToPage)) $oRunner->makePath($sPathToPage);
 
-        $sPageName = Tools::getInputCLI($nl . 'Page name:', 'newpage');
+        $sPageName = Tools::getInputCLI(NL . 'Page name:', 'newpage');
         //self::setEnvForPhocoaPhingPropel();
         $sShellLine = 'cd "' . $sPathToPage . '";'
                     . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP . 'createPage.php ' . $sPageName
@@ -173,44 +168,44 @@ class MenuGenerate extends MenuAbstract {
         if (is_file($sModuleFilePath)) {
             $sModuleOriginal = file_get_contents($sModuleFilePath);
             $iCount = 0;
-            $sModuleNew = str_replace('?' . '>', $sModulePageBit . $nl . '?'
+            $sModuleNew = str_replace('?' . '>', $sModulePageBit . NL . '?'
                                       . '>', $sModuleOriginal, $iCount);
             switch ($iCount) {
                 case 0 : // no closing php tag
                     file_put_contents($sModuleFilePath, $sModuleOriginal . $sModulePageBit);
-                    echo $nl . 'NOTICE: no closing php tag ie ?' . '> in '
-                        . $sModuleFilePath . $nl
+                    echo NL . 'NOTICE: no closing php tag ie ?' . '> in '
+                        . $sModuleFilePath . NL
                         . 'added page module without adding closing tag for php';
                     break;
 
                 case 1 : // fine, let's save
                     file_put_contents($sModuleFilePath, $sModuleNew);
-                    echo $nl . 'added page module to ' . $sModuleFilePath . $nl;
+                    echo NL . 'added page module to ' . $sModuleFilePath . NL;
                     break;
 
                 default : // oops, multiple occurences
                     file_put_contents($sModuleFilePath . '.prop', $sModuleOriginal
-                                      . $nl . '<' . '?' . 'php' . $nl
+                                      . NL . '<' . '?' . 'php' . NL
                                       . '// this is the proposed structure. you need '
                                       . 'to manually check your php opening and '
-                                      . 'closing tags' . $nl . $sModulePageBit
-                                      . $nl . '?' . '>');
-                    echo $nl . 'WARNING:oops, multiple occurences of closing php '
-                            . 'tag ie ?' . '> in ' . $sModuleFilePath . $nl
-                            . 'made a proposition in ' . $sModuleFilePath . '.prop' . $nl;
+                                      . 'closing tags' . NL . $sModulePageBit
+                                      . NL . '?' . '>');
+                    echo NL . 'WARNING:oops, multiple occurences of closing php '
+                            . 'tag ie ?' . '> in ' . $sModuleFilePath . NL
+                            . 'made a proposition in ' . $sModuleFilePath . '.prop' . NL;
 
             } // switch count of php closing tags
 
         } else {
 
             // no module yet
-            $sModuleNew = '<' . '?' . 'php' . $nl
-                    . _moduleBit($sModuleName, $sPageName) . $nl
-                    . $sModulePageBit . $nl . '?' . '>';
+            $sModuleNew = '<' . '?' . 'php' . NL
+                    . _moduleBit($sModuleName, $sPageName) . NL
+                    . $sModulePageBit . NL . '?' . '>';
             file_put_contents($sModuleFilePath, $sModuleNew);
-            echo $nl . 'there was no ' . $sModuleName
+            echo NL . 'there was no ' . $sModuleName
                     . '.php so it has been created with ' . $sPageName
-                    . ' as default page.' . $nl . $sModuleFilePath . $nl;
+                    . ' as default page.' . NL . $sModuleFilePath . NL;
 
         } // if module php file already exists or not
 
@@ -221,7 +216,6 @@ class MenuGenerate extends MenuAbstract {
 
     protected function createScaffolds() {
 
-        $nl = chr(10);
         $aConnections = $this->collectPropel2connectionNames();
         $iLenQuery = strLen('Query');
         $sPathClassesBase = APP_ROOT . DIR_SEP . 'classes' . DIR_SEP . 'SssSPropel2' . DIR_SEP;
@@ -230,7 +224,7 @@ class MenuGenerate extends MenuAbstract {
             $sPath = $sPathClassesBase . $sConnetion . DIR_SEP;
             $rDir = opendir($sPath);
             if (false === $rDir) {
-                echo $nl . 'error: could not open ' . $sPath . $nl;
+                echo NL . 'error: could not open ' . $sPath . NL;
                 continue;
             } // if could not open dir
             while (false !== $sFile = readdir($rDir)) {
@@ -255,17 +249,17 @@ class MenuGenerate extends MenuAbstract {
         } // loop all connection directories
 
         if (empty($sAvailableClasses)) {
-            echo 'you don\'t seem to have any generated classes yet.' . $nl;
+            echo 'you don\'t seem to have any generated classes yet.' . NL;
             return true;
         } // if no classes found
 
-        echo $nl . 'available classes to build scaffolds for:' . $nl
-            . $sAvailableClasses . $nl;
+        echo NL . 'available classes to build scaffolds for:' . NL
+            . $sAvailableClasses . NL;
         $sEntityList = Tools::getInputCLI(
-            $nl . 'Which entities do you want to create scaffolds for?',
+            NL . 'Which entities do you want to create scaffolds for?',
             $sAvailableClasses);
         $sPathToPutScaffolds = Tools::getInputCLI(
-            $nl . 'Where should the scaffolds be created?', APP_ROOT
+            NL . 'Where should the scaffolds be created?', APP_ROOT
             . DIR_SEP . 'modules');
         WFRequestController::setEnvForPhocoaPropel();
         if (!is_dir($sPathToPutScaffolds)) {
@@ -285,15 +279,14 @@ class MenuGenerate extends MenuAbstract {
 
     protected function createTestStub() {
 
-        $nl = chr(10);
         $oRunner = ShellScriptRunnerForDummies::sharedRunner();
 
         //TODO: offer better default
         $sPathToTest = Tools::removeTrailingSlash(Tools::getInputCLI(
-                $nl . 'Where should the teststub be created?', APP_ROOT), DIR_SEP);
+                NL . 'Where should the teststub be created?', APP_ROOT), DIR_SEP);
         if (!is_dir($sPathToTest)) $oRunner->makePath($sPathToTest);
 
-        $sTestClassName = Tools::getInputCLI($nl . 'Name of class to test:', 'WFObject');
+        $sTestClassName = Tools::getInputCLI(NL . 'Name of class to test:', 'WFObject');
         WFRequestController::setEnvForPhocoaPhingPropel();
         $sShellLine = 'cd "' . $sPathToTest . '";'
                     . $this->sPHPbin . ' ' . $this->sPathPhocoaScripts . DIR_SEP
@@ -305,7 +298,7 @@ class MenuGenerate extends MenuAbstract {
             echo $oRunner->sOut();
 
         } // if error
-        
+
         return true;
 
     } // createTestStub
@@ -313,34 +306,32 @@ class MenuGenerate extends MenuAbstract {
 
     protected function do_0_1_2allConnections() {
 
-        $nl = chr(10);
-
         // we can not assume that propel is initiated yet
         // collect connection names
         $aPropelConnectionNames = $this->collectPropel2connectionNames();
 
         foreach ($aPropelConnectionNames as $sPropelConnection) {
-            echo $nl . 'propel database:reverse ' . $sPropelConnection . $nl;
+            echo NL . 'propel database:reverse ' . $sPropelConnection . NL;
             $iRes = null;
             passthru($this->sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
             if (0 !== $iRes) {
-                echo $nl . 'error: abborting jobs on this connection.' . $nl;
+                echo NL . 'error: abborting jobs on this connection.' . NL;
                 continue;
             } // if error
 
-            echo $nl . 'fix-schema' . $nl;
+            echo NL . 'fix-schema' . NL;
             $iRes = null;
             passthru($this->sPathBin . DIR_SEP . 'fix-schema.php', $iRes);
             if (0 !== $iRes) {
-                echo $nl . 'error: abborting jobs on this connection.' . $nl;
+                echo NL . 'error: abborting jobs on this connection.' . NL;
                 continue;
             } // if error
 
-            echo $nl . 'propel database:build' . $nl;
+            echo NL . 'propel database:build' . NL;
             $iRes = null;
             passthru($this->sPathPropelGenBin . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
             if (0 !== $iRes) {
-                echo $nl . 'error: oops.' . $nl;
+                echo NL . 'error: oops.' . NL;
                 continue;
             } // if error
 
@@ -363,24 +354,22 @@ class MenuGenerate extends MenuAbstract {
 
     protected function propel2config_convert() {
 
-        $nl = chr(10);
-
         $iRes = null;
         $sPathPropelBuildConf = $this->sPathPropelBuild . DIR_SEP . 'config.php';
         if (is_file($sPathPropelBuildConf)) {
             rename($sPathPropelBuildConf, $sPathPropelBuildConf . '.last');
-            echo 'backed up existing conf in build dir to ' . $sPathPropelBuildConf . '.last' . $nl;
+            echo 'backed up existing conf in build dir to ' . $sPathPropelBuildConf . '.last' . NL;
         } // make sure old file is gone
         passthru($this->sPathPropelGenBin . ' config:convert' . $this->sPropelBinArgsBuild, $iRes);
         if (is_file($sPathPropelBuildConf)) {
             if (is_file(PROPEL2_RUNTIME_CONFIG)) {
                 rename(PROPEL2_RUNTIME_CONFIG, PROPEL2_RUNTIME_CONFIG . '.last');
-                echo 'backed up current conf to ' . PROPEL2_RUNTIME_CONFIG . '.last' . $nl;
+                echo 'backed up current conf to ' . PROPEL2_RUNTIME_CONFIG . '.last' . NL;
             } // if got old config
             rename($sPathPropelBuildConf, PROPEL2_RUNTIME_CONFIG);
-            echo 'moved conf from build dir to ' . PROPEL2_RUNTIME_CONFIG . $nl;
+            echo 'moved conf from build dir to ' . PROPEL2_RUNTIME_CONFIG . NL;
         } else {
-            echo $nl . 'error, did not generate new runtime config!';
+            echo NL . 'error, did not generate new runtime config!';
         } // if new file created
 
         return true;
@@ -400,8 +389,6 @@ class MenuGenerate extends MenuAbstract {
 
     protected function propel2database_reverse() {
 
-        $nl = chr(10);
-
         // which connection?
         $aPropelConnectionNames = $this->collectPropel2connectionNames();
         if (empty($aPropelConnectionNames)) {
@@ -420,20 +407,23 @@ class MenuGenerate extends MenuAbstract {
 
     protected function togglePropel2() {
 
-        static $nl = null;
-        static $sSearchPropelAct, $sPathAppConfActive, $sPathAppConfTemplate;
-        static $sCommentOFF, $sCommentON, $sCommentRestart;
-        if (!$nl) {
-            $nl = chr(10);
+        static $sSearchPropelAct = null;
+		static $sPathAppConfActive = null;
+		static $sPathAppConfTemplate = null;
+        static $sCommentOFF = null;
+		static $sCommentON = null;
+		static $sCommentRestart = null;
+        if (!$sSearchPropelAct) {
+
             $sSearchPropelAct = '/define\(["\']PROPEL2_ACTIVATED["\'],\s?(\w+)\);/';
             $sPathAppConfActive = APP_ROOT . DIR_SEP . 'conf' . DIR_SEP . 'SssSphocoaApp.conf';
             $sPathAppConfTemplate = $sPathAppConfActive . '.SssStemplate';
-            $sCommentOFF = 'Switching OFF Propel2 integration' . $nl . 'Repeat to reactivate.'
-                    . '(after restarting app)' . $nl;
-            $sCommentON = 'Switching ON Propel2 integration' . $nl . 'Repeat to deactivate.'
-                    . '(after restarting app)'  . $nl
+            $sCommentOFF = 'Switching OFF Propel2 integration' . NL . 'Repeat to reactivate.'
+                    . '(after restarting app)' . NL;
+            $sCommentON = 'Switching ON Propel2 integration' . NL . 'Repeat to deactivate.'
+                    . '(after restarting app)'  . NL
                     . 'Make sure you have something like this in your '
-                    . 'application delegate class::initialize()' . $nl
+                    . 'application delegate class::initialize()' . NL
                     . '
     if (PROPEL2_ACTIVATED) {
         if (is_readable(PROPEL2_RUNTIME_CONFIG)) {
@@ -442,8 +432,8 @@ class MenuGenerate extends MenuAbstract {
         } else {
             throw new WFException(\'could not read Propel2 config file at \' . PROPEL2_RUNTIME_CONFIG);
         } // if got propel config at all
-    } // if propel is activated' . $nl . $nl;
-            $sCommentRestart = $nl . 'You need to restart the app to toggle again.' . $nl . 'Or you can edit your conf and template manually.' . $nl;
+    } // if propel is activated' . NL . NL;
+            $sCommentRestart = NL . 'You need to restart the app to toggle again.' . NL . 'Or you can edit your conf and template manually.' . NL;
         } // if first run
 
         if (defined('PROPEL2_ACTIVATED') && PROPEL2_ACTIVATED) {
@@ -457,26 +447,26 @@ class MenuGenerate extends MenuAbstract {
         foreach (array($sPathAppConfActive, $sPathAppConfTemplate) as $sPathAppConf) {
             if (is_writable($sPathAppConf)) {
                 $sAppConf = @file_get_contents_safely($sPathAppConf);
-                echo 'Searching in ' . $sPathAppConf . $nl . 'for "define("PROPEL2_ACTIVATED", ...);"' . $nl;
+                echo 'Searching in ' . $sPathAppConf . NL . 'for "define("PROPEL2_ACTIVATED", ...);"' . NL;
                 $aRes = array();
                 $iRes = preg_match($sSearchPropelAct, $sAppConf, $aRes);
                 if ($iRes) {
-                    echo 'Found: ' . $aRes[0] . $nl;
+                    echo 'Found: ' . $aRes[0] . NL;
                     $sAppConf = str_replace($aRes[0], 'define(\'PROPEL2_ACTIVATED\', ' . $sNewValue . ');', $sAppConf);
                     file_put_contents_safely($sPathAppConf, $sAppConf, 'wb');
                 } else {
-                    $sComment2 = 'error: could not find "define("PROPEL2_ACTIVATED", ...);" in ' . $sPathAppConf . $nl
-                        . 'add define("PROPEL2_ACTIVATED", true); manually.' . $nl;
-                    $sComment .= $nl . $sComment;
+                    $sComment2 = 'error: could not find "define("PROPEL2_ACTIVATED", ...);" in ' . $sPathAppConf . NL
+                        . 'add define("PROPEL2_ACTIVATED", true); manually.' . NL;
+                    $sComment .= NL . $sComment;
                     echo $sComment2;
                 } // if found
             } else {
-                $sComment2 = $nl . 'error, can not write to ' . $sPathAppConf . $nl;
+                $sComment2 = NL . 'error, can not write to ' . $sPathAppConf . NL;
                 $sComment .= $sComment2;
                 echo $sComment2;
                 if ($sPathAppConf == $sPathAppConfActive) {
-                    $sComment2 = 'try to remakeTemplatedFiles and try again.' . $nl;
-                    $sComment .= $nl . $sComment2;
+                    $sComment2 = 'try to remakeTemplatedFiles and try again.' . NL;
+                    $sComment .= NL . $sComment2;
                     echo $sComment2;
                 } // if has template for conf
             } // if can write to config or not
