@@ -313,7 +313,7 @@ class MenuGenerate extends MenuAbstract {
         foreach ($aPropelConnectionNames as $sPropelConnection) {
             echo NL . 'propel database:reverse ' . $sPropelConnection . NL;
             $iRes = null;
-            passthru($this->sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
+            passthru($this->sPathBin . DIR_SEP . 'propel2.phps database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
             if (0 !== $iRes) {
                 echo NL . 'error: abborting jobs on this connection.' . NL;
                 continue;
@@ -329,7 +329,7 @@ class MenuGenerate extends MenuAbstract {
 
             echo NL . 'propel database:build' . NL;
             $iRes = null;
-            passthru($this->sPathPropelGenBin . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
+			passthru($this->sPathBin . DIR_SEP . 'propel2.phps' . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
             if (0 !== $iRes) {
                 echo NL . 'error: oops.' . NL;
                 continue;
@@ -360,7 +360,7 @@ class MenuGenerate extends MenuAbstract {
             rename($sPathPropelBuildConf, $sPathPropelBuildConf . '.last');
             echo 'backed up existing conf in build dir to ' . $sPathPropelBuildConf . '.last' . NL;
         } // make sure old file is gone
-        passthru($this->sPathPropelGenBin . ' config:convert' . $this->sPropelBinArgsBuild, $iRes);
+        passthru($this->sPathBin . DIR_SEP . 'propel2.phps config:convert' . $this->sPropelBinArgsBuild, $iRes);
         if (is_file($sPathPropelBuildConf)) {
             if (is_file(PROPEL2_RUNTIME_CONFIG)) {
                 rename(PROPEL2_RUNTIME_CONFIG, PROPEL2_RUNTIME_CONFIG . '.last');
@@ -380,7 +380,7 @@ class MenuGenerate extends MenuAbstract {
     protected function propel2database_build() {
 
         $iRes = null;
-        passthru($this->sPathPropelGenBin . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
+        passthru($this->sPathBin . DIR_SEP . 'propel2.phps' . ' model:build' . $this->sPropelBinArgsClasses, $iRes);
 
         return true;
 
@@ -398,7 +398,7 @@ class MenuGenerate extends MenuAbstract {
                                 'which connection to reverse',
                                 $aPropelConnectionNames, $aPropelConnectionNames[0]);
         $iRes = null;
-        passthru($this->sPathPropelGenBin . ' database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
+        passthru($this->sPathBin . DIR_SEP . 'propel2.phps database:reverse ' . $sPropelConnection . ' ' . $this->sPropelBinArgsBuild, $iRes);
 
         return true;
 
