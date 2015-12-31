@@ -573,6 +573,10 @@ class WFIncluding {
 				$sPathFile = PROPEL_FRAMEWORK_DIR . $sNamespacePartsPath . '.php';
 				break;
 
+			case 'Psr':
+				$sPathFile = dirname(PROPEL_FRAMEWORK_DIR) . '/vendor/psr/log' . $sNamespacePartsPath . '.php';
+				break;
+
 			// generated from database with Propel2
 			case 'SssSPropel2':
 				$sPathFile = APP_ROOT . DIR_SEP . 'classes' . $sNamespacePartsPath . '.php';
