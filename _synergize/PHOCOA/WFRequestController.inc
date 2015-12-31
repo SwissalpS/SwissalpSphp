@@ -430,7 +430,8 @@ class WFRequestController extends WFObject
             return;
 
         } catch (Exception $e) {
-			if (is_object($oAppDelegate) // this is hopefully a cli-aware delegate
+			$oAppDelegate = WFWebApplication::sharedWebApplication()->delegate();
+            if (is_object($oAppDelegate) // this is hopefully a cli-aware delegate
 				&& method_exists($oAppDelegate, 'handleUncaughtException')) {
 
 				$handled = $oAppDelegate->handleUncaughtException($e);
