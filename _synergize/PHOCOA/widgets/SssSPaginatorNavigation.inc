@@ -47,7 +47,11 @@ class SssSPaginatorNavigation extends WFPaginatorNavigation {
 
 		$sEditMeTextFull = SssSBla::bla('SssSBlaInternalEditText', $aND);
 
-		$bShowBlaEditLinks =  WFAuthorizationManager::sharedAuthorizationManager()->authorizationInfo()->showBlaEditLinks();
+		$bShowBlaEditLinks = false;
+		$oAuthInfo = WFAuthorizationManager::sharedAuthorizationManager()->authorizationInfo();
+		if (is_object($oAuthInfo) && method_exists($oAuthInfo, 'showBlaEditLinks')) {
+			$bShowBlaEditLinks->showBlaEditLinks();
+		} // if got auth-info object that responds to 'showBlaEditLinks'
 
 		if ($this->paginator->mode() == WFPaginator::MODE_URL) {
 
