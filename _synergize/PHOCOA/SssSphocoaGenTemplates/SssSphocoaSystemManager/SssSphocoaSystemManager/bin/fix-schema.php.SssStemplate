@@ -30,9 +30,13 @@ require_once($sPathConfig);
 $schemaFile = '##PATH_DIR_PHOCOA_APP####DIR_SEP##propel-build##DIR_SEP##schema.xml';
 $xml = simplexml_load_file($schemaFile);
 
+$databaseEl = $xml->xpath('//database');
+
 // add WFObject as the BasePeer class
 //$databaseEl[0]['basePeer'] = 'BasePeer';
-$databaseEl = $xml->xpath('//database');
+$databaseEl[0]['baseClass'] = '\\WFObject';
+
+// add namespace with dbName included
 $sDBname = $databaseEl[0]['name'];
 $databaseEl[0]['namespace'] = 'SssSPropel2\\' . $sDBname;
 
