@@ -1177,7 +1177,7 @@ class Generator {
 		} // if rename error
 
 		// make sure there isn't any old symlink or empty directory...
-		$oRunner->doScript('rm -dfv "' . $sPathDestAppRoot . DIR_SEP . 'bin' . DIR_SEP . 'run"');
+		$oRunner->doScript('rm -fv "' . $sPathDestAppRoot . DIR_SEP . 'bin' . DIR_SEP . 'run"');
 		// make a symlink for easy running
 		$bRes = $oRunner->symlinkToAt($sPathRunner, $sPathDestAppRoot . DIR_SEP
 													. 'bin' . DIR_SEP . 'run');
@@ -1224,7 +1224,7 @@ class Generator {
 		} // if copy error
 
 		// first remove old symlink
-		$oRunner->doScript('rm -dfv "' . $sPathWebAppConfSyml . '";');
+		$oRunner->doScript('rm -fv "' . $sPathWebAppConfSyml . '";');
 		// make symlink to SssSphocoaApp.conf for compatability with webapp.conf
 		$oRunner->symlinkToAt($sPathWebAppConf, $sPathWebAppConfSyml);
 
@@ -1238,7 +1238,7 @@ class Generator {
 		} // if copy error
 
 		// first remove old symlink
-		$oRunner->doScript('rm -dfv "' . $sPathGen . 'newSssSphocoaProject";');
+		$oRunner->doScript('rm -fv "' . $sPathGen . 'newSssSphocoaProject";');
 		// make symlink to newSssSphocoaProject in SssSphocoaGen
 		$oRunner->symlinkToAt($sPathASnew, $sPathGen . 'newSssSphocoaProject');
 
@@ -1252,7 +1252,7 @@ class Generator {
 		} // if copy error
 
 		// first remove old symlink
-		$oRunner->doScript('rm -dfv "' . $sPathGen . 'remakeTemplatedFilesWithInfoFromPlist";');
+		$oRunner->doScript('rm -fv "' . $sPathGen . 'remakeTemplatedFilesWithInfoFromPlist";');
 		// make symlink to newSssSphocoaProject in SssSphocoaGen
 		$oRunner->symlinkToAt($sPathASipNew, $sPathGen . 'remakeTemplatedFilesWithInfoFromPlist');
 
