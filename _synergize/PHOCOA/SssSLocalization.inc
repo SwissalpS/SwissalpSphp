@@ -51,14 +51,25 @@ class SssSLocalization extends WFObject {
 	function initialize() {
 
 		if (is_object($this->oDelegate)
-			&& method_exists($this->oDelegate, 'initialize'))
+			&& method_exists($this->oDelegate, 'initialize')) {
+
 				$this->oDelegate->initialize();
+
+		} // if delegate exists and responds to initialize()
+
+		return $this;
 
 	} // initialize
 
 	function assertTableExistsInCache($sTable = '__main') {
 
-		if (!isset($aUIDs[$sTable])) $aUIDs[$sTable] = array();
+		if (!isset($this->aUIDs[$sTable])) {
+
+			$this->aUIDs[$sTable] = array();
+
+		} // if table does not exist in cache, prepare it
+
+		return $this;
 
 	} // assertTableExistsInCache
 
@@ -66,7 +77,13 @@ class SssSLocalization extends WFObject {
 
 		$this->assertTableExistsInCache($sTable);
 
-		if (!isset($aUIDs[$sTable][$sKey])) $aUIDs[$sTable][$sKey] = array();
+		if (!isset($this->aUIDs[$sTable][$sKey])) {
+
+			$this->aUIDs[$sTable][$sKey] = array();
+
+		} // if key does not exist, prepare it
+
+		return $this;
 
 	} // assertKeyExistsInCache
 
@@ -94,6 +111,8 @@ class SssSLocalization extends WFObject {
 
 		} // loop keys
 
+		return $this;
+
 	} // addKeys
 
 
@@ -105,6 +124,8 @@ class SssSLocalization extends WFObject {
 
 		} // if instance of SssSLocalizationTable
 
+		return $this;
+
 	} // addTable
 
 
@@ -114,7 +135,11 @@ class SssSLocalization extends WFObject {
 	// helper for select widget
 	function selectLangValues() {
 
-		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'selectLangValues')) return $this->oDelegate->selectLangValues();
+		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'selectLangValues')) {
+
+			return $this->oDelegate->selectLangValues();
+
+		} // if delegate responds to selectLangValues
 
 		return self::languageOrder();
 
@@ -124,7 +149,11 @@ class SssSLocalization extends WFObject {
 	// helper for select widget
 	function selectLangLabels() {
 
-		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'selectLangLabels')) return $this->oDelegate->selectLangLabels();
+		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'selectLangLabels')) {
+
+			return $this->oDelegate->selectLangLabels();
+
+		} // if delegate responds to selectLangLabels
 
 		return self::languageOrder();
 
@@ -161,8 +190,11 @@ class SssSLocalization extends WFObject {
 		} //
 
 		// last fallback is the delegate
-		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'set'))
+		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'set')) {
+
 			return $this->oDelegate->set($sValue, $sKey, $sLang, $sTable);
+
+		} // if
 
 	} // set
 

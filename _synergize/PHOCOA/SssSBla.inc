@@ -3,7 +3,9 @@
 /*
  * @version 20110314_140553 added php_utf8 functions to improve detection on certain systems
 */
-require_once(SwissalpS_FRAMEWORK_DIR . DIRECTORY_SEPARATOR . '_external' . DIRECTORY_SEPARATOR . 'php_utf8' . DIRECTORY_SEPARATOR . 'utf8.inc');
+//namespace SwissalpS\PHOCOA\Localization;
+
+\SwissalpS\Strings\Encoding\Utf8Loader::load();
 
 class SssSBla implements SssSLocalizationDelegate {
 
@@ -204,11 +206,22 @@ class SssSBla implements SssSLocalizationDelegate {
 
         $iLenS = strlen($sText);
 
-		$sPrefix = self::TRANS_PREFIX;
-		$iLenP = strlen($sPrefix);
+		static $sPrefix = null;
+		static $iLenP = null;
+
+		if (!$sPrefix) {
+
+			$sPrefix = self::TRANS_PREFIX;
+			$iLenP = strlen($sPrefix);
+
+		} // first call
+
 		if (($iLenP < $iLenS)
-				&& ($sPrefix == substr($sText, 0, $iLenP)))
+				&& ($sPrefix == substr($sText, 0, $iLenP))) {
+
 			return substr($sText, $iLenP);
+
+		} // if got prefix, remove it
 
 		return false;
 
@@ -219,9 +232,15 @@ class SssSBla implements SssSLocalizationDelegate {
 
 		$oAuthInfo = WFAuthorizationManager::sharedAuthorizationManager()->authorizationInfo();
 
-		if (is_object($oAuthInfo) && method_exists($oAuthInfo, 'showBlaEditLinks'))
+		if (is_object($oAuthInfo) && method_exists($oAuthInfo, 'showBlaEditLinks')) {
+
 			return $oAuthInfo->showBlaEditLinks();
-		else return false;
+
+		} else {
+
+			return false;
+
+		} // if authinfo responds to showBlaEditLinks
 
 	} // showBlaEditLinks
 
@@ -229,7 +248,13 @@ class SssSBla implements SssSLocalizationDelegate {
 	static function translateIfNeeded($s, $aParams = null) {
 
 		$iLenS = strlen($s);
-		$iLenP = strlen(self::TRANS_PREFIX);
+
+		static $iLenP = null;
+		if (!$iLenP) {
+
+			$iLenP = strlen(self::TRANS_PREFIX);
+
+		} // if first call
 
 		if (($iLenP < $iLenS)
 				&& (self::TRANS_PREFIX == substr($s, 0, $iLenP))) {
@@ -382,9 +407,9 @@ class SssSBla implements SssSLocalizationDelegate {
 		// prepend the requested language
 		$aLangs = array_merge(array($sLang), $this->languageOrder());
 
-		if (class_exists('Bla000Peer')) {
+		if (class_exists('Bla000Query')) {
 
-			if ($oBla = Bla000Peer::retrieveByPK($sKey)) {
+			if ($oBla = SssSPropel2\Bla000Query::retrieveByPK($sKey)) {
 
 				// return the translated value, falling back to next language in list
 				foreach ($aLangs as $sLang) {
@@ -397,7 +422,7 @@ class SssSBla implements SssSLocalizationDelegate {
 
 			} // if got entry in db
 
-		} // if Bla000Peer class exists
+		} // if Bla000Query class exists
 
 		return $sKey;
 
