@@ -127,8 +127,10 @@ return [
 			'log' => [
 				'defaultLogger' => [
 					#type: {empty}|string
+					# Types: stream, rotating_file, syslog, error_log
+					'type' => 'stream',
 					#path: {empty}|string
-					'path' => '##PATH_DIR_LOG##',
+					'path' => '##PATH_DIR_LOG####DIR_SEP##propel2.log',
 					#level: {empty}|integer
 					'level' => 100,
 				],
