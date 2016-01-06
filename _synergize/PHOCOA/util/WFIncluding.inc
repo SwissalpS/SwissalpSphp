@@ -569,6 +569,10 @@ class WFIncluding {
 //var_dump('--', $sNamespaceBase, $sNamespacePartsPath, $sFullClassName, '/-');
 		$sPathFile = null;
 		switch($sNamespaceBase) {
+			case 'Monolog':
+				$sPathFile = dirname(PROPEL_FRAMEWORK_DIR) . '/vendor/monolog/monolog/src' . $sNamespacePartsPath . '.php';
+				break;
+
 			case 'Propel':
 				$sPathFile = PROPEL_FRAMEWORK_DIR . $sNamespacePartsPath . '.php';
 				break;
