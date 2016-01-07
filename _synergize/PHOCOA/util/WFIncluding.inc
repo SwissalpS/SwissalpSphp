@@ -58,7 +58,13 @@ class WFIncluding {
 				'SssS_ShellScriptRunner',
 				'SssS_ShellScriptRunnerForDummies',
 				'SssS_XHTML',
+				'SssSBla',
+				'SssSLink',
+				'SssSLocalization',
+				'SssSLocalizationDelegate',
 				'SssSphocoaGenerator',
+				'WFBundle',
+				'WFLog',
 			);
 
 			$aReplacementClasses = array(
@@ -67,7 +73,13 @@ class WFIncluding {
 				'SwissalpS\CLI\ShellScriptRunner',
 				'SwissalpS\CLI\ShellScriptRunnerForDummies',
 				'SwissalpS\XML\XHTML',
+				'SwissalpS\PHOCOA\Localization\Bla',
+				'SwissalpS\PHOCOA\Widgets\WFLink',
+				'SwissalpS\PHOCOA\Localization\Localization',
+				'SwissalpS\PHOCOA\Localization\LocalizationDelegateInterface',
 				'SwissalpS\PHOCOA\Project\Generator',
+				'SwissalpS\PHOCOA\Localization\WFBundle',
+				'SwissalpS\PHOCOA\Logging\WFLog',
 			);
 
 			$hAutoloadClassmapCache = array(
@@ -108,6 +120,8 @@ class WFIncluding {
 				'WFException'
 			 //   => FRAMEWORK_DIR . '/framework/WFException.php',
 				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFException.inc',
+				'WFLog'
+				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFLog.inc',
 				'WFRequestController'
 				=> SwissalpS_FRAMEWORK_DIR . '/_synergize/PHOCOA/WFRequestController.inc',
 				'WFRedirectRequestException'

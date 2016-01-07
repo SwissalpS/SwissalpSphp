@@ -6,6 +6,9 @@
  * @version $Revision: 284340 $
  * @package Log
  */
+// since we have code loading class by file rather than using autoload...
+//TODO: move to monolog
+if (!class_exists('Log')) {
 
 define('PEAR_LOG_EMERG',    0);     /* System is unusable */
 define('PEAR_LOG_ALERT',    1);     /* Immediate action required */
@@ -857,4 +860,5 @@ class Log
     {
         return $this->_ident;
     }
-}
+} // Log
+} // if class does not yet exist
