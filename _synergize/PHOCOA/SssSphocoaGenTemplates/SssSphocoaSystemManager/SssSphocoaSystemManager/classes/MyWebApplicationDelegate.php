@@ -2,6 +2,7 @@
 /**
   * This file contains delegate implementations for the basic parts of this cli Application.
   */
+use SwissalpS\PHOCOA\Localization\WFBundle;
 
 
 // custom WFWebApplication delegate
@@ -37,7 +38,7 @@ class MyWebApplicationDelegate
 
 		// initialize bundle here for now, until is done by WebApp
 		// this is required for WFLocalizedString() etc.
-		//WFBundle::mainBundle();
+		WFBundle::mainBundle();
 
     } // initialize
 
@@ -211,4 +212,3 @@ class MyWebApplicationDelegate
     } // authorizationInfoClass
 
 } // MyWebApplicationDelegate
-?>

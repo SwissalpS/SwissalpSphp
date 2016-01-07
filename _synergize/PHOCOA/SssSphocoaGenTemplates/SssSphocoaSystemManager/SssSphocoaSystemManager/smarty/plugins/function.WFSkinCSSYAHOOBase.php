@@ -46,4 +46,3 @@ function smarty_function_WFSkinCSSYAHOOBase($params, &$smarty) {
     ' . $sPrefix . $sBase . 'base/base-min.css" />';
 
 } // smarty_function_WFSkinCSSYAHOOBase
-?>

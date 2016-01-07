@@ -25,6 +25,7 @@
  *  @param object WFSmarty object of the current tpl.
  *  @return string The rendered HTML.
  */
+use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
 
 function smarty_function_SssSBla($aParams, &$oSmarty) {
 
@@ -56,4 +57,3 @@ function smarty_function_SssSBla($aParams, &$oSmarty) {
 } // smarty_function_SssSBla
 
 /* * * *\ smarty_function_SssSBla (CC) Luke JZ aka SwissalpS /* * * */
-?>
