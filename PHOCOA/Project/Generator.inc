@@ -237,7 +237,7 @@ class Generator {
 		foreach ($a['DB_CONNECTIONS_ARRAY'] as $aConnection) {
 
 			if ('default' == $aConnection['DB_NAME']) {
-				$sConnectionNameDefault = 'default';
+				$sConnectionNameDefault = 'phocoa';
 			} // if default found
 
 			$sConnectionNamesAsString .= '\'' . $aConnection['DB_NAME'] . '\',';
