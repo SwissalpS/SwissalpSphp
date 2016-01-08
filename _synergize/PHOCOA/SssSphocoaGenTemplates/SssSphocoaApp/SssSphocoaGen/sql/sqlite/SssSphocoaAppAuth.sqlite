@@ -1,0 +1,63 @@
+PRAGMA synchronous = OFF;
+PRAGMA journal_mode = MEMORY;
+PRAGMA encoding = "UTF-8";
+PRAGMA locking_mode = EXCLUSIVE;
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS `permissions` (
+  `uid` integer PRIMARY KEY ASC AUTOINCREMENT,
+  `domain` text NOT NULL DEFAULT 'GLOBAL' COLLATE NOCASE,
+  `hash` integer NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `permpresets` (
+  `uid` integer PRIMARY KEY ASC AUTOINCREMENT,
+  `name` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `permissions` text NOT NULL DEFAULT '' COLLATE NOCASE
+);
+
+CREATE TABLE IF NOT EXISTS `Users` (
+  `handle` text NOT NULL UNIQUE COLLATE NOCASE,
+  `permissions` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `passhash` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `oAuth` text DEFAULT NULL COLLATE NOCASE,
+  `openID` text DEFAULT NULL COLLATE NOCASE,
+  `email` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `realname` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `uid` integer PRIMARY KEY ASC AUTOINCREMENT,
+  `url` text DEFAULT NULL COLLATE NOCASE,
+  `avatarMediaUID` integer NOT NULL,
+  `languageOrder` text NOT NULL DEFAULT 'de,fr,it,rm,en' COLLATE NOCASE,
+  `country` text DEFAULT NULL COLLATE NOCASE,
+  `region` text DEFAULT NULL COLLATE NOCASE,
+  `karma` integer NOT NULL DEFAULT '100'
+);
+
+INSERT INTO `permissions` (`uid`, `domain`, `hash`) VALUES
+(1, 'SYSTEM', 0),
+(2, 'GLOBAL', 0),
+(3, 'SYSTEM', 32768),
+(4, 'GLOBAL', 32768),
+(5, 'GLOBAL', 1),
+(6, 'SYSTEM', 1),
+(7, 'NOTES', 1),
+(8, 'NOTES', 5),
+(9, 'NOTES', 21),
+(10, 'NOTES', 32789),
+(11, 'MEDIA', 1),
+(12, 'MEDIA', 5),
+(13, 'MEDIA', 21),
+(14, 'MEDIA', 32789);
+
+INSERT INTO `permpresets` (`uid`, `name`, `permissions`) VALUES
+(1, 'nobody', '1,2'),
+(2, 'www', '1,5,7,11'),
+(3, 'regUser', '1,5,7,8,11,12'),
+(4, 'contentAdmin', '5,6,7,8,9,11,12,13'),
+(5, 'SuperUser', '3,4,5,6,7,8,9,10,11,12,13,14');
+
+INSERT INTO `Users` (`handle`, `permissions`, `passhash`, `oAuth`, `openID`, `email`, `realname`, `uid`, `url`, `avatarMediaUID`, `languageOrder`, `country`, `region`, `karma`) VALUES
+('SwissalpS', '5', 'a9e290accb79d94bfe2fc24e7e20b4469885864c', NULL, NULL, 'Luke@SwissalpS.ws', 'Luke Zimmermann', 1, 'lukezimmermann.com', 1, 'de,fr,it,rm,en', 'CH', 'BE', 200),
+('admin', '4', '2532a2bd437d825ca612be49f7f0768f8f80d935', NULL, NULL, 'admin@foo.bar', 'admin', 2, 'foo.bar', 2, 'de,fr,it,rm,en', 'CH', 'BE', 200);
+
+END TRANSACTION;

@@ -1,0 +1,43 @@
+PRAGMA synchronous = OFF;
+PRAGMA journal_mode = MEMORY;
+PRAGMA encoding = "UTF-8";
+PRAGMA locking_mode = EXCLUSIVE;
+BEGIN TRANSACTION;
+
+CREATE TABLE IF NOT EXISTS `mediaMap` (
+  `mediaUID` integer PRIMARY KEY ASC AUTOINCREMENT,
+  `url` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `type` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `width` integer NOT NULL DEFAULT '240',
+  `height` integer NOT NULL DEFAULT '80',
+  `cssClass` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `mime` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `karma` integer NOT NULL DEFAULT '100',
+  `bigWidth` integer NOT NULL DEFAULT '800',
+  `bigHeight` integer NOT NULL DEFAULT '600',
+  `bigURL` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `thumbWidth` integer NOT NULL,
+  `thumbHeight` integer NOT NULL,
+  `thumbUrl` text NOT NULL DEFAULT '' COLLATE NOCASE
+);
+
+CREATE TABLE IF NOT EXISTS `Notes` (
+  `uid` integer PRIMARY KEY ASC AUTOINCREMENT,
+  `name` text NOT NULL DEFAULT '_name_' COLLATE NOCASE,
+  `email` text DEFAULT NULL COLLATE NOCASE,
+  `url0` text DEFAULT NULL COLLATE NOCASE,
+  `url1` text DEFAULT NULL COLLATE NOCASE,
+  `children` text DEFAULT NULL COLLATE NOCASE,
+  `note` text NOT NULL COLLATE NOCASE,
+  `mediaUID` integer DEFAULT NULL,
+  `lang` text NOT NULL DEFAULT 'de' COLLATE NOCASE,
+  `country` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `region` text NOT NULL DEFAULT '' COLLATE NOCASE,
+  `bridgeUID` integer NOT NULL DEFAULT '0',
+  `date` integer NOT NULL DEFAULT '0',
+  `publish` integer DEFAULT NULL,
+  `karma` integer NOT NULL DEFAULT '100',
+  `handle` text DEFAULT NULL COLLATE NOCASE
+);
+
+END TRANSACTION;
