@@ -25,8 +25,7 @@ class Bla implements LocalizationDelegateInterface {
 
 	const TRANS_PREFIX = 'SssSBla'; // prefix for labels etc that need translating
 
-	const CLASS_QUERY = 'SssSPropel2\\phocoa\\Bla000Query';
-	//const CLASS_QUERY = 'SssSPropel2\\phocoaBla\\BlaQuery';
+	const CLASS_QUERY = 'SssSPropel2\\SssSphocoaAppBla\\Bla000Query';
 
 	const OUTPUT_MODE_SIMPLE = 1; // just text
 	const OUTPUT_MODE_DIV	 = 2; // wrapped in div (default)
