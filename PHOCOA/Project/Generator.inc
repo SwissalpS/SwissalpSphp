@@ -2546,7 +2546,10 @@ class Generator {
 			$sDBtype = 'pgsql';
 		} // if name needs fixing
 		if ('sqlite' == $sDBtype) {
-			$sDBfile = realpath(trim(Tools::$gi(NL . 'absolute path to database file:', $sDBfile), '\' "\t'));
+			$sDBfile = trim(Tools::$gi(NL . 'absolute path to database file:', $sDBfile), '\' "\t');
+			if (file_exists($sDBfile)) {
+				$sDBfile = realpath($sDBfile);
+			} // if file exists, resolve realpath
 			$sDBhost = 'localhost';
 			$sDBname = self::requestPropel2connectionName($sDBname);
 			$sDBpass = '';
