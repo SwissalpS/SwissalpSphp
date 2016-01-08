@@ -1075,10 +1075,10 @@ class Generator {
 
 			$aPropelConnections = array();
 
-			// ask if uses propel
-			$sUsePropel = Tools::getChoiceCLI(
+			// ask if uses propel TODO: or doctrine
+			$sUsePropel = 'yes'; /*Tools::getChoiceCLI(
 					'Add Propel2 db connection(s)?',
-					array('no' => 'NO', 'yes' => 'YES'), 'yes');
+					array('no' => 'NO', 'yes' => 'YES'), 'yes');*/
 
 			if ('yes' == strtolower($sUsePropel)) {
 				// get db props
