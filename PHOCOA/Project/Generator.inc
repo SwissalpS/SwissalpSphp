@@ -1054,6 +1054,7 @@ class Generator {
 			//$sAppType = 'cli';
 
 			// httpd.conf takes also servername, ip and port
+			echo 'Details for httpd.conf' . NL;
 			if (!in_array($sAppType, array('Command Line Tool', 'cli'))) {
 
 				$sHTTPip = Tools::$gi(NL . 'IP (HTTPD_IP):', $sHTTPip);
