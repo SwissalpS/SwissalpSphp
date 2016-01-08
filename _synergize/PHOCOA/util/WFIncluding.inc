@@ -524,7 +524,7 @@ class WFIncluding {
 
 				throw new Exception('WARNING: class ' . $sClassName
 									. ' is depricated. Use ' . $sClassNameNew
-									. ' instead.');
+									. ' instead.', E_DEPRECATED);
 
 			} // if depricated class
 
