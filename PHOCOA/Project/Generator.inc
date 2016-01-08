@@ -1091,14 +1091,47 @@ class Generator {
 				echo NL;
 			} // if use propel
 
-			while('yes' == strtolower($sUsePropel)) {
+			$aPropelConnectionsInPlist = $oP->getOrSet('DB_CONNECTIONS_ARRAY', array());
+			if (count($aPropelConnectionsInPlist)) {
+				echo 'Review predefined connections:' . NL;
+			} // if got predefined connections
+			foreach($aPropelConnectionsInPlist as $aConnection) {
+
+				// move settings to root of plist for next step
+				$oP->set('DB_TYPE', isset($aConnection['DB_TYPE'])
+						 ? $aConnection['DB_TYPE'] : 'mysql');
+				$oP->set('DB_SQLITE_FILE', isset($aConnection['DB_SQLITE_FILE'])
+						 ? $aConnection['DB_SQLITE_FILE'] : '');
+				$oP->set('DB_HOST', isset($aConnection['DB_HOST'])
+						 ? $aConnection['DB_HOST'] : 'localhost');
+				$oP->set('DB_NAME', isset($aConnection['DB_NAME'])
+						 ? $aConnection['DB_NAME'] : 'phocoa');
+				$oP->set('DB_PASS', isset($aConnection['DB_PASS'])
+						 ? $aConnection['DB_PASS'] : '');
+				$oP->set('DB_USER', isset($aConnection['DB_USER'])
+						 ? $aConnection['DB_USER'] : 'phocoa');
+				$oP->set('DB_PORT', isset($aConnection['DB_PORT'])
+						 ? $aConnection['DB_PORT'] : '');
 
 				$aPropelConnections[] = self::requestPropel2connectionInfo($sPathDest, $oP);
+
+				echo NL;
+
+			} // loop each connection in plist
+
+			echo NL;
+			while ('yes' == strtolower($sUsePropel)) {
 
 				// ask for more connections
 				$sUsePropel = Tools::getChoiceCLI(
 						'Add another propel db connection?',
 						array('no' => 'NO', 'yes' => 'YES'), 'yes');
+
+				if ('yes' == strtolower($sUsePropel)) {
+
+					$aPropelConnections[] = self::requestPropel2connectionInfo($sPathDest, $oP);
+
+				} // if add another
 
 			} // while add propel connections
 			$iCountConnections = count($aPropelConnections);
