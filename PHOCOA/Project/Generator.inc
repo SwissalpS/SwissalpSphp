@@ -1082,7 +1082,7 @@ class Generator {
 
 			if ('yes' == strtolower($sUsePropel)) {
 				// get db props
-				echo NL;
+				echo NL . 'Database setup' . NL;
 				// get propel path
 				$sPathPropelFrameWork = Tools::$rts(trim(Tools::$gi(
 					NL . 'Path to Propel2 source directory:', $sPathPropelFrameWork), '\' "\t'));
