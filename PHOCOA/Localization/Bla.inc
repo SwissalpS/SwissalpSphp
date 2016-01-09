@@ -19,7 +19,7 @@ use WFAuthorizationManager;
 
 \SwissalpS\Strings\Encoding\Utf8Loader::load();
 
-class Bla implements LocalizationDelegateInterface {
+class Bla implements DelegateInterface {
 
 	const DEFAULT_ID = 'SssSBla'; // default instance id
 
@@ -326,7 +326,7 @@ class Bla implements LocalizationDelegateInterface {
 		$sButtons = '';
 		$sUrlEdit = null;
 		$iCount = 0;
-		if (-1 == $sBlaToolTip) $sBlaToolTip = SssSLocalization::sharedInstance()->translate('SharedEditLocalized');
+		if (-1 == $sBlaToolTip) $sBlaToolTip = Localization::sharedInstance()->translate('SharedEditLocalized');
 
 		foreach ($aBlas as $aParams) {
 
@@ -383,7 +383,7 @@ class Bla implements LocalizationDelegateInterface {
 
 	} // wrapHTMLinEditDiv
 
-/* 	SssSLocalizationDelegate methods */
+/* 	DelegateInterface methods */
 
 	public function initialize() {
 

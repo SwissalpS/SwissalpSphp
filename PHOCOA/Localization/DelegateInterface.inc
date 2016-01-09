@@ -1,12 +1,12 @@
 <?php
 /* * * *
- * * SwissalpS/PHOCOA/Localization/LocalizationDelegateInterface.inc
+ * * SwissalpS/PHOCOA/Localization/DelegateInterface.inc
  * *
  * * @version 20160107_010413 (CC) Luke JZ aka SwissalpS
  * * * */
 namespace SwissalpS\PHOCOA\Localization;
 
-interface LocalizationDelegateInterface {
+interface DelegateInterface {
 
     // initialize tables etc.
     public function initialize();
@@ -28,6 +28,6 @@ interface LocalizationDelegateInterface {
     // return string with translated sKey or unchanged sKey
     public function translate($sKey, $sLang = null, $sTable = '__main');
 
-} // LocalizationDelegateInterface
+} // DelegateInterface
 
-/* * * *\ SwissalpS/PHOCOA/Localization/LocalizationDelegateInterface.inc (CC) Luke JZ aka SwissalpS /* * * */
+/* * * *\ SwissalpS/PHOCOA/Localization/DelegateInterface.inc (CC) Luke JZ aka SwissalpS /* * * */

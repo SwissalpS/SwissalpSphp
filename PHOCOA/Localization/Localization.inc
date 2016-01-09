@@ -11,10 +11,10 @@ use SwissalpS\PHOCOA\Logging\WFLog;
 use WFObject;
 
 if (!defined('LOCALIZATION_DELEGATE')) {
-	define('LOCALIZATION_DELEGATE', 'SwissalpS\PHOCOA\Localization\Bla');
+	define('LOCALIZATION_DELEGATE', 'SwissalpS\\PHOCOA\\Localization\\Bla');
 }
 
-class Localization extends WFObject implements LocalizationDelegateInterface {
+class Localization extends WFObject implements DelegateInterface {
 
 	// array holding on to the translated keys
 	protected $aUIDs;
@@ -136,9 +136,9 @@ class Localization extends WFObject implements LocalizationDelegateInterface {
 	} // addKeys
 
 
-	function addTable(SssSLocalizationTable $oSssSLocalizationTable) {
+	function addTable(TableInterface $oSssSLocalizationTable) {
 
-		if ($oSssSLocalizationTable instanceOf SssSLocalizationTable) {
+		if ($oSssSLocalizationTable instanceOf TableInterface) {
 
 			$this->aTables[$oSssSLocalizationTable->name()] = $oSssSLocalizationTable;
 

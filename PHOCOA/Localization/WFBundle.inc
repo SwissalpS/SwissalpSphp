@@ -92,4 +92,5 @@ class WFBundle extends WFObject {
  	static function preferredLocalizationsFromArray_ForPreferences($aLocalizationsArray, $aPreferencesArray) {} // preferredLocalizationsFromArray_ForPreferences
 
 } // WFBundle
-/* * * *\ WFBundle (CC) Luke JZ aka SwissalpS /* * * */
+
+/* * * *\ SwissalpS/PHOCOA/Localization/WFBundle.inc (CC) Luke JZ aka SwissalpS /* * * */
