@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
  * SwissalpS/PHOCOA/Widgets/WFMessageBox.inc
- * 
+ *
  * @package UI
  * @subpackage Widgets
  * @copyright Copyright (c) 2005 Alan Pinstein. All Rights Reserved.
@@ -12,6 +12,7 @@
 namespace SwissalpS\PHOCOA\Widgets;
 
 use WFMessageBox as WFMessageBoxParent;
+use WFWebApplication;
 use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
 
 /**
@@ -35,6 +36,18 @@ class WFMessageBox extends WFMessageBoxParent {
 		parent::__construct($sID, $oPage);
 
 	} // __construct
+
+
+    /**
+     *  Get a relative URL path to the public www dir for graphics for this widget.
+     *
+     *  @return string The URL to directory containing www items for this widget.
+     */
+    function getWidgetWWWDir() {
+
+        return WFWebApplication::webDirPath(WFWebApplication::WWW_DIR_FRAMEWORK) . '/widgets/WFMessageBox';
+
+    } // getWidgetWWWDir
 
 
 	function setValue($sValue) {
