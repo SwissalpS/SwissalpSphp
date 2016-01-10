@@ -3,25 +3,24 @@
 /* * * *
  * * ##PHOCOA_PROJECT_NAME## fixPermissions.phps
  * *
- * *alpha - use with caution
+ * * alpha - use with caution
  * *
  * * @generated ##DATE_STAMP##
  * * @version 20110117_131424 (CC) Luke JZ aka SwissalpS
  * * * */
-/*##RUN_BLOCKER##require_once('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
+/*##RUN_BLOCKER##use SwissalpS\CLI\ChmodHelper as CH;
+require_once('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
 
-$oChmodder = new SssS_ChmodHelper();
 $sPath = RUNTIME_DIR . DIR_SEP . 'Eventsfrontend';
-$oChmodder->doScript('mkdir -p "' . $sPath . '"');
-$oChmodder->chmodDir(LOG_DIR);
-$oChmodder->chmodDir(RUNTIME_DIR);
-chmod(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##AppSettings.plist', 0666);
-chmod(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##brainXconfig.plist', 0666);
-chmod(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayAuth.plist', 0666);
-chmod(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayUsers.plist', 0666);
+CH::chmodDir($sPath);
+CH::chmodDir(LOG_DIR);
+CH::chmodDir(RUNTIME_DIR);
+CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##AppSettings.plist');
+CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##brainXconfig.plist');
+CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayAuth.plist');
+CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayUsers.plist');
 
 // allow web user to modify by making it the owner, above chmod does not suffice
-//$oChmodder->doScript('chown www-data ' . $sPath . '/*');
+//CH::doScript('chown www-data ' . $sPath . '/*');
 ##RUN_BLOCKER##*/
 /* * * *\ fixPermissions.phps (CC) Luke JZ aka SwissalpS /* * * */
-?>

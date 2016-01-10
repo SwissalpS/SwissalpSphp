@@ -42,14 +42,17 @@ class MyApplicationDelegate
 
     } // initialize
 
+
     function defaultInvocationPath() {
         return 'examples/widgets/toc';
     } // defaultInvocationPath
+
 
     // switch between different skin catalogs; admin, public, partner reporting, etc
     function defaultSkinDelegate() {
         return 'simple';
     } // defaultSkinDelegate
+
 
 	function handleUncaughtException($e) {
 		if (!$this->bRunning) return false;
@@ -57,6 +60,7 @@ class MyApplicationDelegate
 		echo chr(10) . '!!' . chr(10) . $e . chr(10) . '!!' . chr(10);
 		return true;
 	} // handleUncaughtException
+
 
 	function handleError($errNum, $errString, $file, $line, $contextArray) {
 		echo '!#!' . chr(10) . $errNum . ' ' . $errString . chr(10) . '!#!';
@@ -163,19 +167,23 @@ class MyApplicationDelegate
  ';
 	} // helpCLI
 
-    function autoload($className) {
+    function autoload($sClassName) {
 
         $requirePath = NULL;
 
-    	switch ($className) {
+		$aNamespacePath = explode('\\', $sClassName);
+
+		$sNamespaceBase = $aNamespacePath[0];
+
+    	switch ($sNamespaceBase) {
             // Custom Classes - add in handlers for any custom classes used here.
-            case 'Propel':
+            case 'Propel14':
                 $requirePath = 'propel/Propel.php';
                 break;
         }
 
         if ($requirePath) {
-            require($requirePath);
+            require_once($requirePath);
             return true;
         }
 

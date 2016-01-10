@@ -4,6 +4,7 @@
   */
 use SwissalpS\PHOCOA\Localization\WFBundle;
 
+
 // custom WFWebApplication delegate
 class MyWebApplicationDelegate
 {

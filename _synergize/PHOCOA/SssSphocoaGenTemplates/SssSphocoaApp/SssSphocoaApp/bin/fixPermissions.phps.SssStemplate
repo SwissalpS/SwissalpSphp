@@ -8,7 +8,7 @@
  * * @generated ##DATE_STAMP##
  * * @version 20110117_131424 (CC) Luke JZ aka SwissalpS
  * * * */
-use SwissalpS\CLI\ChmodHelper as CH;
+/*##RUN_BLOCKER##use SwissalpS\CLI\ChmodHelper as CH;
 require_once('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
 
 CH::chmodDir(LOG_DIR);
@@ -21,4 +21,7 @@ CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##brainXconfig.plist', 0666);
 //CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayAuth.plist', 0666);
 //CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayUsers.plist', 0666);
 
+// allow web user to modify by making it the owner, above chmod does not suffice
+//CH::doScript('chown www-data ' . $sPath . '/*');
+##RUN_BLOCKER##*/
 /* * * *\ fixPermissions.phps (CC) Luke JZ aka SwissalpS /* * * */
