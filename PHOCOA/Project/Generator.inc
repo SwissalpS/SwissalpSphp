@@ -89,7 +89,7 @@ class Generator {
 	} // findTemplatesInProject
 
 
-	public static function initGitIn($sPath) {
+	public static function gitInitIn($sPath) {
 
 		$oRunner = ShellScriptRunnerForDummies::sharedRunner();
 
@@ -100,7 +100,7 @@ class Generator {
 
 			echo 'can not find git, skipping git init.' . NL;
 
-			return;
+			return null;
 
 		} // if no git
 
@@ -110,17 +110,55 @@ class Generator {
 			echo 'path, ' . $sPath . ',' . NL
 				. 'is not valid, skipping git init.' . NL;
 
-			return;
+			return false;
 
 		} // if not valid path given
 
 		// init git repo as is
-		$sScript = 'cd ' . $sPath . ';'
+		$sScript = 'cd "' . $sPath . '";'
 			. 'git init; git add .; git commit -m "SssSphocoaApp creation";';
 
 		$oRunner->doScript($sScript);
 
-	} // initGitIn
+		return (0 === $oRunner->iRes());
+
+	} // gitInitIn
+
+
+	public static function gitFirstCommitIn($sPath) {
+
+		$oRunner = ShellScriptRunnerForDummies::sharedRunner();
+
+		// check if git is available at all
+		$sScript = 'which git;';
+		$oRunner->doScript($sScript);
+		if (0 !== $oRunner->iRes()) {
+
+			echo 'can not find git, skipping git commit.' . NL;
+
+			return null;
+
+		} // if no git
+
+		// check existance of given path
+		if (!is_dir($sPath)) {
+
+			echo 'path, ' . $sPath . ',' . NL
+				. 'is not valid, skipping git commit.' . NL;
+
+			return false;
+
+		} // if not valid path given
+
+		// init git repo as is
+		$sScript = 'cd "' . $sPath . '";'
+			. 'git add .; git commit -m "templates applied";';
+
+		$oRunner->doScript($sScript);
+
+		return (0 === $oRunner->iRes());
+
+	} // gitFirstCommitIn
 
 
 	public static function inPlaceRefreshTemplatesInPlist(
@@ -1299,7 +1337,7 @@ class Generator {
 		$oP->set('PATH_DIR_PHOCOA_APP_CONTAINER', $sPathDest);
 		$oP->saveTo($sPathGen . 'useMeToRebuildInPlace.plist');
 
-		self::initGitIn($sPathDest);
+		self::gitInitIn($sPathDest);
 
 		// and so we can reuse another method
 		$mRes = self::inPlaceRefreshTemplatesInPlist($oP, null, $sPathDest);
@@ -1307,6 +1345,16 @@ class Generator {
 		// and one more with changed name
 		$oP->set('PHOCOA_PROJECT_NAME', $oP->get('PHOCOA_PROJECT_NAME') . 'Copy');
 		$oP->saveTo($sPathGen . 'useMeAsTemplate.plist');
+
+		// make sure fixer is executable
+		echo 'checking permissions...' . NL;
+		$sPathFixer = $sPathDestAppRoot . DIR_SEP . 'bin' . DIR_SEP . 'fixPermissions.phps';
+		$oRunner->doScript('chmod a+x "' . $sPathFixer . '";');
+		$oRunner->doScript('"' . $sPathFixer . '";');
+		echo $oRunner->sOut() . NL;
+
+		// maybe not such a good idea?
+		self::gitFirstCommitIn($sPathDest);
 
 		echo 'New SwissalpS PHOCOA project initialized.' . NL
 			. 'You may now want to wire up apache with the configuration-file' . NL
@@ -2654,51 +2702,63 @@ class Generator {
 		while (0 < count($a)) {
 			$s = array_shift($a);
 
-			if ('help' == strtolower($s)) {
+			if ('--help' == strtolower($s)) {
 				self::showHelpCLI();
 				self::bail();
 			} // if help passed as argument
 
-			if (('-target' == $s) && (0 < count($a)))
+			if (('--target' == strtolower($s)) && (0 < count($a))) {
+
 				$sPathDest = array_shift($a);
 				// setting new sPathDest destination dir
 
-			else if ((('-appName' == $s)
-				|| ('-appname' == $s)) && (0 < count($a)))
+			} else if (('--appname' == strtolower($s)) && (0 < count($a))) {
+
 				$sAppName = array_shift($a);
 				// setting an app name by command line (not yet implemented) might never as editing the plists is so simple and gui-able
 
-			else if (('-noInteraction' == $s)
-				|| ('-nointeraction' == $s)) $bUseAllDefaults = true;
+			} else if ('--nointeraction' == strtolower($s)) {
+
+				$bUseAllDefaults = true;
 				// just use defaults for all files from now on
 
-			else if (('-withInteraction' == $s)
-				|| ('-withinteraction' == $s)) $bUseAllDefaults = false;
+			} else if ('--withinteraction' == strtolower($s)) {
+
+				$bUseAllDefaults = false;
 				// ask for each item for all files from now on
 
-			else {
+			} else {
+
 				$aPaths[] = array($s, $bUseAllDefaults, $sPathDest, $sAppName);
 				// got a path to a plist (if correct syntax etc) theoretically could be a string xml:plist
 				$sAppName = $sPathDest = false;
+
 			} // if path or modifier
 
 		} // loop all args building aPaths array
 
 		$aFails = array(); $iYes = 0;
 		if (empty($aPaths)) {
+
 			$aPaths[] = array(null, false, false, false);
+
 		} // if no arguments at all given
 		foreach ($aPaths as $aPath) {
+
 			list($sPath, $bUseAllDefaults, $sPathDest, $sAppName) = $aPath;
 			// paths in $a may come quoted or escaped
 			$sPath = self::trimOrUnescapeShellArgument($sPath);
 
 			if (self::makeNewSssSphocoaProjectWithPlist($sPath, $bUseAllDefaults, $sPathDest, $sPathInvocationBase, $sAppName)) {
+
 				$iYes++; // count success
+
 			} else {
+
 				$aFails[] = array('sPath' => $sPath,
 						'bUseAllDefaults' => $bUseAllDefaults,
 							  'sPathDest' => $sPathDest);
+
 			} // record fails for debugging at end
 
 		} // loop all paths generating a project at each given set of values in plist or flagged form
@@ -2708,9 +2768,14 @@ class Generator {
 						NL, $iYes, count($aPaths));
 
 		// debug fails if any
-		if (!empty($aFails)) echo 'failed paths: ' . print_r($aFails, true);
+		if (!empty($aFails)) {
+
+			echo 'failed paths: ' . print_r($aFails, true);
+
+		} // if got fails
 
 		self::bail();
+
 	} // runCLI
 
 
@@ -2948,18 +3013,21 @@ class Generator {
 		'syntax for SssSphocoaGenerator::runCLI()
 		newSssSphocoaProject [[args] <plist> [[args] <plist>] ...]]
 	the following arguments are valid:
-		help	shows this text. no other arguments are parsed when this
+		--help	shows this text. no other arguments are parsed when this
 				argument is present.
 
-		-target <destination_dir>	ignore the target in plist and use this
+		--target <destination_dir>	ignore the target in plist and use this
 
-		-appName <appName>	override plist appName
+		--appName <appName>	override plist appName
 
-		-noInteraction	use all defaults, don\'t ask for confirmation
+		--noInteraction	use all defaults, don\'t ask for confirmation
 
-		-withInteraction (default) prompt for each value
+		--withInteraction (default) prompt for each value
 
-		arguments are not case sensitive, values are.
+		Note: arguments are case-insensitive.
+
+		<plist> is the path to the plist with values to use as default.
+		If no plist is given, built in default values will be offered.
 ';
 
 		echo $sHelpText;

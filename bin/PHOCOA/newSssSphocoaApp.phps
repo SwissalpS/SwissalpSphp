@@ -8,18 +8,18 @@
  * * syntax for SssSphocoaGenerator::runCLI()
 		newSssSphocoaProject [[args] <plist> [[args] <plist>] ...]]
 	the following arguments are valid:
-		help	shows this text. no other arguments are parsed when this
+		--help	shows this text. no other arguments are parsed when this
 				argument is present.
 
-		-target <destination_dir>	ignore the target in plist and use this
+		--target <destination_dir>	ignore the target in plist and use this
 
-		-appName <appName>	override plist appName
+		--appName <appName>	override plist appName
 
-		-noInteraction	use all defaults, don\'t ask for confirmation
+		--noInteraction	use all defaults, don\'t ask for confirmation
 
-		-withInteraction (default) prompt for each value
+		--withInteraction (default) prompt for each value
 
-		arguments are not case sensitive, values are.
+		Note: arguments are case-insensitive.
 
 		<plist> is the path to the plist with values to use as default.
 		If no plist is given, built in default values will be offered.
