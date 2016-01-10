@@ -1,6 +1,6 @@
 ---
 blaSwitchOff:
-  class:SwissalpS\PHOCOA\Widgets\WFLink
+  class: SwissalpS\PHOCOA\Widgets\WFLink
   bindings:
     hidden:
       controllerKey: authInfo
@@ -18,7 +18,7 @@ blaSwitchOff:
     label: SssSBlaAdminPanelBlaTurnOff
     title: SssSBlaAdminPanelBlaTurnOffTitle
 blaSwitchOn:
-  class:SwissalpS\PHOCOA\Widgets\WFLink
+  class: SwissalpS\PHOCOA\Widgets\WFLink
   bindings:
     hidden:
       controllerKey: authInfo
