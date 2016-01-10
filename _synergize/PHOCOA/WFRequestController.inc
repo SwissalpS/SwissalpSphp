@@ -28,6 +28,7 @@ use SwissalpS\CLI\MenuAbstract;
 use SwissalpS\CLI\ShellScriptRunnerForDummies;
 use SwissalpS\CLI\Tools;
 use SwissalpS\PHOCOA\CLI\WFRequestController\MenuMain;
+use SwissalpS\PHOCOA\Project\URLRewrite as SssSURLRewrite;
 
 
 class WFRequestController extends WFObject
@@ -181,7 +182,7 @@ class WFRequestController extends WFObject
             'error'     => $standardErrorData,
             '$_SERVER'  => $_SERVER,
             '$_REQUEST' => $_REQUEST,
-            '$_SESSION' => $_SESSION,
+            '$_SESSION' => (isset($_SESSION) ? $_SESSION : array()),
         )));
         // @todo refactor these templates to use WFExceptionReporting::generatedStandardizedErrorDataFromException($e)
         if (IS_PRODUCTION)
