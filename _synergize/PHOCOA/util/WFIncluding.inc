@@ -53,6 +53,7 @@ class WFIncluding {
 		if (NULL == $hAutoloadClassmapCache) {
 
 			$aDepricatedClasses = array(
+				'SssS_ChmodHelper',
 				'SssS_CLI_Tools',
 				'SssS_Plist',
 				'SssS_ShellScriptRunner',
@@ -87,6 +88,7 @@ class WFIncluding {
 			);
 
 			$aReplacementClasses = array(
+				'SwissalpS\\CLI\\ChmodHelper',
 				'SwissalpS\\CLI\\Tools',
 				'SwissalpS\\XML\\Plist',
 				'SwissalpS\\CLI\\ShellScriptRunner',
@@ -642,6 +644,10 @@ class WFIncluding {
 				$sPathFile = SwissalpS_FRAMEWORK_DIR . substr($sNamespacePartsPath, 10) . '.inc';
 				break;
 
+			case 'Symfony':
+				$sPathFile = dirname(PROPEL_FRAMEWORK_DIR) . '/vendor/symfony/yaml/' . str_replace('/Symfony/Component/Yaml/', '', $sNamespacePartsPath) . '.php';
+				break;
+
 			default;
 				// try vendor in project dir (composer)
 				$sPathFile = $sPathVendor . $sNamespacePartsPath . '.php';
@@ -658,7 +664,7 @@ class WFIncluding {
 					return true;
 				} // if interface now exists
 			} // ends in 'Interface' may thus be an interface
-//var_dump('==', $bRes, 'class ' . $sFullClassName . ' exists now?', class_exists($sFullClassName), '/=');
+//var_dump('==', 'class ' . $sFullClassName . ' exists now?', class_exists($sFullClassName), '/=');
 			if (class_exists($sFullClassName)) {
 				return true;
 			} // if class now exists
