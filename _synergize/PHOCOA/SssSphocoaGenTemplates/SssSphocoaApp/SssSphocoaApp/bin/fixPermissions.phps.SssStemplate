@@ -16,10 +16,10 @@ CH::chmodDir(LOG_DIR);
 CH::chmodDir(RUNTIME_DIR);
 $sPathExports = WFWebApplication::appDirPath(WFWebApplication::DIR_WWW) . DIR_SEP . 'exports';
 //CH::chmodDir($sPathExports);
-//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##AppSettings.plist', 0666);
-CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##brainXconfig.plist', 0666);
-//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayAuth.plist', 0666);
-//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayUsers.plist', 0666);
+//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##AppSettings.plist');
+CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##brainXconfig.plist');
+//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayAuth.plist');
+//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayUsers.plist');
 
 // allow web user to modify by making it the owner, above chmod does not suffice
 //CH::doScript('chown www-data ' . $sPath . '/*');
