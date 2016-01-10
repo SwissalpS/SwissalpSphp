@@ -1,0 +1,24 @@
+#!##PATH_BIN_PHP## -q
+<?php
+/* * * *
+ * * ##PHOCOA_PROJECT_NAME## fixPermissions.phps
+ * *
+ * * alpha - use with caution
+ * *
+ * * @generated ##DATE_STAMP##
+ * * @version 20110117_131424 (CC) Luke JZ aka SwissalpS
+ * * * */
+use SwissalpS\CLI\ChmodHelper as CH;
+require_once('##PATH_DIR_PHOCOA_APP####DIR_SEP##conf##DIR_SEP##SssSphocoaApp.conf');
+
+CH::chmodDir(LOG_DIR);
+//CH::chmodDir(LOG_DIR . DIR_SEP . 'archive');
+CH::chmodDir(RUNTIME_DIR);
+$sPathExports = WFWebApplication::appDirPath(WFWebApplication::DIR_WWW) . DIR_SEP . 'exports';
+//CH::chmodDir($sPathExports);
+//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##AppSettings.plist', 0666);
+CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##brainXconfig.plist', 0666);
+//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayAuth.plist', 0666);
+//CH::chmodFile(APP_ROOT . '##DIR_SEP##conf##DIR_SEP##relayUsers.plist', 0666);
+
+/* * * *\ fixPermissions.phps (CC) Luke JZ aka SwissalpS /* * * */
