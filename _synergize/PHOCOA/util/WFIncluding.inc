@@ -98,6 +98,7 @@ class WFIncluding {
 				'SwissalpS\\PHOCOA\\Localization\\BlaHelper',
 				'SwissalpS\\PHOCOA\\Localization\\BlaHelperND',
 				'SwissalpS\\PHOCOA\\Localization\\BlaHelperNDhtmlEntities',
+				'SwissalpS\\PHOCOA\\Widgets\\WFBlaWidget',
 				'SwissalpS\\PHOCOA\\Widgets\\WFCheckbox',
 				'SwissalpS\\PHOCOA\\Localization\\Countries',
 				'SwissalpS\\PHOCOA\\Error\\Exception',
