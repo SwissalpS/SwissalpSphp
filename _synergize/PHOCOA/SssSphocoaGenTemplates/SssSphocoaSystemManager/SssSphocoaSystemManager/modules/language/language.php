@@ -2,11 +2,20 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 
 class module_language extends WFModule {
-	function sharedInstancesDidLoad() {}
 
-	function defaultPage() { return 'switchto'; }
+	function sharedInstancesDidLoad() {
+
+	} // sharedInstancesDidLoad
+
+
+	function defaultPage() {
+
+		return 'switchto';
+
+	} // defaultPage
 
 } // module_language
+
 
 
 class module_language_switchto {
@@ -21,8 +30,11 @@ class module_language_switchto {
 	function parametersDidLoad($oPage, $aParams) {
 
 		if (isset($aParams['lang'])) {
+
 			$oAuth = WFAuthorizationManager::sharedAuthorizationManager()->authorizationInfo();
+
 			if (method_exists($oAuth, 'languageOrder')) {
+
 				$sLang = strtolower($aParams['lang']);
 
 				if (in_array($sLang, $oAuth->languageOrder())) {
@@ -37,7 +49,9 @@ class module_language_switchto {
 		} // if got lang param
 
 		if (isset($aParams['continueURL'])) {
+
 			$this->gotoURL(WFWebApplication::unserializeURL($aParams['continueURL']));
+
 		} // if got return to url
 
 		// else??? ever happen?
@@ -46,15 +60,18 @@ class module_language_switchto {
 
 
 	function gotoURL($url) {
+
 		// use an internal redirect for ajax requests (otherwise might not work), but use 302 for normal logins. This ensures that the URL in the address bar is correct.
-		if (WFRequestController::isAjax())
+		if (WFRequestController::isAjax()) {
+
 			throw(new WFRequestController_InternalRedirectException($url));
 
-		else
+		} else {
+
 			throw(new WFRequestController_RedirectException($url));
+
+		} // if is ajax or normal request
 
 	} // gotoURL
 
 } // module_language_switchto
-
-?>
