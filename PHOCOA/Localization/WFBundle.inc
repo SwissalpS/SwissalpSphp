@@ -23,12 +23,16 @@ class WFBundle extends WFObject {
 
 		$sResult = Localization::sharedInstance()->translate($sKey, null, $sTable);
 
-		if (($sResult == $sKey) && (!empty($sValue)))
+		if (($sResult == $sKey) && (strlen($sValue))) {
+
 			$sResult = $sValue;
+
+		} // if returned result is what was given and default value is given
 
 		return $sResult;
 
  	} // localizedStringForKey
+
 
  	static function mainBundle() {
 
