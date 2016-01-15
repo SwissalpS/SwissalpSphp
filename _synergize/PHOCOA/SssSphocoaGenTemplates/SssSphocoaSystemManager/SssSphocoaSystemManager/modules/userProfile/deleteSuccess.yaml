@@ -1,5 +1,5 @@
 
 statusMessage: 
-  class     : SssSMessageBox
+  class     : SwissalpS\PHOCOA\Widgets\WFMessageBox
   properties: 
     value: SssSBlaUsersDeleteSuccess

@@ -14,7 +14,7 @@ editUsersForm:
           controllerKey: selection
           instanceID   : Users
           modelKeyPath : isNew
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         label: SssSBlaSharedDelete
     email            :
@@ -97,7 +97,7 @@ editUsersForm:
           controllerKey: selection
           instanceID   : Users
           modelKeyPath : isNew
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         label: SssSBlaSharedSave
     saveNew          :
@@ -108,7 +108,7 @@ editUsersForm:
           modelKeyPath : isNew
           options      :
             valueTransformer: WFNegateBoolean
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         action: save
         label : SssSBlaSharedCreate
@@ -124,4 +124,4 @@ editUsersForm:
         maxLength: 256
   class   : WFForm
 statusMessage:
-  class: SssSMessageBox
+  class: SwissalpS\PHOCOA\Widgets\WFMessageBox

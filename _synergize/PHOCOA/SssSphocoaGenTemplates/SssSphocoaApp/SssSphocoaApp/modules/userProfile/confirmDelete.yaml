@@ -2,11 +2,11 @@
 confirmDeleteUsersForm: 
   children: 
     cancel   : 
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties: 
         label: SssSBlaSharedCancel
     deleteObj: 
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties: 
         label: SssSBlaSharedDelete
     handle   : 
@@ -25,4 +25,4 @@ confirmMessage        :
       modelKeyPath : handle
       options      : 
         ValuePattern: SssSBlaUsersSureDelete "%1%"?
-  class   : SssSMessageBox
+  class   : SwissalpS\PHOCOA\Widgets\WFMessageBox

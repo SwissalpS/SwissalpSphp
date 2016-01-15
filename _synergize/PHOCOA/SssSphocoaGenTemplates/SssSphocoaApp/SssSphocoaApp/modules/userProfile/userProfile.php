@@ -107,7 +107,7 @@ class module_userProfile_edit {
 		$a = PermpresetsQuery::create()->find()->getData();
 		$oPage->sharedOutlet('Permpresets')->setContent($a);
 
-		if ($oPage->sharedOutlet('Users')->selection() === NULL) {
+		if (NULL === $oPage->sharedOutlet('Users')->selection()) {
 
 			if (!isset($aParams['handle'])) {
 
