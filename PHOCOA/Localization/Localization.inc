@@ -109,6 +109,7 @@ class Localization extends WFObject implements DelegateInterface {
 
 	//function addKey() {} // addKey
 
+
 	// method for other classes to add their strings to the cache hash
 	function addKeys(Array $aNewKeys) {
 
@@ -149,7 +150,11 @@ class Localization extends WFObject implements DelegateInterface {
 	} // addTable
 
 
-	function delegate() { return $this->oDelegate; } // delegate
+	function delegate() {
+
+		return $this->oDelegate;
+
+	} // delegate
 
 
 	// helper for select widget
@@ -219,11 +224,18 @@ class Localization extends WFObject implements DelegateInterface {
 	} // set
 
 	function translate($sKey, $sLang = null, $sTable = '__main') {
+		
+		if (!$sLang) {
 
-		if (!$sLang) $sLang = self::currentLanguage();
+			$sLang = self::currentLanguage();
 
-		if (isset($this->aUIDs[$sTable][$sKey][$sLang]))
+		} // if no language given
+
+		if (isset($this->aUIDs[$sTable][$sKey][$sLang])) {
+
 			return $this->aUIDs[$sTable][$sKey][$sLang];
+
+		} // if got in cache, return that
 
 		// not yet in cache, try delegate
 		if (is_object($this->oDelegate) && method_exists($this->oDelegate, 'translate')) {
