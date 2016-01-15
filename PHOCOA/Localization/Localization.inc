@@ -231,6 +231,12 @@ class Localization extends WFObject implements DelegateInterface {
 
 		} // if no language given
 
+		if (null === $sTable) {
+
+			$sTable = '__main';
+
+		} // if no table given
+
 		if (isset($this->aUIDs[$sTable][$sKey][$sLang])) {
 
 			return $this->aUIDs[$sTable][$sKey][$sLang];
