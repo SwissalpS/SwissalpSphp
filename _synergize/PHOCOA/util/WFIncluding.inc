@@ -104,7 +104,6 @@ class WFIncluding {
 				'SwissalpS\\PHOCOA\\Error\\Exception',
 				'SwissalpS\\PHOCOA\\Graphics\\GDimageBasic',
 				'SwissalpS\\PHOCOA\\Widgets\\WFLabel',
-				'SwissalpS\\PHOCOA\\Widgets\\WFBlaWidget',
 				'SwissalpS\\PHOCOA\\Widgets\\WFLink',
 				'SwissalpS\\PHOCOA\\Localization\\Localization',
 				'SwissalpS\\PHOCOA\\Localization\\DelegateInterface',
