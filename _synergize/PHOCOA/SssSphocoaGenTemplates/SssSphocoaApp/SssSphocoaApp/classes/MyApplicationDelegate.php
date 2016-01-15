@@ -16,7 +16,7 @@ class MyApplicationDelegate
     function initialize() {
         // manifest core modules that we want to use -- if you don't want people to access a module, remove it from this list!
         $webapp = WFWebApplication::sharedApplication();
-        $webapp->addModulePath('login', FRAMEWORK_DIR . '/modules/login');
+        $webapp->addModulePath('login', APP_ROOT . '/modules/login');
         $webapp->addModulePath('menu', FRAMEWORK_DIR . '/modules/menu');
         $webapp->addModulePath('css', FRAMEWORK_DIR . '/modules/css');
         $webapp->addModulePath('examples', FRAMEWORK_DIR . '/modules/examples');
