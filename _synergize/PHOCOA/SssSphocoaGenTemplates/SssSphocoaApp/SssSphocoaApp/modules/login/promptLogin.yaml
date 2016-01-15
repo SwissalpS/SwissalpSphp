@@ -11,15 +11,15 @@ loginForm:
     continueURL:
       class: 'WFHidden'
     signUp:
-      class: 'SssSLink'
+      class: 'SwissalpS\PHOCOA\Widgets\WFLink'
       properties:
         label: 'SssSBlaLoginSignUp'
     login:
-      class: 'SssSSubmit'
+      class: 'SwissalpS\PHOCOA\Widgets\WFSubmit'
       properties:
         action: 'doLogin'
         label: 'SssSBlaLoginLogin'
 forgottenPasswordLink:
-  class: 'SssSLink'
+  class: 'SwissalpS\PHOCOA\Widgets\WFLink'
   properties:
     label: 'SssSBlaLoginForgotYourPassword'
