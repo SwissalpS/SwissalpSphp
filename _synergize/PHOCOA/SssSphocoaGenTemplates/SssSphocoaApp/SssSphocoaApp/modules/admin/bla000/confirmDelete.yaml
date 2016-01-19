@@ -2,11 +2,11 @@
 confirmDeleteBla000Form: 
   children: 
     cancel   : 
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties: 
         label: SssSBlaSharedCancel
     deleteObj: 
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties: 
         label: SssSBlaSharedDelete
     uid      : 
@@ -25,4 +25,4 @@ confirmMessage         :
       modelKeyPath : uid
       options      : 
         ValuePattern: SssSBlaReallyDelete "%1%"?
-  class   : SssSMessageBox
+  class   : SwissalpS\PHOCOA\Widgets\WFMessageBox

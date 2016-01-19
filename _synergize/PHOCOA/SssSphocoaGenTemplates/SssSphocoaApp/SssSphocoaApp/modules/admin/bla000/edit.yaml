@@ -27,7 +27,7 @@ editBla000Form:
           controllerKey: selection
           instanceID   : Bla000
           modelKeyPath : isNew
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         label: SssSBlaSharedDelete
     en         :
@@ -76,7 +76,7 @@ editBla000Form:
           controllerKey: selection
           instanceID   : Bla000
           modelKeyPath : isNew
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         label: SssSBlaSharedSave
         postSubmitLabel: SssSBlaSharedSaveing
@@ -88,7 +88,7 @@ editBla000Form:
           modelKeyPath : isNew
           options      :
             valueTransformer: WFNegateBoolean
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         action: save
         label : SssSBlaSharedCreate
@@ -110,4 +110,4 @@ editBla000Form:
   properties:
     isAjax: false
 statusMessage :
-  class: SssSMessageBox
+  class: SwissalpS\PHOCOA\Widgets\WFMessageBox

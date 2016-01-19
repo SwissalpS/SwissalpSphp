@@ -1,4 +1,7 @@
 <?php
+use SssSPropel2\phocoa\Bla000;
+use SssSPropel2\phocoa\Bla000Query;
+use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
 
 // Created by PHOCOA WFModelCodeGen on Wed, 21 Jul 2010 15:19:56 +0200
 class module_bla000 extends WFModule {
@@ -29,7 +32,12 @@ class module_bla000 extends WFModule {
 	} // checkSecurity
 
 
-    function defaultPage() { return 'list'; }
+    function defaultPage() {
+
+		return 'list';
+
+	} // defaultPage
+
 
     // this function should throw an exception if the user is not permitted to edit (add/edit/delete) in the current context
     function verifyEditingPermission($oPage) {
@@ -43,43 +51,66 @@ class module_bla000 extends WFModule {
 class module_bla000_list {
 
     function parameterList() {
+
         return array('paginatorState');
-    }
+
+    } // parameterList
+
 
     function parametersDidLoad($oPage, $params) {
+
         $oPage->sharedOutlet('paginator')->readPaginatorStateFromParams($params);
-    }
+
+    } // parametersDidLoad
+
 
     function noAction($oPage, $params) {
+
         $this->search($oPage, $params);
-    } //
+
+    } // noAction
+
 
     function search($oPage, $params) {
-        $query = $oPage->outlet('query')->value();
-        $c = new Criteria();
-        if (!empty($query))
-        {
-            $querySubStr = '%' . str_replace(' ', '%', trim($query)) . '%';
 
-            $c->add(Bla000Peer::UID, $querySubStr, Criteria::LIKE);
-        }
+		$sQuery = trim($oPage->outlet('query')->value());
 
-        $oPage->sharedOutlet('paginator')->setDataDelegate(new WFPagedPropelQuery($c, 'Bla000Peer'));
-        $oPage->sharedOutlet('Bla000')->setContent($oPage->sharedOutlet('paginator')->currentItems());
-    } //
+		$oC = Bla000Query::create();
+
+		if (strlen($sQuery)) {
+
+			$sQuerySubStr = '%' . str_replace(' ', '%', $sQuery) . '%';
+
+			$oC->filterByUid($sQuerySubStr);
+
+		} // if got query string
+
+		$oPaginator = $oPage->sharedOutlet('paginator');
+		$oSharedEntity = $oPage->sharedOutlet('SssSPropel2_phocoa_Bla000');
+		$oPagedQuery = new WFPagedPropelQuery($oC);
+
+		$oPaginator->setDataDelegate($oPagedQuery);
+		$oSharedEntity->setContent($oPaginator->currentItems());
+
+    } // search
+
 
     function clear($oPage, $params) {
+
         $oPage->outlet('query')->setValue(NULL);
         $this->search($oPage, $params);
+
     } // clear
 
 
     function setupSkin($oPage, $parameters, $skin) {
+
        // $skin->addHeadString('<link rel="stylesheet" type="text/css" href="' . $skin->getSkinDirShared() . '/form.css" />');
 		$aND = array('noDIV' => true);
         $skin->setTitle(SssSBla::cleanForTitle(
         		SssSBla::bla('BlaPlur', $aND)
         		. ' ' . SssSBla::bla('SharedList', $aND)));
+
     } // setupSkin
 
 } // module_bla000_list
@@ -89,8 +120,10 @@ class module_bla000_list {
 class module_bla000_edit {
 
     function parameterList() {
+
         return array('uid');
-    } //
+
+    } // parameterList
 
 
     function parametersDidLoad($oPage, $params) {
@@ -100,12 +133,14 @@ class module_bla000_edit {
             if ($params['uid']) {
 
             	// test if uid already exists
-            	$oTemp = Bla000Peer::retrieveByPK($params['uid']);
+            	$oTemp = Bla000Query::create()->findPk($params['uid']);
 
-                if ($oTemp)
+                if ($oTemp) {
+
                 	$oPage->sharedOutlet('Bla000')->setContent(array($oTemp));
 
-                else {
+                } else {
+
                 	$oBla = new Bla000();
                 	$oBla->setUid($params['uid']);
                 	$oPage->sharedOutlet('Bla000')->setContent(array($oBla));

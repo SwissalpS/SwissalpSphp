@@ -9,7 +9,7 @@ deleteLink         :
           modelKeyPath : uid
           options      :
             ValuePattern: /admin/bla000/confirmDelete/%1%
-      class     : SssSLink
+      class     : SwissalpS\PHOCOA\Widgets\WFLink
       properties:
         label: SssSBlaSharedDelete
   class     : WFDynamic
@@ -25,7 +25,7 @@ editLink           :
           modelKeyPath : uid
           options      :
             ValuePattern: /admin/bla000/edit/%1%
-      class     : SssSLink
+      class     : SwissalpS\PHOCOA\Widgets\WFLink
       properties:
         label: SssSBlaSharedEdit
   class     : WFDynamic
@@ -44,17 +44,17 @@ comment           :
   properties:
     arrayController: '#module#Bla000'
 paginatorNavigation:
-  class     : SssSPaginatorNavigation
+  class     : SwissalpS\PHOCOA\Widgets\WFPaginatorNavigation
   properties:
     paginator: '#module#paginator'
 paginatorPageInfo  :
-  class     : SssSPaginatorPageInfo
+  class     : SwissalpS\PHOCOA\Widgets\WFPaginatorPageInfo
   properties:
     paginator: '#module#paginator'
 searchBla000Form   :
   children:
     clear         :
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         label: SssSBlaSharedClear
     paginatorState:
@@ -64,7 +64,7 @@ searchBla000Form   :
     query         :
       class: WFTextField
     search        :
-      class     : SssSSubmit
+      class     : SwissalpS\PHOCOA\Widgets\WFSubmit
       properties:
         label: SssSBlaSharedSearch
   class   : WFForm
@@ -82,7 +82,7 @@ uid                :
           modelKeyPath : uid
           options      :
             ValuePattern: /admin/bla000/detail/%1%
-      class   : SssSLink
+      class   : SwissalpS\PHOCOA\Widgets\WFLink
   class     : WFDynamic
   properties:
     arrayController: '#module#Bla000'
