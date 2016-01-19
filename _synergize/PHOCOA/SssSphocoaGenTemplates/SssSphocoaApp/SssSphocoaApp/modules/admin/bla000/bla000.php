@@ -1,6 +1,6 @@
 <?php
-use SssSPropel2\phocoa\Bla000;
-use SssSPropel2\phocoa\Bla000Query;
+use SssSPropel2\SssSphocoaAppBla\Bla000;
+use SssSPropel2\SssSphocoaAppBla\Bla000Query;
 use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
 
 // Created by PHOCOA WFModelCodeGen on Wed, 21 Jul 2010 15:19:56 +0200
