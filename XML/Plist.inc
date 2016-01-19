@@ -2,6 +2,7 @@
 /* * * *
  * * SwissalpS/XML/Plist.inc
  * *
+ * * @version 20160119_042321 + more robust type handling & better date and data management
  * * @version 20151228_182957 (CC) Luke JZ aka SwissalpS
  * * * */
 // MODIFIED FOR mb_ less & mb_ ed machines
@@ -72,6 +73,8 @@ class Plist extends XHTML {
 	 * @var bool true (default) if you want dates and data values to be identifiable in the output array
 	 */
 	var $b_identifyDataAndDatesInOutputArray; // true (default)
+
+    const SdATEfORMAT = 'Y-m-d\TH:i:s\Z';
 
 	/**
 	 * constructs the SssSPlist instance from the given string or array
@@ -250,8 +253,16 @@ class Plist extends XHTML {
 		// split into day notation and time notation by "T"
 		$a_d = array();
 		preg_match_all('/([\d.,:\-W]+)(?:T([\d.,:\-+WZ]*))?/', $s_date, $a_d);
-		$s_dayNotation = $a_d[1][0];
-		$s_timeNotation = $a_d[2][0];
+        if (isset($a_d[1][0])) {
+            $s_dayNotation = $a_d[1][0];
+        } else {
+            return null;
+        } // if got at all
+        if (isset($a_d[2][0])) {
+            $s_timeNotation = $a_d[2][0];
+        } else {
+            return null;
+        } // if got at all
 
 		// extract year, month and day
 		$a_days = array();
@@ -728,7 +739,7 @@ class Plist extends XHTML {
 										self::serializeAndEncodeObject($m_item));
 					} // if responds to methods
 				} // if object
-				trigger_error('unknown type found in Plist::parseArrayToTag() type is: ' . gettype($m_item) . ' for key: ' . $m_key . chr(10) . chr(10) . 'Valid Plist values are strings, numbers and arrays. There is some support for dates and base64 encoded data. You cannot add objects but you can pass them but be aware you may not be able to retrieve them!' . chr(10) . 'Objects that respond to __toPlistArray() will be added as the returned array containing plist valid values.' . chr(10) . 'Then checks if object responds to __toDataBase64() which should be a base64 encoded string' . chr(10) . 'Then checks if object responds to __toString and adds it as that string' . chr(10) . 'Then the object is serialized and added as base64 encoded data string.' . chr(10) . 'When retrieving objects be aware of this, as you must recreate them yourself from the given string.' . chr(10) . 'Plists are not intended to hold objects rather just small portions of values.' . chr(10) . chr(10) . 'This time I ' . $sDid . chr(10) . chr(10), E_USER_NOTICE);
+				trigger_error('unknown type found in Plist::parseArrayToTag() type is: ' . gettype($m_item) . ' for key: ' . $m_key . chr(10) . chr(10) . 'Valid Plist values are strings, numbers and arrays. There is some support for dates and base64 encoded data. You cannot add objects but you can pass them but be aware you may not be able to retrieve them!' . chr(10) . 'Objects that respond to __toPlistArray() will be added as the returned array containing plist valid values.' . chr(10) . 'Then checks if object responds to __toDataBase64() which should be a base64 encoded string' . chr(10) . 'Then checks if object responds to __toString and adds it as that string' . chr(10) . 'As last resort the object is serialized and added as base64 encoded data string.' . chr(10) . 'When retrieving objects be aware of this, as you must recreate them yourself from the given string.' . chr(10) . 'Plists are not intended to hold objects rather just small portions of values.' . chr(10) . chr(10) . 'This time I ' . $sDid . chr(10) . chr(10), E_USER_NOTICE);
 				debug_print_backtrace();
 	}	}	} // parseArrayToTag
 
@@ -1072,6 +1083,22 @@ pathChecks ' . $s_path . '
 		return false; // nothing found
 	} // getBoolForKeyPath
 
+
+    public function getData($mKeyPath = '', $mDefaultValue = '', $iStartID = -1) {
+
+        $sRes = $this->getDataForKeyPath($mKeyPath, $iStartID);
+
+        if ('' == $sRes) {
+
+            return $mDefaultValue;
+
+        } // if empty result
+
+        return $sRes;
+
+    } // getData
+
+
 	// I haven't worked with data objects -> so pls advise if you think it's
 	// not as usefull as it could be
 	public function getDataForKeyPath($mKeyPath = '', $iStartID = -1) {
@@ -1080,6 +1107,22 @@ pathChecks ' . $s_path . '
 				array('[[SssS_Plist_data]]', '=='), '', $aRes['value']);
 		return ""; // nothing found
 	} // getDataForKeyPath
+
+
+    public function getDate($mKeyPath, $mDefaultValue = '', $sFormat = null, $iStartID = -1) {
+
+        $sRes = $this->getDateForKeyPath($mKeyPath, $sFormat, $iStartID);
+
+        if ('' == $sRes) {
+
+            return $mDefaultValue;
+
+        } // if nothing found
+
+        return $sRes;
+
+    } // getDate
+
 
 	public function getDateForKeyPath($mKeyPath = '', $sFormat = null,
 			$iStartID = -1) {
@@ -1091,9 +1134,11 @@ pathChecks ' . $s_path . '
 		return ""; // nothing found
 	} // getDateForKeyPath
 
+
 	public function getDouble($mKeyPath = '', $mDefaultValue = 0.0, $iStartID = -1) {
 		return $this->getFloat($mKeyPath, $mDefaultValue, $iStartID);
 	} // getDouble
+
 
 	public function getFloat($mKeyPath = '', $mDefaultValue = 0.0, $iStartID = -1) {
 		$mRes = $this->get($mKeyPath, $mDefaultValue, $iStartID);
@@ -1242,10 +1287,22 @@ pathChecks ' . $s_path . '
 				$iStartID);
 	} // setBoolForKeyPath
 
+
+    public function setData($mKeyPath = '', $sData, $iStartID = -1) {
+        return $this->setDataForKeyPath($sData, $mKeyPath, $iStartID);
+    } // setData
+
+
 	// I haven't worked with data objects -> so pls advise if you think it's
 	// not as usefull as it could be
 	public function setDataForKeyPath($sData = '', $mKeyPath = '',
 			$iStartID = -1) {
+
+        if (is_array($sData) || is_object($sData) || is_null($sData)) {
+
+            $sData = '';
+
+        } // if array, object or null given
 
 		$sData .= ('=' != substr($sData, -1)) ? '=' : '';
 		$sData .= ('==' != substr($sData, -2)) ? '=' : '';
@@ -1256,18 +1313,46 @@ pathChecks ' . $s_path . '
 
 	public function setDate($mKeyPath = '',	$mDate = 0, $sFormat = null,
 			$iStartID = -1) {
-		return $this->setDataForKeyPath($mDate, $mKeyPath, $sFormat, $iStartID);
+		return $this->setDateForKeyPath($mDate, $mKeyPath, $sFormat, $iStartID);
 	} // setDate
 
 	public function setDateForKeyPath($mDate = 0, $mKeyPath = '',
 			$sFormat = null, $iStartID = -1) {
 
+        if (null == $sFormat) {
+            $sFormat = self::SdATEfORMAT;
+        } // if no format given, set one so check is forced
+
 		// convert first
-		$sDate = ('integer' == gettype($mDate))
-				? gmdate('Y-m-d\TH:i:s\Z', $mDate)
-				: $mDate;
+        $sType = gettype($mDate);
+        if (in_array($sType, ['boolean', 'float', 'double', 'array'])) {
+            return null;
+        } elseif (is_object($mDate)) {
+            if (method_exists($mDate, 'format')) {
+                $sDate = $mDate->format(self::SdATEfORMAT);
+            } else {
+                return null;
+            } // if object has method format()
+        } elseif ('integer' == $sType) {
+            $sDate = gmdate(self::SdATEfORMAT, $mDate);
+        } elseif (is_string($mDate)) {
+            if ('now' == strtolower($mDate)) {
+                $sDate = gmdate(self::SdATEfORMAT);
+            } elseif (false !== strpos($mDate, chr(0))) { // TODO: check for more invalid chars
+                return null;
+            } elseif ('' == trim($mDate)) {
+                return null;
+            } else {
+                $sDate = $mDate;
+            } // if 'now' or other
+        } else {
+            $sDate = $mDate;
+        } // if object, integer or other
 		// and format if requested
 		$sDate = $this->formatDate($sDate, $sFormat);
+        if (null === $sDate) {
+            return null;
+        } // if unable to format
 		if ($this->b_identifyDataAndDatesInOutputArray) $sDate =
 				'[[SssS_Plist_date]]' . $sDate;
 		return $this->setObjectForKeyPath((string)$sDate, $mKeyPath, $iStartID);
@@ -1284,6 +1369,12 @@ pathChecks ' . $s_path . '
 	public function setFloatForKeyPath($fFloat = 0.0, $mKeyPath = '',
 			$iStartID = -1) {
 
+        if (is_array($fFloat) || is_object($fFloat)) {
+
+            $fFloat = 0.0;
+
+        } // if array or object given
+
 		return $this->setObjectForKeyPath((float)floatval($fFloat), $mKeyPath, $iStartID);
 	} // setFloatForKeyPath
 
@@ -1297,6 +1388,12 @@ pathChecks ' . $s_path . '
 
 	public function setIntegerForKeyPath($iInteger = 0, $mKeyPath = '',
 			$iStartID = -1) {
+
+        if (is_array($iInteger) || is_object($iInteger)) {
+
+            $iInteger = 0;
+
+        } // if array or object given
 
 		return $this->setObjectForKeyPath((int)intval($iInteger), $mKeyPath, $iStartID);
 	} // setIntegerForKeyPath
@@ -1342,8 +1439,32 @@ pathChecks ' . $s_path . '
 	public function setStringForKeyPath($sString = '', $mKeyPath = '',
 			$iStartID = -1) {
 
+        if (is_array($sString)) {
+
+            $sString = '';
+
+        } elseif (is_object($sString)) {
+
+            if (method_exists($sString, '__toString')) {
+
+                $sString = $sString->__toString();
+
+            } elseif (method_exists($sString, 'toString')) {
+
+                $sString = $sString->toString();
+
+            } else {
+
+                $sString = '';
+
+            } // if got methods __toString or toString or not
+
+        } // if array or object given
+
 		return $this->setObjectForKeyPath((string)strval($sString), $mKeyPath, $iStartID);
+
 	} // setStringForKeyPath
+
 
 	// to integrate WFKeyValueCoding this would need to look at keypath arrays and strings with '/' are for fArrayizeKeyPath
 	// strings with '.' are for WFKeyValueCoding
