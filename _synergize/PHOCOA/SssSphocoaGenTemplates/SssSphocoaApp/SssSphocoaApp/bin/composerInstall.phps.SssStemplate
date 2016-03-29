@@ -174,13 +174,13 @@ class SssScomposer {
 		$o = new SssScomposer();
 
 		// make sure composer is installed
-		$this->installComposer();
+		$o->installComposer();
 
 		// install the dependencies
-		$this->composerInstall();
+		$o->composerInstall();
 
 		// and exit
-		$this->bail();
+		$o->bail();
 
 	} // runInstallWithDependencies
 
