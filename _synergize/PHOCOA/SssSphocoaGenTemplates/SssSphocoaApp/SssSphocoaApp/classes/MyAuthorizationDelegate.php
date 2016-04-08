@@ -4,7 +4,13 @@
   *
   * The WFAuthorizationManager will call your delegate methods to attempt logins.
   */
-class SssSSBAuthorizationDelegate extends WFAuthorizationDelegate {
+use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
+use Propel\Runtime\ActiveQuery\Criteria;
+use SssSPropel2\SssSphocoaAppAuth\PermissionsQuery;
+use SssSPropel2\SssSphocoaAppAuth\PermpresetsQuery;
+use SssSPropel2\SssSphocoaAppAuth\UsersQuery;
+
+class MyAuthorizationDelegate extends WFAuthorizationDelegate {
 
 	const SssSauthSalt = 'SkyBIKEzebrok';
 	const SssSnewPassLength = 32;
@@ -21,7 +27,7 @@ class SssSSBAuthorizationDelegate extends WFAuthorizationDelegate {
 	static function sharedAuthorizationDelegate() {
 
 		static $o = null;
-		if (!$o) $o = new SssSSBAuthorizationDelegate();
+		if (!$o) $o = new MyAuthorizationDelegate();
 
 		return $o;
 
@@ -448,4 +454,4 @@ class SssSSBAuthorizationDelegate extends WFAuthorizationDelegate {
 
     } // save
 
-} // SssSSBAuthorizationDelegate
+} // MyAuthorizationDelegate

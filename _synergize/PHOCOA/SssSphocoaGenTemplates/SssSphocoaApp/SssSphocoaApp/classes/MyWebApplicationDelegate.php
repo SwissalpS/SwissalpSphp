@@ -34,7 +34,7 @@ class MyWebApplicationDelegate
         $this->bRunning = false;
 
         // initialize authorizationDelegate here
-        //WFAuthorizationManager::sharedAuthorizationManager()->setDelegate(SssSSBAuthorizationDelegate::sharedAuthorizationDelegate());
+        WFAuthorizationManager::sharedAuthorizationManager()->setDelegate(MyAuthorizationDelegate::sharedAuthorizationDelegate());
 
 		// initialize bundle here for now, until is done by WebApp
 		// this is required for WFLocalizedString() etc.
