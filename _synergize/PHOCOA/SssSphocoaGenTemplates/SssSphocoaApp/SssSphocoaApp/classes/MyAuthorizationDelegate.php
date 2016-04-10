@@ -287,14 +287,14 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
      */
     function resetPassword($sUsernameOrEmail) {
 
-    	//throw (new WFException(SssSBla::bla('LoginNotImplemented')));
-
 		$sUsernameOrEmail = trim($sUsernameOrEmail);
 
 		// first try to find user by handle
-		$oUser = UsersQuery::create()->findPk($sUsernameOrEmail);
+		$oC = UsersQuery::create()->filterByHandle($sUsernameOrEmail)->setLimit(1)->find();
+		$m = $oC->getData();
+		if (!empty($m)) {
 
-    	if ($oUser) {
+			$oUser = $m[0];
 
     	} else {
     		// try to find user by email
@@ -307,9 +307,13 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
 
 				$oUser = $m[0];
 
-			} // if found something
+			} else {
 
-    	} // if found user by alias or not
+				throw (new WFException(SssSBla::bla('LoginResetUserNotFound')));
+
+			} // if found user or not
+
+    	} // if found user by handle or not
 
     	if ($oUser) {
 
@@ -327,10 +331,6 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
     			WFLog::logToFile('mailNewPassword.log', 'FAILED to send email to user: ' . $oUser->getHandle() . ' with error: ' . print_r($mRes, true));
 
     		}
-
-    	} else {
-
-    		throw (new WFException(SssSBla::bla('LoginResetUserNotFound')));
 
     	} // if found user or not
 
@@ -387,11 +387,7 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
 
     	$sSubject = SssSBla::cleanForTitle(SssSBla::bla('AuthDelegateEmailSubject', $aParams));
 
-		if (class_exists('ApplicationSettings')) {
-
-
-		} // if have class AppPlistSettings
-		$oP = AppPlistSettings::sharedInstance();
+		$oP = ApplicationSettings::sharedInstance();
 
  /*   	$sHeaders = 'From: ' . $oP->get('users/mailPasswordFromAddress', 'noreply@' . $_SERVER['HTTP_HOST']);
 */
@@ -399,7 +395,7 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
 
     	$sFromMeName = 'noreply AutoTechnik-RML';
 
-    	$oMailer = new SBSssSMailer($sFromMeMail, $sFromMeName, 'mailNewPassword.log');
+    	$oMailer = new MyMailer($sFromMeMail, $sFromMeName, 'mailNewPassword.log');
 
     	return $oMailer->sendMail($oUser->getEmail(), $sUserName, $sSubject, $sMessage);
 
