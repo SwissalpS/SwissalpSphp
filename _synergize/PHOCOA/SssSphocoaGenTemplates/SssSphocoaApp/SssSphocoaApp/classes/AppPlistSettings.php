@@ -2,8 +2,11 @@
 /* * * *
  * * AppPlistSettings.inc
  * *
+ * * @version 20160410_112532 (CC) Luke JZ aka SwissalpS
  * * @version 20101012_225447 (CC) Luke JZ aka SwissalpS
  * * * */
+use SwissalpS\XML\Plist;
+
 class AppPlistSettings extends WFObject {
 
 	static function sharedInstance() {
@@ -12,9 +15,10 @@ class AppPlistSettings extends WFObject {
 
 		if (!$oMe) {
 
-			$oMe = new SssS_Plist(APP_ROOT . '/conf/AppSettings.plist');
+			$oMe = new Plist(APP_ROOT . DIR_SEP . 'conf' . DIR_SEP
+							 . 'AppSettings.plist');
 
-		}
+		} // if first call
 
 		return $oMe;
 
@@ -22,4 +26,3 @@ class AppPlistSettings extends WFObject {
 
 } // AppPlistSettings
 /* * * *\ AppPlistSettings (CC) Luke JZ aka SwissalpS /* * * */
-?>
