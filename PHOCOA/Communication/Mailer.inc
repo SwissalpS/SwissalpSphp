@@ -44,9 +44,9 @@ class Mailer {
 	} // log
 
 
-	function sendMail($sToMail, $sToName, $sSubject, $sMessage) {
+	function sendMail($sToMail, $sToName, $sSubject, $sMessage, &$sError = '') {
 
-		return $this->sendMailXPM4($sToMail, $sToName, $sSubject, $sMessage);
+		return $this->sendMailXPM4($sToMail, $sToName, $sSubject, $sMessage, $sError);
 
 		return $this->sendMailXPM3($sToMail, $sToName, $sSubject, $sMessage);
 
@@ -98,7 +98,7 @@ Powered by XPertMailer', 70);
 	} // sendMailXPM3
 
 
-	protected function sendMailXPM4($sToMail, $sToName, $sSubject, $sMessage) {
+	protected function sendMailXPM4($sToMail, $sToName, $sSubject, $sMessage, &$sError = '') {
 
 		$sMessage = wordWrap($sMessage . '
 
@@ -130,7 +130,9 @@ Powered by XPertMailer', 70);
 
 		} else {
 
-			$this->log('Error, failed to connect to mailserver');
+			$sError = 'Error, failed to connect to mailserver';
+
+			$this->log($sError);
 
 			return null;
 

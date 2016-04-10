@@ -4,11 +4,16 @@
   *
   * The WFAuthorizationManager will call your delegate methods to attempt logins.
   */
-use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
-use Propel\Runtime\ActiveQuery\Criteria;
+// TODO: IMPORTANT make better password reset process
+// email a token that expires. It initiates further
+// recovery questions and finally allows user to give new
+// password.
 use SssSPropel2\SssSphocoaAppAuth\PermissionsQuery;
 use SssSPropel2\SssSphocoaAppAuth\PermpresetsQuery;
 use SssSPropel2\SssSphocoaAppAuth\UsersQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
+use SwissalpS\PHOCOA\Localization\Bla as SssSBla;
+use SwissalpS\PHOCOA\Settings\ApplicationSettings;
 
 class MyAuthorizationDelegate extends WFAuthorizationDelegate {
 
@@ -321,14 +326,15 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
     		$oUser->setPasshash(self::passHashForPass($sNewPassword));
     		$oUser->save();
 
-    		if ($mRes = self::mailUserNewPass($oUser, $sNewPassword)) {
+			$sError = '';
+    		if ($mRes = self::mailUserNewPass($oUser, $sNewPassword, $sError)) {
 
     			// yeah, mail success
     			WFLog::logToFile('mailNewPassword.log', 'successfully sent email to user: ' . $oUser->getHandle());
 
     		} else {
     			// boo no mail;
-    			WFLog::logToFile('mailNewPassword.log', 'FAILED to send email to user: ' . $oUser->getHandle() . ' with error: ' . print_r($mRes, true));
+    			WFLog::logToFile('mailNewPassword.log', 'FAILED to send email to user: ' . $oUser->getHandle() . ' with error: ' . $sError);
 
     		}
 
@@ -339,7 +345,7 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
     } // resetPassword
 
 
-    static function mailUserNewPass($oUser, $sNewPassword) {
+    static function mailUserNewPass($oUser, $sNewPassword, &$sError = '') {
 
     	$sNL = chr(10); // \n
 
@@ -397,7 +403,7 @@ class MyAuthorizationDelegate extends WFAuthorizationDelegate {
 
     	$oMailer = new MyMailer($sFromMeMail, $sFromMeName, 'mailNewPassword.log');
 
-    	return $oMailer->sendMail($oUser->getEmail(), $sUserName, $sSubject, $sMessage);
+    	return $oMailer->sendMail($oUser->getEmail(), $sUserName, $sSubject, $sMessage, $sError);
 
     	//return mail($sEmail, $sSubject, $sMessage, $sHeaders);
 
