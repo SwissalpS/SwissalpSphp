@@ -42,6 +42,7 @@
  * * Output is for UTF-8, so if you want to output in other encoding such as iso-xxx
  * * you need to use multibyte-encoding-conversion functions
  * *
+ * * @version 20170808_110427 (CC) Luke JZ aka SwissalpS idiot-proofing
  * * @version 20170806_141732 (CC) Luke JZ aka SwissalpS
  * * * */
 namespace SwissalpS\Games\Rubik;
@@ -53,10 +54,22 @@ class Scrambler {
 	/* *
 	 * * function scramble()
 	 * *
-	 * * version 20170806_142640 (CC) Luke JZ aka SwissalpS
+	 * * $iSideCount: number of segments per side
+	 * * $iMoveCount: number of moves to output
+	 * * $bFRUonly: true => only use F, R and U moves
+	 * * $bAvoidSlicingOverCenter: true => eg 3x3x3, avoid moves like R₁₊₂
+	 * * 							which is equal to L
+	 * * $bNoInnerSlices: true => no R₂₋₄ instead make it R₁₋₄ and express as R₄
+	 * *
+	 * * version 20170808_110427 (CC) Luke JZ aka SwissalpS
 	 * */
 	static function scramble($iSideCount = 3, $iMoveCount = 44,
-							 $bFRUonly = true, $bAvoidSlicingOverCenter = true) {
+							 $bFRUonly = true, $bAvoidSlicingOverCenter = true,
+							 $bNoInnerSlices = false) {
+
+		// clean input
+		$iSideCount = floor(abs($iSideCount));
+		$iMoveCount = floor(abs($iMoveCount));
 
 		// prepare output
 		$sOut = '';
@@ -98,7 +111,16 @@ class Scrambler {
 			$sOut .= $sSideNext;
 
 			// choose first slice
-			$iSliceFirst = rand(0, $iSideCountMax);
+
+			if ($bNoInnerSlices) {
+
+				$iSliceFirst = 0;
+
+			} else {
+
+				$iSliceFirst = rand(0, $iSideCountMax);
+
+			} // if no inner slices
 
 			// choose last slice
 			$iSliceLast = rand($iSliceFirst, $iSideCountMax);
@@ -113,8 +135,13 @@ class Scrambler {
 
 			} else {
 
-				$sOut .= $aNumberStrings[$iSliceFirst + 1];
-				$sOut .= ($iSliceFirst + 1 == $iSliceLast) ? $sPlus : $sMinus;
+				if (!$bNoInnerSlices) {
+
+					$sOut .= $aNumberStrings[$iSliceFirst + 1];
+					$sOut .= ($iSliceFirst + 1 == $iSliceLast) ? $sPlus : $sMinus;
+
+				} // if no inner slices
+
 				$sOut .= $aNumberStrings[$iSliceLast + 1];
 
 			} // append slice(s)
