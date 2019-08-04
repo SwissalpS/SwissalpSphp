@@ -13,7 +13,7 @@ modified to play well with some of my development systems
 In _synergize there are mainly functions and classes that I wrote while learning
 PHOCOA most are from PEAR
 
-Generally a file beginning with 'SssS', abreviation of 'SwissalpS', was either
+Generally a file beginning with 'SssS', abbreviation of 'SwissalpS', was either
 fully written by me, SwissalpS, or I have done reasonable changes to the original
 script. Without the 'SssS' prefix, the file probably comes from someone else.
 To be sure, look at the information in the files. Though they may lack some
